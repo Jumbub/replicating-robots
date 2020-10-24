@@ -1,0 +1,6 @@
+{
+  "license": "MIT",
+  "dependencies": {
+    "typescript-to-lua": "^0.36.0"
+  }
+}
