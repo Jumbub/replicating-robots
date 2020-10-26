@@ -4,7 +4,7 @@ import {
   FactChecker,
   FactToAction,
   satisfyFacts,
-} from '../backwardChaining/satisfyFacts';
+} from './satisfyFacts';
 
 const enum Rotation {
   NORTH = 0,
@@ -28,11 +28,13 @@ export type State = {
 };
 
 const enum Fact {
-  MOVED_FORWARD,
+  NOT_AT_BASE,
+  CAN_MOVE,
 }
 
 const enum Action {
   MOVE_FORWARD,
+  DIE,
 }
 
 const rotationToAxis: Record<Rotation, [Axis, 1 | -1]> = {
@@ -46,27 +48,40 @@ export const TurtleApi = {
   forward: (state: State) => {
     const [axis, sign] = rotationToAxis[state.gps.r];
     state.gps[axis] += sign;
+    console.log('MOVING FORWARD');
     return turtle.forward();
   },
   dig: () => {
+    console.log('DIGGING');
     return turtle.dig();
   },
   inspect: () => {
+    console.log('INSPECTING');
     return turtle.inspect();
+  },
+  getFuelLevel: (state: State) => {
+    console.log('GETTING FUEL LEVEL');
+    return turtle.getFuelLevel();
   },
 };
 
 const actionToMethod: ActionToMethod<Action, State> = {
   [Action.MOVE_FORWARD]: (state: State) => TurtleApi.forward(state),
+  [Action.DIE]: () => {
+    throw 'Died!';
+  },
 };
 const factToAction: FactToAction<Fact, Action> = {
-  [Fact.MOVED_FORWARD]: Action.MOVE_FORWARD,
+  [Fact.NOT_AT_BASE]: Action.MOVE_FORWARD,
+  [Fact.CAN_MOVE]: Action.DIE,
 };
 const factChecker: FactChecker<Fact, State> = {
-  [Fact.MOVED_FORWARD]: (state: State) => state.gps.x + state.gps.z > 0,
+  [Fact.NOT_AT_BASE]: (state: State) => state.gps.x + state.gps.z != 0,
+  [Fact.CAN_MOVE]: (state: State) => TurtleApi.getFuelLevel(state) > 0,
 };
 const actionToFacts: ActionToFacts<Fact, Action> = {
-  [Action.MOVE_FORWARD]: [],
+  [Action.MOVE_FORWARD]: [Fact.CAN_MOVE],
+  [Action.DIE]: [],
 };
 
 export const replicate = () => {
@@ -79,5 +94,12 @@ export const replicate = () => {
     },
   };
 
-  satisfyFacts([], factChecker, factToAction, actionToFacts, actionToMethod, baseState);
+  satisfyFacts(
+    [Fact.NOT_AT_BASE],
+    factChecker,
+    factToAction,
+    actionToFacts,
+    actionToMethod,
+    baseState,
+  );
 };

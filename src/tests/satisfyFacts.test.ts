@@ -4,7 +4,7 @@ import {
   FactChecker,
   FactToAction,
   satisfyFacts,
-} from './satisfyFacts';
+} from '../satisfyFacts';
 
 describe('demo situation', () => {
   type State = {
@@ -39,7 +39,7 @@ describe('demo situation', () => {
   const actionToMethod: ActionToMethod<Action, State> = {
     [Action.MOVE_FORWARD]: (state: State) => api.moveForward(state),
     [Action.DESTROY_WHATEVER_FACING]: (state: State) => api.destroyWhateverFacing(state),
-    [Action.NOTHING]: () => void null,
+    [Action.NOTHING]: () => {},
     [Action.UNKNOWN]: () => {
       throw 'unknown state';
     },

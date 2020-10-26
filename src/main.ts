@@ -1,3 +1,3 @@
-import { replicate } from './application/replicate';
+import { replicate } from './replicate';
 
 replicate();

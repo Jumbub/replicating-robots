@@ -19,4 +19,5 @@ declare const turtle: {
   dig: () => boolean;
   /** !TupleReturn */
   inspect: (n?: number) => [boolean, { name: string }];
+  getFuelLevel: () => number;
 };

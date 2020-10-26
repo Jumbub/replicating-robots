@@ -11,7 +11,7 @@ export const satisfyFacts = <TFact extends EnumKey, TAction extends EnumKey, TSt
 ): void => {
   let tasks: Task<TFact, TAction>[] = [[null, facts]];
 
-  while (tasks.length) {
+  while (tasks.length > 0) {
     const [[action, requiredFacts]] = tasks;
 
     const unsatisfiedFact = requiredFacts.find(fact => !factIsTrue[fact](state));
@@ -21,14 +21,13 @@ export const satisfyFacts = <TFact extends EnumKey, TAction extends EnumKey, TSt
       const requirements = actionToFacts[action];
 
       tasks.unshift([action, requirements]);
-      continue;
-    }
+    } else {
+      if (action !== null) {
+        actionToMethod[action](state);
+      }
 
-    if (action !== null) {
-      actionToMethod[action](state);
+      tasks.shift();
     }
-
-    tasks.shift();
   }
 };
 
