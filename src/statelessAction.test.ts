@@ -26,7 +26,7 @@ it('should complete the demo', () => {
   };
 
   const hasInfoResult = (result: unknown): result is { info: string } => {
-    if (typeof result === 'object' && 'info' in result) {
+    if (typeof result === 'object' && result !== null && 'info' in result) {
       return true;
     }
     return false;

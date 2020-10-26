@@ -1,1 +1,3 @@
-print('nothing here yet');
+import { replicate } from './application/replicate';
+
+replicate();

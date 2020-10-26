@@ -3,7 +3,8 @@
   "scripts": {
     "build": "tstl",
     "push": "rsync -rtv build/ `head -n 1 .computerDirectory` && echo 'Pushed to computer!'",
-    "push:watch": "find * | rg lua | entr yarn -s push",
+    "push:clean": "rm -r `head -n 1 .computerDirectory` && yarn -s push",
+    "push:watch": "find * | rg lua | entr yarn -s push:clean",
     "dev": "concurrently 'tstl --watch' 'yarn -s push:watch'"
   },
   "devDependencies": {

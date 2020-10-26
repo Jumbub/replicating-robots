@@ -17,7 +17,7 @@ export const executeTask = <TApi, TState>(
   initialState: TState,
 ) => {
   let mutableState = initialState;
-  let mutableDerive = initialDerive;
+  let mutableDerive: Derive<TApi, TState> | null = initialDerive;
 
   do {
     const [apiCall, stateMutator] = mutableDerive(mutableState);

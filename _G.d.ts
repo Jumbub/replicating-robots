@@ -16,6 +16,7 @@ declare function print(...args: any[]): void;
 
 declare const turtle: {
   forward: (n?: number) => boolean;
+  dig: () => boolean;
   /** !TupleReturn */
   inspect: (n?: number) => [boolean, { name: string }];
 };

@@ -1,23 +1,27 @@
+import {
+  ActionToFacts,
+  ActionToMethod,
+  FactChecker,
+  FactToAction,
+  satisfyFacts,
+} from './satisfyFacts';
+
 describe('demo situation', () => {
   type State = {
     moves: string[];
     facingSomething: boolean;
   };
-
-  const GAME_OVER = 'GameOver';
-  type GameOver = typeof GAME_OVER;
   const enum Fact {
-    FACING_SOMETHING,
-    FACING_NOTHING,
-    MOVED_FORWARD,
+    FACING_SOMETHING = 'FACING_SOMETHING',
+    FACING_NOTHING = 'FACING_NOTHING',
+    MOVED_FORWARD = 'MOVED_FORWARD',
   }
   const enum Action {
-    MOVE_FORWARD,
-    DESTROY_WHATEVER_FACING,
-    NOTHING,
-    UNKNOWN,
+    MOVE_FORWARD = 'MOVE_FORWARD',
+    DESTROY_WHATEVER_FACING = 'DESTROY_WHATEVER_FACING',
+    NOTHING = 'NOTHING',
+    UNKNOWN = 'UNKNOWN',
   }
-
   const api = {
     destroyWhateverFacing: (state: State) => {
       state.moves.push('doing action: destroying whatever facing');
@@ -32,8 +36,7 @@ describe('demo situation', () => {
       return state.facingSomething;
     },
   };
-
-  const performAction: ActionPerformer = {
+  const actionToMethod: ActionToMethod<Action, State> = {
     [Action.MOVE_FORWARD]: (state: State) => api.moveForward(state),
     [Action.DESTROY_WHATEVER_FACING]: (state: State) => api.destroyWhateverFacing(state),
     [Action.NOTHING]: () => void null,
@@ -41,12 +44,12 @@ describe('demo situation', () => {
       throw 'unknown state';
     },
   };
-  const satisfactionAction: SatisfactionAction = {
+  const factToAction: FactToAction<Fact, Action> = {
     [Fact.FACING_SOMETHING]: Action.UNKNOWN,
     [Fact.FACING_NOTHING]: Action.DESTROY_WHATEVER_FACING,
     [Fact.MOVED_FORWARD]: Action.MOVE_FORWARD,
   };
-  const isSatisfied: IsSatisfied = {
+  const factChecker: FactChecker<Fact, State> = {
     [Fact.FACING_SOMETHING]: (state: State) => api.isFacingSomething(state),
     [Fact.FACING_NOTHING]: (state: State) => !api.isFacingSomething(state),
     [Fact.MOVED_FORWARD]: (state: State) => {
@@ -54,47 +57,14 @@ describe('demo situation', () => {
       return state.moves.includes('doing action: move forward');
     },
   };
-  const satisfactionRequirements: SatisfactionRequirements = {
+  const actionToFacts: ActionToFacts<Fact, Action> = {
     [Action.MOVE_FORWARD]: [Fact.FACING_NOTHING],
     [Action.DESTROY_WHATEVER_FACING]: [Fact.FACING_SOMETHING],
     [Action.NOTHING]: [],
     [Action.UNKNOWN]: [],
   };
 
-  type IsSatisfied = Record<Fact, (state: State) => boolean>;
-  type SatisfactionRequirements = Record<Action, Fact[]>;
-  type SatisfactionAction = Record<Fact, Action>;
-  type ActionPerformer = Record<Action, (state: State) => void>;
-  type Task = [desiredAction: Action, requiredFacts: Fact[]];
-
-  const satisfyFacts = (
-    facts: Fact[],
-    isSatisfied: IsSatisfied,
-    satisfactionRequirements: SatisfactionRequirements,
-    satisfactionAction: SatisfactionAction,
-    performAction: ActionPerformer,
-    state: State,
-  ): void | GameOver => {
-    let taskList: Task[] = [[Action.NOTHING, facts]];
-    while (taskList.length) {
-      const [[action, requiredFacts]] = taskList;
-
-      const unsatisfiedFact = requiredFacts.find(fact => !isSatisfied[fact](state));
-
-      if (unsatisfiedFact) {
-        const action = satisfactionAction[unsatisfiedFact];
-        const requirements = satisfactionRequirements[action];
-
-        taskList.unshift([action, requirements]);
-        continue;
-      }
-
-      performAction[action](state);
-      taskList.shift();
-    }
-  };
-
-  it('should solve (1)', () => {
+  it('should solve: remove blocker when nothing to remove', () => {
     let state: State = {
       moves: [],
       facingSomething: false,
@@ -102,10 +72,10 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.FACING_NOTHING],
-      isSatisfied,
-      satisfactionRequirements,
-      satisfactionAction,
-      performAction,
+      factChecker,
+      factToAction,
+      actionToFacts,
+      actionToMethod,
       state,
     );
 
@@ -114,7 +84,7 @@ describe('demo situation', () => {
     ]);
   });
 
-  it('should solve (2)', () => {
+  it('should solve: remove blocker when something to remove', () => {
     let state: State = {
       moves: [],
       facingSomething: true,
@@ -122,10 +92,10 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.FACING_NOTHING],
-      isSatisfied,
-      satisfactionRequirements,
-      satisfactionAction,
-      performAction,
+      factChecker,
+      factToAction,
+      actionToFacts,
+      actionToMethod,
       state,
     );
 
@@ -137,7 +107,7 @@ describe('demo situation', () => {
     ]);
   });
 
-  it('should solve (3)', () => {
+  it('should solve: move forward without blocker', () => {
     let state: State = {
       moves: [],
       facingSomething: false,
@@ -145,10 +115,10 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.MOVED_FORWARD],
-      isSatisfied,
-      satisfactionRequirements,
-      satisfactionAction,
-      performAction,
+      factChecker,
+      factToAction,
+      actionToFacts,
+      actionToMethod,
       state,
     );
 
@@ -160,7 +130,7 @@ describe('demo situation', () => {
     ]);
   });
 
-  it('should solve (4)', () => {
+  it('should solve: move forward with blocker', () => {
     let state: State = {
       moves: [],
       facingSomething: true,
@@ -168,10 +138,10 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.MOVED_FORWARD],
-      isSatisfied,
-      satisfactionRequirements,
-      satisfactionAction,
-      performAction,
+      factChecker,
+      factToAction,
+      actionToFacts,
+      actionToMethod,
       state,
     );
 
