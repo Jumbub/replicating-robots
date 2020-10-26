@@ -1,0 +1,10 @@
+{
+  "tstl": {
+    "luaTarget": "5.1",
+    "luaBundleEntry": "yes"
+  },
+  "compilerOptions": {
+    "outDir": "build",
+    "noImplicitAny": true
+  }
+}

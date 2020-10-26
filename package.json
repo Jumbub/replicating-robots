@@ -1,6 +1,24 @@
 {
   "license": "MIT",
-  "dependencies": {
+  "scripts": {
+    "build": "tstl",
+    "push": "rsync -rtv build/ `head -n 1 .computerDirectory` && echo 'Pushed to computer!'",
+    "push:watch": "find * | rg lua | entr yarn -s push",
+    "dev": "concurrently 'tstl --watch' 'yarn -s push:watch'"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.15",
+    "concurrently": "^5.3.0",
+    "jest": "^26.6.1",
+    "ts-jest": "^26.4.2",
+    "typescript": "^4.0.3",
     "typescript-to-lua": "^0.36.0"
+  },
+  "tsconfig": {
+    "outDir": "build",
+    "tstl": {
+      "luaTarget": "5.1",
+      "luaBundleEntry": "yes"
+    }
   }
 }
