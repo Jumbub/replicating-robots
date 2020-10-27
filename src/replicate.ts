@@ -28,13 +28,13 @@ export type State = {
 };
 
 const enum Fact {
-  NOT_AT_BASE,
-  CAN_MOVE,
+  NOT_AT_BASE = 'NOT_AT_BASE',
+  CAN_MOVE = 'CAN_MOVE',
 }
 
 const enum Action {
-  MOVE_FORWARD,
-  DIE,
+  MOVE_FORWARD = 'MOVE_FORWARD',
+  DIE = 'DIE',
 }
 
 const rotationToAxis: Record<Rotation, [Axis, 1 | -1]> = {
@@ -48,19 +48,15 @@ export const TurtleApi = {
   forward: (state: State) => {
     const [axis, sign] = rotationToAxis[state.gps.r];
     state.gps[axis] += sign;
-    console.log('MOVING FORWARD');
     return turtle.forward();
   },
   dig: () => {
-    console.log('DIGGING');
     return turtle.dig();
   },
   inspect: () => {
-    console.log('INSPECTING');
     return turtle.inspect();
   },
   getFuelLevel: (state: State) => {
-    console.log('GETTING FUEL LEVEL');
     return turtle.getFuelLevel();
   },
 };
@@ -101,5 +97,6 @@ export const replicate = () => {
     actionToFacts,
     actionToMethod,
     baseState,
+    print,
   );
 };

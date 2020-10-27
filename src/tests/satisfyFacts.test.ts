@@ -3,6 +3,7 @@ import {
   ActionToMethod,
   FactChecker,
   FactToAction,
+  Logger,
   satisfyFacts,
 } from '../satisfyFacts';
 
@@ -77,6 +78,7 @@ describe('demo situation', () => {
       actionToFacts,
       actionToMethod,
       state,
+      () => {},
     );
 
     expect(state.moves).toEqual([
@@ -97,6 +99,7 @@ describe('demo situation', () => {
       actionToFacts,
       actionToMethod,
       state,
+      () => {},
     );
 
     expect(state.moves).toEqual([
@@ -120,6 +123,7 @@ describe('demo situation', () => {
       actionToFacts,
       actionToMethod,
       state,
+      () => {},
     );
 
     expect(state.moves).toEqual([
@@ -143,6 +147,7 @@ describe('demo situation', () => {
       actionToFacts,
       actionToMethod,
       state,
+      () => {},
     );
 
     expect(state.moves).toEqual([
@@ -153,6 +158,54 @@ describe('demo situation', () => {
       'checking fact: is facing something', // re-check if can move forward
       'doing action: move forward', // move forward
       'checking fact: has moved forward', // re-check initial fact
+    ]);
+  });
+
+  it('should log correctly', () => {
+    let state: State = {
+      moves: [],
+      facingSomething: true,
+    };
+
+    const logs: string[] = [];
+    const logger: Logger = (input: string) => {
+      logs.push(input);
+    };
+
+    satisfyFacts(
+      [Fact.MOVED_FORWARD],
+      factChecker,
+      factToAction,
+      actionToFacts,
+      actionToMethod,
+      state,
+      logger,
+    );
+
+    expect(state.moves).toEqual([
+      'checking fact: has moved forward', // initial fact check
+      'checking fact: is facing something', // check if can move forward
+      'checking fact: is facing something', // check if can destroy object
+      'doing action: destroying whatever facing', // destroy blocking object
+      'checking fact: is facing something', // re-check if can move forward
+      'doing action: move forward', // move forward
+      'checking fact: has moved forward', // re-check initial fact
+    ]);
+
+    expect(logs).toEqual([
+      'satisfying MOVED_FORWARD',
+      '| need  MOVED_FORWARD',
+      '| not   MOVED_FORWARD',
+      '| will  MOVE_FORWARD',
+      '| | need  FACING_NOTHING',
+      '| | not   FACING_NOTHING',
+      '| | will  DESTROY_WHATEVER_FACING',
+      '| | | need  FACING_SOMETHING',
+      '| | |       DESTROY_WHATEVER_FACING',
+      '| | need  FACING_NOTHING',
+      '| |       MOVE_FORWARD',
+      '| need  MOVED_FORWARD',
+      'satisfied MOVED_FORWARD',
     ]);
   });
 });

@@ -12,7 +12,7 @@ declare const _VERSION: number;
  * debugging. For formatted output, use string.format.
  * @param args Arguments to print
  */
-declare function print(...args: any[]): void;
+declare function print(...args: unknown[]): void;
 
 declare const turtle: {
   forward: (n?: number) => boolean;
