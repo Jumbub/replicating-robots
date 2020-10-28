@@ -34,8 +34,6 @@ Replicating Robots is an attempt at the "self-replicating turtle" challenge for 
 - Fuel use is enabled
 - Player will neither help nor deliberately obstruct the turtle
 
-<br/>
-
 ## Running
 
 ### Prerequisites
@@ -63,16 +61,6 @@ The sync step is used to push the Lua into your Minecraft save -
 If you're developing -
 
 `yarn sync:watch`
-
-## Usage
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
 
 ## License
 
