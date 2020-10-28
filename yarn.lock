@@ -2436,6 +2436,11 @@ lodash@^4.17.15, lodash@^4.17.19:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
+lua-types@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/lua-types/-/lua-types-2.8.0.tgz#4514f5c31b7418d3d6af0728023fefb160bc01b0"
+  integrity sha512-FJY32giHIqD/XW1XGkJnl8XotXIJsJ2M42fj9A2UudttWA6orJioToW1OpgPdayTr+S1/oTO7i+hfBY3UVG8Fg==
+
 make-dir@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"

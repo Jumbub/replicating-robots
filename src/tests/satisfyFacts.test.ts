@@ -5,7 +5,7 @@ import {
   FactToAction,
   Logger,
   satisfyFacts,
-} from '../satisfyFacts';
+} from '../theory/satisfyFacts';
 
 describe('demo situation', () => {
   type State = {
@@ -73,12 +73,12 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.FACING_NOTHING],
-      factChecker,
       factToAction,
       actionToFacts,
+      factChecker,
       actionToMethod,
       state,
-      () => {},
+      { write: () => {}, print: () => {} },
     );
 
     expect(state.moves).toEqual([
@@ -94,12 +94,12 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.FACING_NOTHING],
-      factChecker,
       factToAction,
       actionToFacts,
+      factChecker,
       actionToMethod,
       state,
-      () => {},
+      { write: () => {}, print: () => {} },
     );
 
     expect(state.moves).toEqual([
@@ -118,12 +118,12 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.MOVED_FORWARD],
-      factChecker,
       factToAction,
       actionToFacts,
+      factChecker,
       actionToMethod,
       state,
-      () => {},
+      { write: () => {}, print: () => {} },
     );
 
     expect(state.moves).toEqual([
@@ -142,12 +142,12 @@ describe('demo situation', () => {
 
     satisfyFacts(
       [Fact.MOVED_FORWARD],
-      factChecker,
       factToAction,
       actionToFacts,
+      factChecker,
       actionToMethod,
       state,
-      () => {},
+      { write: () => {}, print: () => {} },
     );
 
     expect(state.moves).toEqual([
@@ -167,16 +167,21 @@ describe('demo situation', () => {
       facingSomething: true,
     };
 
-    const logs: string[] = [];
-    const logger: Logger = (input: string) => {
-      logs.push(input);
+    let logs = '';
+    const logger: Logger = {
+      print: (input: string) => {
+        logs = logs + input + '\n';
+      },
+      write: (input: string) => {
+        logs = logs + input;
+      },
     };
 
     satisfyFacts(
       [Fact.MOVED_FORWARD],
-      factChecker,
       factToAction,
       actionToFacts,
+      factChecker,
       actionToMethod,
       state,
       logger,
@@ -192,20 +197,21 @@ describe('demo situation', () => {
       'checking fact: has moved forward', // re-check initial fact
     ]);
 
-    expect(logs).toEqual([
-      'satisfying MOVED_FORWARD',
-      '| need  MOVED_FORWARD',
-      '| not   MOVED_FORWARD',
-      '| will  MOVE_FORWARD',
-      '| | need  FACING_NOTHING',
-      '| | not   FACING_NOTHING',
-      '| | will  DESTROY_WHATEVER_FACING',
-      '| | | need  FACING_SOMETHING',
-      '| | |       DESTROY_WHATEVER_FACING',
-      '| | need  FACING_NOTHING',
-      '| |       MOVE_FORWARD',
-      '| need  MOVED_FORWARD',
-      'satisfied MOVED_FORWARD',
-    ]);
+    expect(logs).toEqual(
+      `$ MOVED_FORWARD
+| ? MOVED_FORWARD
+| ! MOVED_FORWARD
+| @ MOVE_FORWARD
+| | ? FACING_NOTHING
+| | ! FACING_NOTHING
+| | @ DESTROY_WHATEVER_FACING
+| | | ? FACING_SOMETHING
+| | | DESTROY_WHATEVER_FACING!
+| | ? FACING_NOTHING
+| | MOVE_FORWARD!
+| ? MOVED_FORWARD
+$ MOVED_FORWARD
+`,
+    );
   });
 });
