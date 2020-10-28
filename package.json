@@ -2,9 +2,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tstl",
-    "sync:push": "rsync -rtv build/ `head -n 1 .computerDirectory` && echo 'synced to computer!' || echo 'nothing to sync!'",
-    "sync:renameTests": "find build -depth -name \"*.test.lua\" -exec sh -c 'f=\"{}\"; mv -- \"$f\" \"${f%.test.lua}.lua\"' \\; && yarn sync:push",
-    "sync": "while true; do find build -depth -name \"*.lua\" | entr -d yarn sync:renameTests; done",
+    "sync": "rsync -rtv build/ `head -n 1 .computerDirectory` && echo 'synced to computer!' || echo 'nothing to sync!'",
+    "sync:renameTests": "find build -depth -name \"*.test.lua\" -exec sh -c 'f=\"{}\"; mv -- \"$f\" \"${f%.test.lua}.lua\"' \\; && yarn sync",
+    "sync:watch": "while true; do find build -depth -name \"*.lua\" | entr -d yarn sync:renameTests; done",
     "dev": "tstl --watch"
   },
   "devDependencies": {
