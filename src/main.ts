@@ -7,7 +7,7 @@ import { INITIAL_STATE } from './logic/state/State';
 import { satisfyFacts } from './theory/satisfyFacts';
 
 satisfyFacts(
-  [Fact.NOT_AT_BASE],
+  [Fact.REMOVED_FACING_TREE],
   FACT_TO_ACTION,
   ACTION_TO_FACTS,
   factToMethodFactory(API),

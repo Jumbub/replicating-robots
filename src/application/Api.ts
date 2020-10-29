@@ -1,25 +1,41 @@
-import { ROTATION_TO_AXIS } from '../logic/state/GPS';
-import { State } from '../logic/state/State';
-
 export const API = {
-  forward: (state: State) => {
-    const [axis, sign] = ROTATION_TO_AXIS[state.gps.r];
-    state.gps[axis] += sign;
+  up: () => {
+    return turtle.up();
+  },
+  down: () => {
+    return turtle.down();
+  },
+  forward: () => {
     return turtle.forward();
   },
-  dig: (_: State) => {
+  back: () => {
+    return turtle.back();
+  },
+  dig: () => {
     return turtle.dig();
   },
-  digUp: (_: State) => {
+  digUp: () => {
     return turtle.digUp();
   },
-  inspect: (_: State) => {
+  digDown: () => {
+    return turtle.digDown();
+  },
+  inspect: () => {
     return turtle.inspect();
   },
-  inspectUp: (_: State) => {
+  inspectUp: () => {
     return turtle.inspectUp();
   },
-  getFuelLevel: (_: State) => {
+  turnLeft: () => {
+    return turtle.turnLeft();
+  },
+  turnRight: () => {
+    return turtle.turnRight();
+  },
+  inspectDown: () => {
+    return turtle.inspectDown();
+  },
+  getFuelLevel: () => {
     return turtle.getFuelLevel();
   },
 };

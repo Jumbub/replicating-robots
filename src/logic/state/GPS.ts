@@ -19,14 +19,14 @@ export interface Vector {
   r: Rotation;
 }
 
-const enum Rotation {
+export const enum Rotation {
   NORTH = 0,
   EAST = 1,
   SOUTH = 2,
   WEST = 3,
 }
 
-const enum Axis {
+export const enum Axis {
   x = 'x',
   y = 'y',
   z = 'z',

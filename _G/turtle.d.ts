@@ -1,16 +1,42 @@
 /** @noSelfInFile */
 
+declare type InspectResult = [
+  boolean,
+  (
+    | {
+        name: string;
+        state: {
+          axis?: 'x' | 'y' | 'z';
+        };
+        tags: {
+          'minecraft:logs'?: boolean;
+        };
+      }
+    | 'No block to inspect'
+  ),
+];
+
 declare namespace turtle {
-  function forward(n?: number): boolean;
+  function up(): boolean;
+  function down(): boolean;
+  function forward(): boolean;
+  function back(): boolean;
+  function turnLeft(): boolean;
+  function turnRight(): boolean;
   function dig(): boolean;
   function digUp(): boolean;
+  function digDown(): boolean;
   /**
    * @tupleReturn
    */
-  function inspect(n?: number): [boolean, { name: string }];
+  function inspect(): InspectResult;
   /**
    * @tupleReturn
    */
-  function inspectUp(n?: number): [boolean, { name: string }];
+  function inspectUp(): InspectResult;
+  /**
+   * @tupleReturn
+   */
+  function inspectDown(): InspectResult;
   function getFuelLevel(): number;
 }

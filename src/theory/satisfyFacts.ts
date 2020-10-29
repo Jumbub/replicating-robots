@@ -30,7 +30,10 @@ export const satisfyFacts = <TFact extends string, TAction extends string, TStat
     } else {
       if (action !== null) {
         log(logger, tasks.length, 'actionToMethod', action);
-        actionToMethod[action](state);
+        const result = actionToMethod[action](state);
+        if (!result) {
+          throw new Error('Failed to perform action!');
+        }
         log(logger, tasks.length, 'actionToMethod!', action);
       }
 
@@ -92,5 +95,5 @@ export type FactToAction<TFact extends string, TAction extends string> = Record<
 export type ActionToFacts<TFact extends string, TAction extends string> = Record<TAction, TFact[]>;
 export type ActionToMethod<TAction extends string, TState> = Record<
   TAction,
-  (state: TState) => void
+  (state: TState) => boolean
 >;

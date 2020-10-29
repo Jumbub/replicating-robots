@@ -4,6 +4,10 @@ export const LOGGER = {
     term.setTextColor(getColor(color));
     write(input);
     term.setTextColor(getColor('white'));
+
+    const logs = fs.open('logs', 'a');
+    logs.write(input);
+    logs.close();
   },
 };
 

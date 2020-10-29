@@ -27,10 +27,12 @@ describe('demo situation', () => {
     destroyWhateverFacing: (state: State) => {
       state.moves.push('doing action: destroying whatever facing');
       state.facingSomething = false;
+      return true;
     },
     moveForward: (state: State) => {
       state.moves.push('doing action: move forward');
       state.facingSomething = true;
+      return true;
     },
     isFacingSomething: (state: State) => {
       state.moves.push('checking fact: is facing something');
@@ -40,9 +42,9 @@ describe('demo situation', () => {
   const actionToMethod: ActionToMethod<Action, State> = {
     [Action.MOVE_FORWARD]: (state: State) => api.moveForward(state),
     [Action.DESTROY_WHATEVER_FACING]: (state: State) => api.destroyWhateverFacing(state),
-    [Action.NOTHING]: () => {},
+    [Action.NOTHING]: () => true,
     [Action.UNKNOWN]: () => {
-      throw 'unknown state';
+      return false;
     },
   };
   const factToAction: FactToAction<Fact, Action> = {
