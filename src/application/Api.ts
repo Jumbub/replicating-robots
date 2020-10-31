@@ -1,4 +1,4 @@
-export const API = {
+export const apiFactory = () => ({
   up: () => {
     return turtle.up();
   },
@@ -38,6 +38,6 @@ export const API = {
   getFuelLevel: () => {
     return turtle.getFuelLevel();
   },
-};
+});
 
-export type Api = typeof API;
+export type Api = ReturnType<typeof apiFactory>;

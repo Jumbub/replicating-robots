@@ -64,6 +64,10 @@ const log = (
 
   logger.write('| '.repeat(depth), 'gray');
 
+  if (value === '') {
+    value = 'EMPTY';
+  }
+
   if (key === 'satisfyFacts') {
     logger.write('$ ');
     logger.print(value, 'yellow');

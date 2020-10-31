@@ -1,15 +1,33 @@
-export const LOGGER = {
-  print: (input: string, color: string) => LOGGER.write(input + '\n', color),
-  write: (input: string, color: string) => {
-    term.setTextColor(getColor(color));
-    write(input);
-    term.setTextColor(getColor('white'));
+export const loggerFactory = () => {
+  const logger: {
+    write: (input: string, color: string) => void;
+    print?: (input: string, color: string) => void;
+  } = {
+    write: (input: string, color: string) => {
+      term.setTextColor(getColor(color));
+      write(input);
+      term.setTextColor(getColor('white'));
 
-    const logs = fs.open('logs', 'a');
-    logs.write(input);
-    logs.close();
-  },
+      const logs = fs.open('logs', 'a');
+      logs.write(input);
+      logs.close();
+    },
+  };
+  logger.print = (input: string, color: string) => logger.write(input + '\n', color);
+  if (isLogger(logger)) {
+    return logger;
+  } else {
+    throw 'never';
+  }
 };
+
+const isLogger = (logger: {
+  write: (input: string, color: string) => void;
+  print?: (input: string, color: string) => void;
+}): logger is {
+  write: (input: string, color: string) => void;
+  print: (input: string, color: string) => void;
+} => !!logger.print;
 
 const getColor = (color: string | undefined) => {
   if (color == 'white') {

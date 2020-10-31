@@ -1,6 +1,6 @@
 import { ActionToFacts, FactToAction } from '../theory/satisfyFacts';
 
-export const FACT_TO_ACTION: FactToAction<Fact, Action> = {
+export const FACT_TO_ACTION: Readonly<FactToAction<Fact, Action>> = {
   [Fact.NOT_AT_BASE]: Action.MOVE_FORWARD,
   [Fact.HAS_FUEL]: Action.DIE, // NOT IMPLEMENTED
   [Fact.FACING_AIR]: Action.DIG_FORWARD,
@@ -14,7 +14,7 @@ export const FACT_TO_ACTION: FactToAction<Fact, Action> = {
   [Fact.UNDER_TREE]: Action.MOVE_UNDER_TREE,
 };
 
-export const ACTION_TO_FACTS: ActionToFacts<Fact, Action> = {
+export const ACTION_TO_FACTS: Readonly<ActionToFacts<Fact, Action>> = {
   [Action.MOVE_FORWARD]: [Fact.HAS_FUEL, Fact.FACING_AIR],
   [Action.MOVE_UP]: [Fact.HAS_FUEL, Fact.BELOW_AIR],
   [Action.MOVE_DOWN]: [Fact.HAS_FUEL, Fact.ABOVE_AIR],

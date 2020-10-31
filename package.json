@@ -2,9 +2,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tstl",
-    "sync": "rsync -rtv build/ `head -n 1 .computerDirectory` && echo 'synced to computer!' || echo 'nothing to sync!'",
-    "sync:renameTests": "find build -depth -name \"*.test.lua\" -exec sh -c 'f=\"{}\"; mv -- \"$f\" \"${f%.test.lua}.lua\"' \\; && yarn sync",
-    "sync:watch": "while true; do find build -depth -name \"*.lua\" | entr -d yarn sync:renameTests; done",
+    "sync": "ls build.lua | entr sh -c \"cp build.lua `head -n 1 .computerDirectory`out.lua && date +%s\" || echo \"No output to sync\"",
     "dev": "tstl --watch"
   },
   "devDependencies": {
@@ -15,12 +13,5 @@
     "ts-jest": "^26.4.2",
     "typescript": "^4.0.3",
     "typescript-to-lua": "^0.36.0"
-  },
-  "tsconfig": {
-    "outDir": "build",
-    "tstl": {
-      "luaTarget": "5.1",
-      "luaBundleEntry": "yes"
-    }
   }
 }

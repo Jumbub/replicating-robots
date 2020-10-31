@@ -1,12 +1,14 @@
 {
   "tstl": {
     "luaTarget": "5.1",
-    "luaBundleEntry": "yes",
-    "luaLibImport": "inline"
+    "luaBundleEntry": "src/main.ts",
+    "luaBundle": "build.lua",
+    "luaLibImport": "require"
+    // "noImplicitSelf": true
   },
   "compilerOptions": {
-    "outDir": "build",
     "strictNullChecks": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "rootDir": "src"
   }
 }
