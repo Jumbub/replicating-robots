@@ -26,14 +26,14 @@ export const apiFactory = () => ({
   inspectUp: () => {
     return turtle.inspectUp();
   },
+  inspectDown: () => {
+    return turtle.inspectDown();
+  },
   turnLeft: () => {
     return turtle.turnLeft();
   },
   turnRight: () => {
     return turtle.turnRight();
-  },
-  inspectDown: () => {
-    return turtle.inspectDown();
   },
   getFuelLevel: () => {
     return turtle.getFuelLevel();

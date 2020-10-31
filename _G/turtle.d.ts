@@ -5,9 +5,6 @@ declare type InspectResult = [
   (
     | {
         name: string;
-        state: {
-          axis?: 'x' | 'y' | 'z';
-        };
         tags: {
           'minecraft:logs'?: boolean;
         };

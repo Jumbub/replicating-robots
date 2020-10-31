@@ -1,4 +1,4 @@
-import { apiFactory } from './application/Api';
+import { Api, apiFactory } from './application/Api';
 import { loggerFactory } from './application/Logger';
 import { Logger } from './theory/satisfyFacts';
 
@@ -58,7 +58,22 @@ export const testLoggerFactory = () => {
   }
 };
 
-export const testApiFactory = () => {
-  const api = apiFactory();
+export type ApiMock = [keyof Api, Api[keyof Api]];
+export const testApiFactory = (mocks: ApiMock[]): Api => {
+  let mockCounter = 0;
+  let api = {};
+  Object.entries(apiFactory()).forEach(([key, value]) => {
+    /** @ts-ignore */
+    api[key] = (...args: unknown[]) => {
+      if (mocks[mockCounter] === undefined) {
+        throw `[${mockCounter}] Too many calls: ${key}`;
+      } else if (mocks[mockCounter][0] !== key) {
+        throw `[${mockCounter}] Bad call: ${key}`;
+      }
+      /** @ts-ignore */
+      return mocks[mockCounter++][1](...args);
+    };
+  });
+  /** @ts-ignore */
   return api;
 };

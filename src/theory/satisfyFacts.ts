@@ -12,6 +12,7 @@ export const satisfyFacts = <TFact extends string, TAction extends string, TStat
 ): void => {
   log(logger, 0, 'satisfyFacts', facts.join(', '));
   let tasks: Task<TFact, TAction>[] = [[null, facts]];
+  let success = true;
 
   while (tasks.length > 0) {
     const [[action, requiredFacts]] = tasks;
@@ -32,16 +33,22 @@ export const satisfyFacts = <TFact extends string, TAction extends string, TStat
         log(logger, tasks.length, 'actionToMethod', action);
         const result = actionToMethod[action](state);
         if (!result) {
-          throw new Error('Failed to perform action!');
+          success = false;
+          tasks = [];
+        } else {
+          log(logger, tasks.length, 'actionToMethod!', action);
         }
-        log(logger, tasks.length, 'actionToMethod!', action);
       }
 
       tasks.shift();
     }
   }
 
-  log(logger, 0, 'return', facts.join(', '));
+  if (success) {
+    log(logger, 0, 'return', facts.join(', '));
+  } else {
+    log(logger, 0, 'failure', 'X Action failed!');
+  }
 };
 
 const log = (
@@ -54,6 +61,7 @@ const log = (
     | 'factToAction'
     | 'actionToMethod'
     | 'actionToMethod!'
+    | 'failure'
     | 'return',
   value: string,
 ) => {
@@ -82,6 +90,8 @@ const log = (
     logger.print(value);
   } else if (key === 'actionToMethod') {
     logger.write(value, 'lime');
+  } else if (key === 'failure') {
+    logger.print('\n' + value, 'red');
   } else if (key === 'return') {
     logger.write('$ ');
     logger.print(value, 'lime');

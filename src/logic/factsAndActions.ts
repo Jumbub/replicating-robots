@@ -14,24 +14,28 @@ export const FACT_TO_ACTION: Readonly<FactToAction<Fact, Action>> = {
   [Fact.UNDER_TREE]: Action.MOVE_UNDER_TREE,
 };
 
+const TO_MOVE = [Fact.HAS_FUEL];
+const TO_MOVE_FORWARD = [...TO_MOVE, Fact.FACING_AIR];
+const TO_MOVE_BACKWARD = [...TO_MOVE, Fact.BEYOND_AIR];
+const TO_MOVE_UP = [...TO_MOVE, Fact.BELOW_AIR];
+const TO_MOVE_DOWN = [...TO_MOVE, Fact.ABOVE_AIR];
 export const ACTION_TO_FACTS: Readonly<ActionToFacts<Fact, Action>> = {
-  [Action.MOVE_FORWARD]: [Fact.HAS_FUEL, Fact.FACING_AIR],
-  [Action.MOVE_UP]: [Fact.HAS_FUEL, Fact.BELOW_AIR],
-  [Action.MOVE_DOWN]: [Fact.HAS_FUEL, Fact.ABOVE_AIR],
-  [Action.MOVE_BACK]: [Fact.HAS_FUEL, Fact.BEYOND_AIR],
+  [Action.MOVE_FORWARD]: TO_MOVE_FORWARD,
+  [Action.MOVE_BACK]: TO_MOVE_BACKWARD,
+  [Action.MOVE_UP]: TO_MOVE_UP,
+  [Action.MOVE_DOWN]: TO_MOVE_DOWN,
   [Action.DIG_FORWARD]: [],
   [Action.DIG_UP]: [],
   [Action.DIG_DOWN]: [],
   [Action.DIG_BACK]: [],
   [Action.DIE]: [],
   [Action.MOVE_BACK_FROM_REMOVE_TREE]: [
-    Fact.HAS_FUEL,
     Fact.UNDER_TREE,
     Fact.NO_LOG_ABOVE,
     Fact.ABOVE_BLOCK,
-    Fact.BEYOND_AIR,
+    ...TO_MOVE_BACKWARD,
   ],
-  [Action.MOVE_UNDER_TREE]: [Fact.HAS_FUEL, Fact.FACING_AIR],
+  [Action.MOVE_UNDER_TREE]: [...TO_MOVE_FORWARD],
 };
 
 export const enum Fact {

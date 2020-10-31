@@ -19,10 +19,12 @@ export const theoryTest = () => {
     const enum Fact {
       FACING_SOMETHING = 'FACING_SOMETHING',
       FACING_NOTHING = 'FACING_NOTHING',
+      FACING_NOTHING_ALIAS = 'FACING_NOTHING',
       MOVED_FORWARD = 'MOVED_FORWARD',
     }
     const enum Action {
       MOVE_FORWARD = 'MOVE_FORWARD',
+      MOVE_FORWARD_ALIAS = 'MOVE_FORWARD',
       DESTROY_WHATEVER_FACING = 'DESTROY_WHATEVER_FACING',
       NOTHING = 'NOTHING',
       UNKNOWN = 'UNKNOWN',

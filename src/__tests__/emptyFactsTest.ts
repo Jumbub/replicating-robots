@@ -9,7 +9,7 @@ export const emptyFactsTest = () => {
   setupGlobals();
 
   it('should handle empty fact list', () => {
-    const api = testApiFactory();
+    const api = testApiFactory([]);
     const logger = testLoggerFactory();
 
     satisfyFacts(
