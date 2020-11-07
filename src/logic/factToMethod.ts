@@ -2,9 +2,9 @@ import { FactChecker } from '../theory/satisfyFacts';
 import { State } from './state/State';
 import { Fact } from './factsAndActions';
 import { Api } from '../application/Api';
+import { BlockId } from '../application/constants';
 
 export const factToMethodFactory = (api: Api): FactChecker<Fact, State> => {
-  const not = (checker: (state: State) => boolean) => (state: State) => !checker(state);
   const aboveBlock = (_: State) => {
     const [is] = api.inspectDown();
     return is;
@@ -28,11 +28,7 @@ export const factToMethodFactory = (api: Api): FactChecker<Fact, State> => {
       const [, x] = api.inspectUp();
       return x === 'No block to inspect' || !x.tags['minecraft:logs'];
     },
-    [Fact.UNDER_TREE]: (state: State) => {
-      return state.underTree;
-    },
     [Fact.BELOW_AIR]: not(belowBlock),
-    [Fact.GROUNDED]: aboveBlock,
     [Fact.ABOVE_AIR]: not(aboveBlock),
     [Fact.ABOVE_BLOCK]: aboveBlock,
     [Fact.BEYOND_AIR]: (_: State) => {
@@ -44,5 +40,29 @@ export const factToMethodFactory = (api: Api): FactChecker<Fact, State> => {
       }
       throw new Error('Failure to rotate??');
     },
+    [Fact.HAS_LOG]: (_: State) => {
+      for (let i = 1; i++; i < 16) {
+        const item = api.getItemDetail(i + 1);
+        if (item?.name === BlockId.OAK_LOG) {
+          return true;
+        }
+      }
+      return false;
+    },
+    [Fact.FACING_TREE]: (_: State) => {
+      const [, x] = api.inspect();
+      return x !== 'No block to inspect' && !!x.tags['minecraft:logs'];
+    },
+    [Fact.MOVED_FORWARD]: hasMoved,
   };
+};
+
+const not = (checker: (state: State) => boolean) => (state: State) => !checker(state);
+
+const hasMoved = (state: State) => {
+  if (state.moved === true) {
+    state.moved = undefined;
+    return true;
+  }
+  return false;
 };

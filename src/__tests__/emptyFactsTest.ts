@@ -23,11 +23,10 @@ export const emptyFactsTest = () => {
     );
 
     stringMatch(
+      logger.logs,
       `$ EMPTY
-| ? EMPTY
 $ EMPTY
 `,
-      logger.logs,
     );
   });
 };

@@ -1,43 +1,47 @@
 export const apiFactory = () => ({
-  up: () => {
-    return turtle.up();
-  },
-  down: () => {
-    return turtle.down();
-  },
-  forward: () => {
-    return turtle.forward();
-  },
-  back: () => {
-    return turtle.back();
-  },
-  dig: () => {
-    return turtle.dig();
-  },
-  digUp: () => {
-    return turtle.digUp();
-  },
-  digDown: () => {
-    return turtle.digDown();
-  },
-  inspect: () => {
-    return turtle.inspect();
-  },
-  inspectUp: () => {
-    return turtle.inspectUp();
-  },
-  inspectDown: () => {
-    return turtle.inspectDown();
-  },
-  turnLeft: () => {
-    return turtle.turnLeft();
-  },
-  turnRight: () => {
-    return turtle.turnRight();
-  },
-  getFuelLevel: () => {
-    return turtle.getFuelLevel();
-  },
+  craft: (quantity: number) => turtle.craft(quantity),
+  forward: () => turtle.forward(),
+  back: () => turtle.back(),
+  up: () => turtle.up(),
+  down: () => turtle.down(),
+  turnLeft: () => turtle.turnLeft(),
+  turnRight: () => turtle.turnRight(),
+  select: (slotNum: number) => turtle.select(slotNum),
+  getSelectedSlot: () => turtle.getSelectedSlot(),
+  getItemCount: (slotNum?: number) => turtle.getItemCount(slotNum),
+  getItemSpace: (slotNum?: number) => turtle.getItemSpace(slotNum),
+  getItemDetail: (slotNum?: number) => turtle.getItemDetail(slotNum),
+  equipLeft: () => turtle.equipLeft(),
+  equipRight: () => turtle.equipRight(),
+  attack: (toolSide?: string) => turtle.attack(toolSide),
+  attackUp: (toolSide?: string) => turtle.attackUp(toolSide),
+  attackDown: (toolSide?: string) => turtle.attackDown(toolSide),
+  dig: (toolSide?: string) => turtle.dig(toolSide),
+  digUp: (toolSide?: string) => turtle.digUp(toolSide),
+  digDown: (toolSide?: string) => turtle.digDown(toolSide),
+  place: (signText?: string) => turtle.place(signText),
+  placeUp: () => turtle.placeUp(),
+  placeDown: () => turtle.placeDown(),
+  detect: () => turtle.detect(),
+  detectUp: () => turtle.detectUp(),
+  detectDown: () => turtle.detectDown(),
+  inspect: () => turtle.inspect(),
+  inspectUp: () => turtle.inspectUp(),
+  inspectDown: () => turtle.inspectDown(),
+  compare: () => turtle.compare(),
+  compareUp: () => turtle.compareUp(),
+  compareDown: () => turtle.compareDown(),
+  compareTo: (slot: number) => turtle.compareTo(slot),
+  drop: (count?: number) => turtle.drop(count),
+  dropUp: (count?: number) => turtle.dropUp(count),
+  dropDown: (count?: number) => turtle.dropDown(count),
+  suck: (amount?: number) => turtle.suck(amount),
+  suckUp: (amount?: number) => turtle.suckUp(amount),
+  suckDown: (amount?: number) => turtle.suckDown(amount),
+  refuel: (quantity?: number) => turtle.refuel(quantity),
+  getFuelLevel: () => turtle.getFuelLevel(),
+  getFuelLimit: () => turtle.getFuelLimit(),
+  transferTo: (slot: number, quantity?: number) => turtle.transferTo(slot, quantity),
 });
 
 export type Api = ReturnType<typeof apiFactory>;

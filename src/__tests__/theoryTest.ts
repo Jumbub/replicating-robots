@@ -67,8 +67,8 @@ export const theoryTest = () => {
       },
     };
     const actionToFacts: ActionToFacts<Fact, Action> = {
-      [Action.MOVE_FORWARD]: [Fact.FACING_NOTHING],
-      [Action.DESTROY_WHATEVER_FACING]: [Fact.FACING_SOMETHING],
+      [Action.MOVE_FORWARD]: [[Fact.FACING_NOTHING]],
+      [Action.DESTROY_WHATEVER_FACING]: [[Fact.FACING_SOMETHING]],
       [Action.NOTHING]: [],
       [Action.UNKNOWN]: [],
     };

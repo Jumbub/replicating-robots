@@ -4,7 +4,7 @@ import { actionToMethodFactory } from './logic/actionToMethod';
 import { ACTION_TO_FACTS, Fact, FACT_TO_ACTION } from './logic/factsAndActions';
 import { factToMethodFactory } from './logic/factToMethod';
 import { initialStateFactory } from './logic/state/State';
-import { theoryTest } from './__tests__/thoeryTest';
+import { theoryTest } from './__tests__/theoryTest';
 import { satisfyFacts } from './theory/satisfyFacts';
 import { emptyFactsTest } from './__tests__/emptyFactsTest';
 import { chopTreeTest } from './__tests__/chopTreeTest';
@@ -17,16 +17,16 @@ try {
   chopTreeTest();
   logger.print('Tests passed!', 'lime');
 
-  // const api = apiFactory();
-  // satisfyFacts(
-  //   [Fact.REMOVED_FACING_TREE],
-  //   FACT_TO_ACTION,
-  //   ACTION_TO_FACTS,
-  //   factToMethodFactory(api),
-  //   actionToMethodFactory(api),
-  //   initialStateFactory(),
-  //   logger,
-  // );
+  const api = apiFactory();
+  satisfyFacts(
+    [Fact.REMOVED_FACING_TREE],
+    FACT_TO_ACTION,
+    ACTION_TO_FACTS,
+    factToMethodFactory(api),
+    actionToMethodFactory(api),
+    initialStateFactory(),
+    logger,
+  );
 } catch (err) {
   const fileName = 'errors.txt';
   const errFile = fs.open(fileName, 'a');

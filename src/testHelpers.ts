@@ -20,9 +20,9 @@ export const setupGlobals = () => {
     });
 };
 
-export const stringMatch = (expected: string, actual: string) => {
+export const stringMatch = (actual: string, expected: string) => {
   if (expect) {
-    expect(expected).toEqual(actual);
+    expect(actual).toEqual(expected);
   } else {
     assert(
       expected === actual,
@@ -31,9 +31,9 @@ export const stringMatch = (expected: string, actual: string) => {
   }
 };
 
-export const stringArrayMatch = (expected: string[], actual: string[]) => {
+export const stringArrayMatch = (actual: string[], expected: string[]) => {
   if (expect) {
-    expect(expected).toEqual(actual);
+    expect(actual).toEqual(expected);
   } else {
     expected.forEach((_, i) =>
       assert(
@@ -68,7 +68,7 @@ export const testApiFactory = (mocks: ApiMock[]): Api => {
       if (mocks[mockCounter] === undefined) {
         throw `[${mockCounter}] Too many calls: ${key}`;
       } else if (mocks[mockCounter][0] !== key) {
-        throw `[${mockCounter}] Bad call: ${key}`;
+        throw `[${mockCounter}] Bad call: ${key} (expected: ${mocks[mockCounter][0]})`;
       }
       /** @ts-ignore */
       return mocks[mockCounter++][1](...args);

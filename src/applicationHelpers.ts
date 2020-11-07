@@ -1,4 +1,5 @@
 import { Api, apiFactory } from './application/Api';
+import { BlockId } from './application/constants';
 import { ApiMock } from './testHelpers';
 
 export const INSPECTIONS: Record<'log' | 'nothing' | 'dirt', InspectResult> = {
@@ -20,6 +21,22 @@ const actionWithDirection = (action: string) => {
 const actionWithDirectionIs = (action: string): action is keyof Api => {
   return action in API_VALUE;
 };
+
+export const getItemDetail = (slot: number, count: number, name?: BlockId): ApiMock => [
+  'getItemDetail',
+  (n: number) => {
+    if (n !== slot) {
+      throw `Invalid test argument! Expected: ${slot}, Got: ${n}`;
+    }
+    if (count === 0) {
+      return null;
+    }
+    if (name === undefined) {
+      throw 'Error: require block id if you set a count';
+    }
+    return { count, name };
+  },
+];
 
 export const inspect = (direction: ActionDirections, thing: keyof typeof INSPECTIONS): ApiMock => [
   actionWithDirection('inspect' + direction),

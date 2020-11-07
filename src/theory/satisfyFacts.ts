@@ -11,24 +11,15 @@ export const satisfyFacts = <TFact extends string, TAction extends string, TStat
   logger: Logger,
 ): void => {
   log(logger, 0, 'satisfyFacts', facts.join(', '));
-  let tasks: Task<TFact, TAction>[] = [[null, facts]];
+  let tasks: Task<TFact, TAction>[] = [[null, [facts]]];
   let success = true;
 
   while (tasks.length > 0) {
-    const [[action, requiredFacts]] = tasks;
-    log(logger, tasks.length, 'checking', requiredFacts.join(', '));
+    let [[action, requiredFactsArray]] = tasks;
 
-    const unsatisfiedFact = requiredFacts.find(fact => !factIsTrue[fact](state));
+    console.log({ action, requiredFactsArray });
 
-    if (unsatisfiedFact !== undefined) {
-      log(logger, tasks.length, 'unsatisfiedFact', unsatisfiedFact);
-
-      const action = factToAction[unsatisfiedFact];
-      const requirements = actionToFacts[action];
-      log(logger, tasks.length, 'factToAction', action);
-
-      tasks.unshift([action, requirements]);
-    } else {
+    if (requiredFactsArray.length === 0) {
       if (action !== null) {
         log(logger, tasks.length, 'actionToMethod', action);
         const result = actionToMethod[action](state);
@@ -41,6 +32,23 @@ export const satisfyFacts = <TFact extends string, TAction extends string, TStat
       }
 
       tasks.shift();
+    } else {
+      const requiredFacts = requiredFactsArray[0];
+      log(logger, tasks.length, 'checking', requiredFacts.join(', '));
+
+      const unsatisfiedFact = requiredFacts.find(fact => !factIsTrue[fact](state));
+
+      if (unsatisfiedFact !== undefined) {
+        log(logger, tasks.length, 'unsatisfiedFact', unsatisfiedFact);
+
+        const action = factToAction[unsatisfiedFact];
+        const requirements = actionToFacts[action];
+        log(logger, tasks.length, 'factToAction', action);
+
+        tasks.unshift([action, requirements]);
+      } else {
+        requiredFactsArray = requiredFactsArray.slice(1);
+      }
     }
   }
 
@@ -98,7 +106,8 @@ const log = (
   }
 };
 
-type Task<TFact, TAction> = [desiredAction: TAction | null, requiredFacts: TFact[]];
+type Facts<TFact> = Readonly<Readonly<TFact[]>[]>;
+type Task<TFact, TAction> = [desiredAction: TAction | null, requiredFacts: Facts<TFact>];
 
 export type Logger = {
   print: (input: string, color?: string) => void;
@@ -106,7 +115,10 @@ export type Logger = {
 };
 export type FactChecker<TFact extends string, TState> = Record<TFact, (state: TState) => boolean>;
 export type FactToAction<TFact extends string, TAction extends string> = Record<TFact, TAction>;
-export type ActionToFacts<TFact extends string, TAction extends string> = Record<TAction, TFact[]>;
+export type ActionToFacts<TFact extends string, TAction extends string> = Record<
+  TAction,
+  Facts<TFact>
+>;
 export type ActionToMethod<TAction extends string, TState> = Record<
   TAction,
   (state: TState) => boolean
