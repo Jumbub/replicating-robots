@@ -1,0 +1,9 @@
+# Better shell
+.mbs
+mbs.lua
+.lua_history
+.shell_history
+startup
+
+# Testing
+x.lua
