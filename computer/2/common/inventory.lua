@@ -51,10 +51,26 @@ m.selectEmpty = function()
 	local slot = c.range(16):findIndex(function(i)
 		return not turtle.getItemDetail(i)
 	end)
-	if not slot then
+	if slot == -1 then
 		return false
 	end
 	return assert(turtle.select(slot), "Somehow failed to select inventory slot")
+end
+
+m.selectNonEmpty = function()
+	local slot = c.range(16):findIndex(function(i)
+		return turtle.getItemDetail(i)
+	end)
+	if slot == -1 then
+		return false
+	end
+	return assert(turtle.select(slot), "Somehow failed to select inventory slot")
+end
+
+m.slotsUsed = function()
+	return c.range(16):filter(function()
+		return turtle.getItemDetail()
+	end)
 end
 
 return m

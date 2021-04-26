@@ -1,6 +1,8 @@
 local m = {}
 
-m.single = function(name, preUnstash, quantity)
+local craftSingle = function(name, preCraft, preUnstash, quantity)
+	quantity = quantity or 1
+	preUnstash = preUnstash or c.noopTrue
 	if not c.inventory.equip("minecraft:crafting_table") then
 		c.report.info("No crafting table equipable")
 		return false
@@ -8,6 +10,10 @@ m.single = function(name, preUnstash, quantity)
 	local stash, task = c.chest.stashExceptSingle(name, function()
 		if not c.inventory.selectEmpty() then
 			c.report.info("No success finding an empty slot to put the crafted item")
+			return false
+		end
+		if not preCraft() then
+			c.report.info("No success in pre craft task")
 			return false
 		end
 		if not turtle.craft(quantity or 1) then
@@ -36,6 +42,28 @@ m.single = function(name, preUnstash, quantity)
 		return false
 	end
 	return true
+end
+
+m.single = function(name, preUnstash, quantity)
+	craftSingle(name, c.noopTrue, preUnstash, quantity)
+end
+
+m.donut = function(name, preUnstash, quantity)
+	craftSingle(name, function()
+		if not c.inventory.selectNonEmpty() then
+			c.report.info("Cannot select non empty slot")
+			return false
+		end
+		return Array({ 1, 2, 3, 5, 7, 9, 10, 11 }):every(function(slot)
+			if not turtle.transferTo(slot, 1) then
+				c.report.info(
+					"Somehow while crafting I cannot transfer from " .. turtle.getSelectedSlot() .. " to " .. slot
+				)
+				return false
+			end
+			return true
+		end)
+	end, preUnstash, quantity)
 end
 
 return m

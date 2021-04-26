@@ -32,4 +32,8 @@ m.reload = function()
 	return true
 end
 
+m.noopTrue = function()
+	return true
+end
+
 return m

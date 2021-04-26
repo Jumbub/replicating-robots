@@ -14,7 +14,7 @@ m.refuel = function()
 		end
 
 		c.report.info("No ability to craft planks, resorting to consuming log")
-		if not c.inventory.find("log") then
+		if not c.inventory.select("log") then
 			c.report.info("The plank is no available in the inventory")
 			return false
 		end
