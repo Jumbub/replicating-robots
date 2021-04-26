@@ -3,7 +3,7 @@
 mbs.lua
 .lua_history
 .shell_history
-startup
+startup/00_mbs.lua
 
 # Testing
 x.lua
