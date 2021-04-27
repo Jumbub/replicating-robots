@@ -4,6 +4,7 @@ _G.colors = colors
 _G.term = term
 _G.textutils = textutils
 _G.fs = fs
+_G.exec = exec
 
 -- Load external packages
 require("lib")

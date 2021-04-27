@@ -6,18 +6,17 @@ m.refuel = function()
 	elseif c.inventory.select("plank") then
 		assert(turtle.refuel(1), "Somehow refueling has failed")
 	elseif c.inventory.find("log") then
-		local plank = c.craft.single("log", function()
-			return assert(turtle.refuel(1), "Somehow refueling has failed")
+		local successRefueling = c.craft.single("log", function()
+			return assert(turtle.refuel(1), "Somehow refueling after crafting plank has failed")
 		end)
-		if plank then
+		if successRefueling then
 			return true
 		end
 
-		c.report.info("No ability to craft planks, resorting to consuming log")
-		if not c.inventory.select("log") then
-			c.report.info("The plank is no available in the inventory")
-			return false
-		end
+		assert(
+			c.inventory.select("log"),
+			"If crafting of plank failed, the log should still be in the inventory"
+		)
 
 		return assert(turtle.refuel(1), "Somehow refueling has failed")
 	else

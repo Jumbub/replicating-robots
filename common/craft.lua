@@ -45,11 +45,11 @@ local craftSingle = function(name, preCraft, preUnstash, quantity)
 end
 
 m.single = function(name, preUnstash, quantity)
-	craftSingle(name, c.noopTrue, preUnstash, quantity)
+	return craftSingle(name, c.noopTrue, preUnstash, quantity)
 end
 
 m.donut = function(name, preUnstash, quantity)
-	craftSingle(name, function()
+	return craftSingle(name, function()
 		if not c.inventory.selectNonEmpty() then
 			c.report.info("Cannot select non empty slot")
 			return false

@@ -41,6 +41,11 @@ m.collectOak = function(height)
 	c.turn.left()
 	c.move.back({ destroy = true })
 	c.move.down({ destroy = true, times = height - 1 })
+
+	c.range(4):forEach(function()
+		turtle.suck()
+		c.turn.right()
+	end)
 	return true
 end
 
