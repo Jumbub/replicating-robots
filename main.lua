@@ -1,3 +1,5 @@
 require("common")
 
-c.tree.chop()
+c.state.clear()
+-- c.tree.chop({ firstTask = true })
+c.mine.down({ firstTask = true })

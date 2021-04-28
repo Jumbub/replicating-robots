@@ -1,8 +1,8 @@
 local m = {}
 
-local craftSingle = function(name, preCraft, preUnstash, quantity)
+local craftOneIngredient = function(name, quantity, preCraft, postCraft)
 	quantity = quantity or 1
-	preUnstash = preUnstash or c.noopTrue
+	postCraft = postCraft or c.noopTrue
 	if not c.inventory.equip("minecraft:crafting_table") then
 		c.report.info("No crafting table equipable")
 		return false
@@ -13,9 +13,10 @@ local craftSingle = function(name, preCraft, preUnstash, quantity)
 			return false
 		end
 		if not preCraft() then
-			c.report.info("No success in pre craft task")
+			c.report.info("Pre-craft task failed")
 			return false
 		end
+		c.inventory.selectEmpty()
 		if not turtle.craft(quantity or 1) then
 			c.report.info("No success while crafting", {
 				name = name,
@@ -25,8 +26,8 @@ local craftSingle = function(name, preCraft, preUnstash, quantity)
 			})
 			return false
 		end
-		if preUnstash then
-			if not preUnstash() then
+		if postCraft then
+			if postCraft() == false then
 				c.report.info("No success doing pre unstash crafting task")
 				return false
 			end
@@ -44,26 +45,29 @@ local craftSingle = function(name, preCraft, preUnstash, quantity)
 	return true
 end
 
-m.single = function(name, preUnstash, quantity)
-	return craftSingle(name, c.noopTrue, preUnstash, quantity)
+local makeDonutShape = function(name)
+	if not c.inventory.selectNonEmpty() then
+		c.report.info("Cannot find ingredient: " .. name)
+		return false
+	end
+	turtle.transferTo(1)
+	turtle.select(1)
+	local success = Array({ 2, 3, 5, 7, 9, 10, 11 }):findIndex(function(slot)
+		return not turtle.transferTo(slot, 1)
+	end)
+	return true
 end
 
-m.donut = function(name, preUnstash, quantity)
-	return craftSingle(name, function()
-		if not c.inventory.selectNonEmpty() then
-			c.report.info("Cannot select non empty slot")
-			return false
-		end
-		return Array({ 1, 2, 3, 5, 7, 9, 10, 11 }):every(function(slot)
-			if not turtle.transferTo(slot, 1) then
-				c.report.info(
-					"Somehow while crafting I cannot transfer from " .. turtle.getSelectedSlot() .. " to " .. slot
-				)
-				return false
-			end
-			return true
-		end)
-	end, preUnstash, quantity)
+m.single = function(name, quantity, preUnstash)
+	return c.task.recoverable(function()
+		return craftOneIngredient(name, quantity, c.noopTrue, preUnstash)
+	end, "Failed to craft 'single'")
+end
+
+m.donut = function(name, quantity, preUnstash)
+	return c.task.recoverable(function()
+		return craftOneIngredient(name, quantity, makeDonutShape, preUnstash)
+	end, "Failed to craft 'donut'")
 end
 
 return m

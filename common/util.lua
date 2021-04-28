@@ -36,4 +36,11 @@ m.noopTrue = function()
 	return true
 end
 
+m.nTimes = function(n, task)
+	assert(n >= 0, "nTimes called with number smaller than 0: " .. n)
+	for i = 1, n do
+		task(i)
+	end
+end
+
 return m

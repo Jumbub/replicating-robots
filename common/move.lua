@@ -1,50 +1,56 @@
 local m = {}
 
-m.direct = function(direction, options)
-	options = options or {}
-	options.destroy = options.destroy or false
+local withAssertions = function(direction, options)
+	local destroy = options.destroy == nil or options.destroy
 
 	local success, error = turtle[direction]()
 
-	if error == "Movement obstructed" and options.destroy and c.dig[direction]() then
-		success, error = turtle[direction]()
+	if success then
+		return true
 	end
-	if error == "Out of fuel" and c.fuel.refuel() then
+
+	if error == "Movement obstructed" and destroy then
+		while not success and c.dig[direction]() do
+			success, error = turtle[direction]()
+		end
+	end
+
+	if error == "Out of fuel" then
+		c.fuel.refuel()
 		success, error = turtle[direction]()
 	end
 
-	return assert(success, "Failed to move: " .. (error or ""))
+	return success
 end
 
-local moveRecoverable = function(direction, options)
+local recoverable = function(direction, options)
 	options = options or {}
-	options.times = options.times and math.max(options.times, 0) or 1
+	local times = options.times and math.max(options.times, 0) or 1
 
-	c.range(options.times):forEach(function()
-		c.task.recoverable(function()
-			c.move.direct(direction, options)
-		end, "Inability to move " .. direction)
+	local failedAt = c.range(times):findIndex(function()
+		return not withAssertions(direction, options)
 	end)
+	if failedAt == -1 then
+		failedAt = nil
+	end
+
+	return failedAt == nil, failedAt
 end
 
 m.forward = function(options)
-	moveRecoverable("forward", options)
-	return true
+	return recoverable("forward", options)
 end
 
 m.back = function(options)
-	moveRecoverable("back", options)
-	return true
+	return recoverable("back", options)
 end
 
 m.down = function(options)
-	moveRecoverable("down", options)
-	return true
+	return recoverable("down", options)
 end
 
 m.up = function(options)
-	moveRecoverable("up", options)
-	return true
+	return recoverable("up", options)
 end
 
 return m

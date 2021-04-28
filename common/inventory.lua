@@ -44,7 +44,7 @@ m.equip = function(name)
 	if name == "minecraft:diamond_pickaxe" then
 		action = turtle.equipRight
 	end
-	return assert(action(), "Somehow failed to equip on left side")
+	return assert(action(), "Somehow failed to equip " .. name)
 end
 
 m.selectEmpty = function()
@@ -70,6 +70,30 @@ end
 m.slotsUsed = function()
 	return c.range(16):filter(function()
 		return turtle.getItemDetail()
+	end)
+end
+
+m.organise = function()
+	local freeSlots = {}
+	c.range(16):forEach(function(slot)
+		local detail = turtle.getItemDetail(slot)
+		if not detail then
+			return
+		end
+		local name = detail.name
+		local freeSlot = freeSlots[name]
+		if freeSlot then
+			turtle.select(slot)
+			turtle.transferTo(freeSlot)
+
+			if turtle.getItemCount(slot) > 0 then
+				freeSlots[name] = slot
+			elseif turtle.getItemSpace(freeSlot) == 0 then
+				freeSlots[name] = nil
+			end
+		elseif turtle.getItemSpace(slot) > 0 then
+			freeSlots[name] = slot
+		end
 	end)
 end
 
