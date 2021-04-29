@@ -1,5 +1,31 @@
 local m = {}
 
+local matchSingleOrMany = function(needle, haystack)
+	if type(haystack) == "string" then
+		return needle == haystack
+	else
+		return Array(haystack):includes(needle)
+	end
+end
+
+-- Takes a name string, or array of name strings
+m.count = function(name)
+	return c.range(16)
+		:map(function(i)
+			local detail = turtle.getItemDetail(i)
+			if not detail then
+				return { "", i }
+			end
+			return { detail.name, i }
+		end)
+		:filter(function(v)
+			return matchSingleOrMany(v[1], name)
+		end)
+		:reduce(function(acc, v)
+			return acc + turtle.getItemCount(v[2])
+		end, 0)
+end
+
 m.itemName = function(i)
 	local item = turtle.getItemDetail(i)
 	if item then
@@ -13,6 +39,16 @@ m.itemNameContains = function(i, name)
 		return false
 	end
 	return string.find(m.itemName(i), name) and true or false
+end
+
+m.findExact = function(name)
+	local index = c.range(16):find(function(i)
+		return turtle.getItemDetail(i).name == name
+	end)
+	if index == -1 then
+		return nil
+	end
+	return index
 end
 
 m.find = function(name)
@@ -68,8 +104,8 @@ m.selectNonEmpty = function()
 end
 
 m.slotsUsed = function()
-	return c.range(16):filter(function()
-		return turtle.getItemDetail()
+	return #c.range(16):filter(function(i)
+		return turtle.getItemDetail(i)
 	end)
 end
 

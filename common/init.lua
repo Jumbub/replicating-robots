@@ -11,6 +11,9 @@ require("lib")
 
 -- Load local packages
 _G.c = require("common.util")
+_G.c.report = require("common.report")
+_G.c.state = require("common.state")
+_G.c.item = require("common.item")
 _G.c.chest = require("common.chest")
 _G.c.craft = require("common.craft")
 _G.c.dig = require("common.dig")
@@ -20,12 +23,11 @@ _G.c.inspect = require("common.inspect")
 _G.c.inventory = require("common.inventory")
 _G.c.leaf = require("common.leaf")
 _G.c.move = require("common.move")
-_G.c.report = require("common.report")
 _G.c.task = require("common.task")
+_G.c.scan = require("common.scan")
 _G.c.tree = require("common.tree")
 _G.c.turn = require("common.turn")
 _G.c.mine = require("common.mine")
-_G.c.state = require("common.state")
 
 -- Create aliases
 _G.dd = c.report.debug

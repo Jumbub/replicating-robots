@@ -2,9 +2,9 @@ local m = {}
 
 m.refuel = function()
 	if c.inventory.select("coal") then
-		assert(turtle.refuel(1), "Somehow refueling has failed")
+		assert(turtle.refuel(1), "Somehow refueling from coal has failed")
 	elseif c.inventory.select("plank") then
-		assert(turtle.refuel(1), "Somehow refueling has failed")
+		assert(turtle.refuel(1), "Somehow refueling from plank has failed")
 	elseif c.inventory.find("log") then
 		local successRefueling = c.craft.single("log", 1, function()
 			return assert(turtle.refuel(1), "Somehow refueling after crafting plank has failed")
@@ -18,7 +18,7 @@ m.refuel = function()
 			"If crafting of plank failed, the log should still be in the inventory"
 		)
 
-		return assert(turtle.refuel(1), "Somehow refueling has failed")
+		return assert(turtle.refuel(1), "Somehow refueling from a log has failed")
 	else
 		c.report.info("No fuel in inventory")
 		return false

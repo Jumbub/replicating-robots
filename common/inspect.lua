@@ -1,15 +1,16 @@
 local m = {}
 
-m.requireResource = function(success, block)
+m.shouldDig = function(success, block)
 	if not success then
 		return false
 	end
 
-	return c.goal.collectItem(block.name)
+	return c.goal.shouldCollect(block.name)
 end
 
 m.hasTag = function(tag, success, block)
 	if success then
+		assert(block, "Block is falsey")
 		return block.tags[tag]
 	end
 	return false

@@ -36,7 +36,7 @@ m.incrementState = function(key)
 	end)
 end
 
-m.clearState = function()
+m.reset = function()
 	write({})
 end
 

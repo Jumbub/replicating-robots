@@ -19,6 +19,7 @@ m.chopRecursive = function(height, options)
 end
 
 m.chop = function(options)
+	c.report.info("Starting tree chopping task")
 	options = options or {}
 	if not c.inspect.hasTag("minecraft:logs", turtle.inspect()) then
 		return false

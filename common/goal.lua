@@ -1,58 +1,34 @@
 local m = {}
 
-local FIRST_GOAL = "resources"
-
-local ALWAYS_COLLECT = Array({
-	"minecraft:diamond_ore",
-	"minecraft:iron_ore",
-	"minecraft:coal_ore",
-	"minecraft:redstone_ore",
+local ALWAYS_DIG = Array({
+	c.item.diamond_ore,
+	c.item.redstone_ore,
+	c.item.iron_ore,
+	c.item.coal_ore,
 })
 
-local GOALS = {
-	[FIRST_GOAL] = Array({
-		["minecraft:stone"] = 22,
-		["minecraft:sand"] = 6,
-		["*plank"] = 17,
-	}),
-}
+local sometimes = function(group, count)
+	local g = {}
+	Array(group):forEach(function(item)
+		g[item] = { count = count, items = group }
+	end)
+	return g
+end
 
-m.collectItem = function(name)
-	if ALWAYS_COLLECT:includes(name) then
+local SOMETIMES_DIG = c.mutativeConcat(sometimes(c.item.all.cobbled, 14), sometimes(c.item.all.sand, 6))
+
+m.shouldCollect = function(name)
+	if ALWAYS_DIG:includes(name) then
 		return true
 	end
 
-	local currentGoalName = c.state.getState("currentGoal", FIRST_GOAL)
-	local currentGoal = GOALS[currentGoalName]
+	local goal = SOMETIMES_DIG[name]
 
-	local goalKey, goalValue = "", 0
-
-	for key, value in pairs(currentGoal) do
-		if String.startsWith(key, "*") then
-			local looseKey = String.replace(key, "*", "")
-			if string.find(name, looseKey) then
-				goalValue = value
-				goalKey = key
-				break
-			end
-		else
-			if key == name then
-				goalValue = value
-				goalKey = key
-				break
-			end
-		end
-	end
-
-	if goalValue == 0 then
+	if not goal then
 		return false
 	end
 
-	-- VERY poor item count code
-	local hasItem = c.inventory.select(String.replace(goalKey, "*", ""))
-	local count = hasItem and turtle.getItemCount() or 0
-
-	return count < goalValue
+	return c.inventory.count(goal.items) < goal.count
 end
 
 return m

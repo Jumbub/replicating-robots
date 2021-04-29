@@ -43,4 +43,13 @@ m.nTimes = function(n, task)
 	end
 end
 
+m.mutativeConcat = function(t, ...)
+	for _, v in pairs({ ... }) do
+		for vk, vv in pairs(v) do
+			t[vk] = vv
+		end
+	end
+	return t
+end
+
 return m

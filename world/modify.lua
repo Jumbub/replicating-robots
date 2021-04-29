@@ -16,10 +16,11 @@ end
 
 m.run = function(...)
 	local cmd = m.join({ ... })
-	print("$ " .. cmd)
-	local a, b, c = exec(cmd)
-	print(textutils.serialiseJSON({ a, b, c }))
-	print()
+	print(cmd)
+	local a, b, t = exec(cmd)
+	if not a then
+		c.report.error(textutils.serialiseJSON({ a, b, t }))
+	end
 end
 
 m.fill = function(start, stop, block, ...)

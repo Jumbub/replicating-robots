@@ -52,10 +52,9 @@ local makeDonutShape = function(name)
 	end
 	turtle.transferTo(1)
 	turtle.select(1)
-	local success = Array({ 2, 3, 5, 7, 9, 10, 11 }):findIndex(function(slot)
-		return not turtle.transferTo(slot, 1)
+	return Array({ 2, 3, 5, 7, 9, 10, 11 }):every(function(slot)
+		return turtle.transferTo(slot, 1)
 	end)
-	return true
 end
 
 m.single = function(name, quantity, preUnstash)
