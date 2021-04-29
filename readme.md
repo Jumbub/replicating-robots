@@ -36,31 +36,13 @@ Replicating Robots is an attempt at the "self-replicating turtle" challenge for 
 
 ## Running
 
-### Prerequisites
+### Installing
 
-[Yarn package manager](https://yarnpkg.com/)
+Replace your turtles rom with: `git clone https://github.com/Jumbub/replicating-robots.git`
 
-### Building source
+### Executing
 
-The build steps transpiles the Typescript into Lua to run in ComputerCraft -
-
-`yarn build`
-
-If you're developing -
-
-`yarn dev`
-
-### Syncing to Minecraft
-
-The sync step is used to push the Lua into your Minecraft save -
-
-`echo "/home/jamie/.minecraft/saves/Test/computercraft/computer/1/src/" > .computerDirectory`
-
-`yarn sync`
-
-If you're developing -
-
-`yarn sync:watch`
+Inside your turtle, run: `main`
 
 ## License
 
