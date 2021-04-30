@@ -1,7 +1,7 @@
 local m = {}
 
 m.placeChest = function()
-	if not c.inventory.select("minecraft:chest") then
+	if not c.inventory.select(c.item.chest) then
 		c.report.info("No chest in inventory for stashing")
 		return false
 	end
@@ -53,7 +53,7 @@ m.stashExceptSingle = function(name, task)
 		c.inventory.organise()
 		c.range(16)
 			:map(function(i)
-				return c.inventory.itemNameContains(i, name)
+				return c.inventory.slotContains(i, name)
 			end)
 			:forEach(function(except, i)
 				if not excepted and except then

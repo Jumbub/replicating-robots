@@ -3,24 +3,25 @@ local m = {}
 local inspection = function()
 	if c.inspect.hasTag("minecraft:logs", turtle.inspect()) then
 		c.tree.chop()
-	end
-	if c.inspect.shouldDig(turtle.inspect()) then
+	elseif c.inspect.shouldDig(turtle.inspect()) then
 		c.dig.forward()
 	end
 end
 
--- Susceptiable to falling into caves. Never to be seen again.
 m.forward = function(times)
 	if times < 1 then
 		return
 	end
+
 	while not c.move.forward({ destroy = false }) do
-		c.move.up()
+		inspection()
+		if turtle.detect() then
+			c.move.up()
+		end
 	end
-	while not turtle.detectDown() do
+	while not turtle.detectDown() or c.inspect.shouldDig(turtle.inspectDown()) do
 		c.move.down()
 	end
-	inspection()
 	c.turn.right()
 	inspection()
 	c.turn.around()
@@ -37,7 +38,7 @@ local squigle = function()
 	m.forward(2)
 end
 
-m.ground = function(loops)
+m.groundLoop = function(loops)
 	if loops <= 0 then
 		c.report.warning("Poor loops argument to ground scan function: " .. loops)
 		return
@@ -76,6 +77,27 @@ m.ground = function(loops)
 			end
 		end)
 	end)
+end
+
+m.ground = function(loops)
+	-- Scan ground
+	m.groundLoop(loops)
+
+	-- Return to center
+	if loops >= 1 then
+		c.turn.right()
+		c.move.forward({ times = loops * 3 })
+		c.turn.right()
+		c.move.forward({ times = loops + 1 })
+		while turtle.detect() do
+			c.move.up()
+		end
+		c.move.forward()
+		while not turtle.detectDown() do
+			c.move.down()
+		end
+		c.turn.around()
+	end
 end
 
 return m

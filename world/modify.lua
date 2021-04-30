@@ -1,6 +1,3 @@
-require("common")
-require("lib")
-
 local m = {}
 
 m.chunk_size = 16

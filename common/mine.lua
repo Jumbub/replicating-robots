@@ -12,7 +12,14 @@ m.spin = function()
 	end)
 end
 
-m.down = function()
+local squigle = function()
+	c.move.forward({ times = 2 })
+	c.turn.right()
+	c.move.forward()
+	c.turn.left()
+end
+
+m.singleVertical = function()
 	c.report.info("Started vertically mining down")
 	local depth = 0
 	while c.move.down() do
@@ -22,10 +29,7 @@ m.down = function()
 	c.report.info("Reach bottom of vertical mine")
 	c.move.up({ times = 6 }) -- out of bedrock zone
 	depth = depth - 6
-	c.move.forward({ times = 2 })
-	c.turn.right()
-	c.move.forward()
-	c.turn.left()
+	squigle()
 	c.report.info("Started vertically mining up")
 	assert(depth >= 0, "Somehow the mining depth is negative: " .. depth)
 	while depth > 0 do
@@ -34,6 +38,34 @@ m.down = function()
 		depth = depth - 1
 	end
 	c.report.info("Completed 2 vertical mines")
+end
+
+local alternateAB = function(a, b, n)
+	c.nTimes(n, function()
+		a()
+		local bBackup = b
+		b = a
+		a = bBackup
+	end)
+end
+
+-- local test = function()
+-- 	c.move.down()
+-- 	c.move.up()
+-- 	squigle()
+-- 	c.move.down()
+-- 	c.move.up()
+-- end
+
+m.vertical = function(edges)
+	c.nTimes(edges, function(edge)
+		if (edge + 2) % 4 == 0 then
+			alternateAB(squigle, m.singleVertical, math.ceil(edge / 2))
+		else
+			alternateAB(m.singleVertical, squigle, math.ceil(edge / 2))
+		end
+		c.turn.right()
+	end)
 end
 
 return m

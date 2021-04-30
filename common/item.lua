@@ -1216,7 +1216,7 @@ m["potted_crimson_roots"] = "minecraft:potted_crimson_roots"
 m["potted_warped_roots"] = "minecraft:potted_warped_roots"
 
 m.all = {
-	logs = {
+	combustibleLogs = {
 		m.oak_log,
 		m.spruce_log,
 		m.birch_log,
@@ -1242,15 +1242,13 @@ m.all = {
 		m.acacia_wood,
 		m.dark_oak_wood,
 	},
-	planks = {
+	combustiblePlanks = {
 		m.oak_planks,
 		m.spruce_planks,
 		m.birch_planks,
 		m.jungle_planks,
 		m.acacia_planks,
 		m.dark_oak_planks,
-		m.crimson_planks,
-		m.warped_planks,
 	},
 	sand = {
 		m.sand,

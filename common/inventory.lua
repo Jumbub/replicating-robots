@@ -1,6 +1,6 @@
 local m = {}
 
-local matchSingleOrMany = function(needle, haystack)
+local matchNameOnNames = function(needle, haystack)
 	if type(haystack) == "string" then
 		return needle == haystack
 	else
@@ -8,52 +8,41 @@ local matchSingleOrMany = function(needle, haystack)
 	end
 end
 
+local matchDetailOnNames = function(detail, haystack)
+	detail = detail or { name = "cidjwuaycpduql" }
+	return matchNameOnNames(detail.name, haystack)
+end
+
 -- Takes a name string, or array of name strings
 m.count = function(name)
 	return c.range(16)
 		:map(function(i)
-			local detail = turtle.getItemDetail(i)
-			if not detail then
-				return { "", i }
-			end
-			return { detail.name, i }
+			return { m.itemName(i), i }
 		end)
 		:filter(function(v)
-			return matchSingleOrMany(v[1], name)
+			return matchNameOnNames(v[1], name)
 		end)
 		:reduce(function(acc, v)
 			return acc + turtle.getItemCount(v[2])
 		end, 0)
 end
 
-m.itemName = function(i)
-	local item = turtle.getItemDetail(i)
+m.itemName = function(slot)
+	local item = turtle.getItemDetail(slot)
 	if item then
 		return item.name
 	end
 	return ""
 end
 
-m.itemNameContains = function(i, name)
-	if name == "" then
-		return false
-	end
-	return string.find(m.itemName(i), name) and true or false
-end
-
-m.findExact = function(name)
-	local index = c.range(16):find(function(i)
-		return turtle.getItemDetail(i).name == name
-	end)
-	if index == -1 then
-		return nil
-	end
-	return index
+-- Takes a name string, or array of name strings
+m.slotContains = function(slot, name)
+	return matchDetailOnNames(turtle.getItemDetail(slot), name)
 end
 
 m.find = function(name)
-	local index = c.range(16):findIndex(function(i)
-		return c.inventory.itemNameContains(i, name)
+	local index = c.range(16):findIndex(function(slot)
+		return matchDetailOnNames(turtle.getItemDetail(slot), name)
 	end)
 	if index == -1 then
 		return nil
@@ -70,14 +59,14 @@ m.select = function(name)
 end
 
 m.equip = function(name)
-	if name == "minecraft:crafting_table" and turtle.craft then
+	if name == c.item.crafting_table and turtle.craft then
 		return true
 	end
 	if not c.inventory.select(name) then
 		return false
 	end
 	local action = turtle.equipLeft
-	if name == "minecraft:diamond_pickaxe" then
+	if name == c.item.diamond_pickaxe then
 		action = turtle.equipRight
 	end
 	return assert(action(), "Somehow failed to equip " .. name)
@@ -90,7 +79,7 @@ m.selectEmpty = function()
 	if slot == -1 then
 		return false
 	end
-	return assert(turtle.select(slot), "Somehow failed to select inventory slot")
+	return assert(turtle.select(slot), "Somehow failed to select inventory slot: " .. slot)
 end
 
 m.selectNonEmpty = function()
@@ -100,7 +89,7 @@ m.selectNonEmpty = function()
 	if slot == -1 then
 		return false
 	end
-	return assert(turtle.select(slot), "Somehow failed to select inventory slot")
+	return assert(turtle.select(slot), "Somehow failed to select inventory slot: " .. slot)
 end
 
 m.slotsUsed = function()

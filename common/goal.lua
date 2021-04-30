@@ -3,6 +3,7 @@ local m = {}
 local ALWAYS_DIG = Array({
 	c.item.diamond_ore,
 	c.item.redstone_ore,
+	c.item.gold_ore,
 	c.item.iron_ore,
 	c.item.coal_ore,
 })
