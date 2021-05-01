@@ -21,22 +21,22 @@ local recoverable = function(dig)
 end
 
 m.forward = function()
-	return recoverable(turtle.dig)
+	return recoverable(turtle.native.dig)
 end
 
 m.back = function()
 	c.turn.around()
-	local result = recoverable(turtle.dig)
+	local result = m.forward()
 	c.turn.around()
 	return result
 end
 
 m.down = function()
-	return recoverable(turtle.digDown)
+	return recoverable(turtle.native.digDown)
 end
 
 m.up = function()
-	return recoverable(turtle.digUp)
+	return recoverable(turtle.native.digUp)
 end
 
 return m

@@ -32,8 +32,15 @@ m.chop = function(options)
 	end
 
 	c.move.forward()
-
 	c.tree.chopRecursive(0, options)
+
+	-- Clear out any tree below us
+	local depth = 0
+	while c.inspect.hasTag("minecraft:logs", turtle.inspectDown()) do
+		c.move.down()
+		depth = depth + 1
+	end
+	c.move.up({ times = depth })
 
 	c.move.back()
 	return true

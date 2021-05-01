@@ -50,6 +50,10 @@ m.find = function(name)
 	return index
 end
 
+m.has = function(name)
+	return m.find(name) and true or false
+end
+
 m.select = function(name)
 	local slot = c.inventory.find(name)
 	if not slot then

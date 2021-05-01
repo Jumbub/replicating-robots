@@ -1,39 +1,54 @@
 local m = {}
 
+local ID = os.getComputerID()
+local STATE_DIR = "memory"
+local STATE_FILE = STATE_DIR .. "/" .. ID .. ".json"
+
+local ensureFileExists = function()
+	if not fs.exists(STATE_DIR) then
+		fs.makeDir(STATE_DIR)
+	end
+	if not fs.exists(STATE_FILE) then
+		local file = fs.open(STATE_FILE, "w")
+		file.write(textutils.serialiseJSON({}))
+		file.close()
+	end
+	assert(fs.isDir(STATE_DIR), "Somehow there exists a state file. Expecting a directory.")
+end
+
 local write = function(state)
-	local file = fs.open("state.json", "w")
+	ensureFileExists()
+
+	local file = fs.open(STATE_FILE, "w")
 	file.write(textutils.serialiseJSON(state))
 	file.close()
 end
 
 local read = function()
-	local file = fs.open("state.json", "r")
-	local state = textutils.unserialiseJSON(file.readLine())
+	ensureFileExists()
+
+	local file = fs.open(STATE_FILE, "r")
+	local state = textutils.unserialiseJSON(file.readAll()) or {}
 	file.close()
+
 	return state
 end
 
-local update = function(action)
-	local state = read()
-	action(state)
-	write(state)
+m.update = function(action)
+	write(action(read()))
 end
 
-m.setState = function(key, value)
-	update(function(state)
-		state[key] = value
+m.updateKey = function(key, default, action)
+	m.update(function(state)
+		local newValue = action(state and state[key] or default)
+		state[key] = newValue
+		return state
 	end)
 end
 
-m.getState = function(key, default)
+m.get = function(key, default)
 	local state = read()
 	return state[key] or default
-end
-
-m.incrementState = function(key)
-	update(function(state)
-		state[key] = (state[key] or 0) + 1
-	end)
 end
 
 m.reset = function()

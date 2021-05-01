@@ -26,4 +26,13 @@ m.refuel = function()
 	return true
 end
 
+m.availableFuel = function()
+	return turtle.getFuelLevel()
+		+ c.inventory.count(c.item.all.combustibleLogs) * 15 * (c.craft.capable() and 4 or 1)
+		+ c.inventory.count(c.item.all.combustiblePlanks) * 15
+		+ c.inventory.count(c.item.all.coal) * 80
+		+ c.inventory.count(c.item.stick) * 5
+		+ c.inventory.count(c.item.lava_bucket) * 1000
+end
+
 return m

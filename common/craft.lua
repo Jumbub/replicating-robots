@@ -69,4 +69,8 @@ m.donut = function(name, quantity, preUnstash)
 	end, "Failed to craft 'donut'")
 end
 
+m.capable = function()
+	return (turtle.craft or c.inventory.has(c.item.crafting_table)) and true or false
+end
+
 return m

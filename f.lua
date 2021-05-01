@@ -1,15 +1,15 @@
-while turtle.down() do
+require("common")
+
+while c.move.down({ destroy = false }) do
 end
 
 local x = turtle.getFuelLevel()
 
 for _ = 1, math.ceil(x / 2), 1 do
-	turtle.digUp()
-	turtle.up()
+	c.move.up()
 end
 for _ = 1, math.ceil(x / 2), 1 do
-	turtle.digDown()
-	turtle.down()
+	c.move.down({ destroy = false })
 end
 
 print("remaining fuel:" .. turtle.getFuelLevel())

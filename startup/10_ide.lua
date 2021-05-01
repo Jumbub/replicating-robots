@@ -8,4 +8,4 @@ _G.peripheral = peripheral
 _G.rednet = rednet
 _G.term = term
 _G.textutils = textutils
-_G.turtle = turtle
+_G.turtle = _G.turtle

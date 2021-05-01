@@ -38,6 +38,12 @@ end
 
 m.nTimes = function(n, task)
 	assert(n >= 0, "nTimes called with number smaller than 0: " .. n)
+	for _ = 1, n do
+		task()
+	end
+end
+m.forI = function(n, task)
+	assert(n >= 0, "forI called with number smaller than 0: " .. n)
 	for i = 1, n do
 		task(i)
 	end

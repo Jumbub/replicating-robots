@@ -60,9 +60,9 @@ m.groundLoop = function(loops)
 		return
 	end
 
-	c.nTimes(loops - 1, function(loopI)
+	c.forI(loops - 1, function(loopI)
 		c.report.info("Starting pattern loop n:" .. loopI)
-		c.nTimes(4, function(edge)
+		c.forI(4, function(edge)
 			c.nTimes(loopI, squigle)
 			c.turn.right()
 			local offset = (loopI - 1) * 3
@@ -83,21 +83,7 @@ m.ground = function(loops)
 	-- Scan ground
 	m.groundLoop(loops)
 
-	-- Return to center
-	if loops >= 1 then
-		c.turn.right()
-		c.move.forward({ times = loops * 3 })
-		c.turn.right()
-		c.move.forward({ times = loops + 1 })
-		while turtle.detect() do
-			c.move.up()
-		end
-		c.move.forward()
-		while not turtle.detectDown() do
-			c.move.down()
-		end
-		c.turn.around()
-	end
+	c.gps.goTo(c.location.getHome())
 end
 
 return m

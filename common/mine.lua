@@ -49,16 +49,8 @@ local alternateAB = function(a, b, n)
 	end)
 end
 
--- local test = function()
--- 	c.move.down()
--- 	c.move.up()
--- 	squigle()
--- 	c.move.down()
--- 	c.move.up()
--- end
-
 m.vertical = function(edges)
-	c.nTimes(edges, function(edge)
+	c.forI(edges, function(edge)
 		if (edge + 2) % 4 == 0 then
 			alternateAB(squigle, m.singleVertical, math.ceil(edge / 2))
 		else
@@ -66,6 +58,8 @@ m.vertical = function(edges)
 		end
 		c.turn.right()
 	end)
+
+	m.gps.goTo(m.location.getHome())
 end
 
 return m
