@@ -5,7 +5,8 @@ m.chopRecursive = function(height, options)
 		return c.leaf.collect(height)
 	end
 
-	if height == 2 and options.firstTask then
+	-- Special case to handle an early complex chest craft
+	if height == 2 and options.first then
 		c.report.info("Crafting a chest because this the first tree task")
 		assert(turtle.select(1), "Somehow this failed")
 		assert(turtle.refuel(3), "First task: there should be 3 planks in the first inventory")
@@ -25,24 +26,26 @@ m.chopRecursive = function(height, options)
 end
 
 m.chop = function(options)
-	c.report.info("Starting tree chopping task")
 	options = options or {}
 	if not c.inspect.hasTag("minecraft:logs", turtle.inspect()) then
 		return false
 	end
+	c.report.info("Starting tree chopping task")
 
 	c.move.forward()
+	local basePos = c.gps.getCurrent()
+
+	-- Chop tree above
 	c.tree.chopRecursive(0, options)
 
-	-- Clear out any tree below us
-	local depth = 0
+	-- Chop tree below
 	while c.inspect.hasTag("minecraft:logs", turtle.inspectDown()) do
 		c.move.down()
-		depth = depth + 1
 	end
-	c.move.up({ times = depth })
 
+	c.gps.goTo(basePos)
 	c.move.back()
+
 	return true
 end
 

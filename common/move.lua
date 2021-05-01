@@ -1,9 +1,32 @@
 local m = {}
 
+local ohno = function()
+	local abortPos = c.gps.getCurrent()
+	c.report.warning(
+		"Attempted to move, but not a safe amount of fuel. Temporarily aborting task to harvest fuel.",
+		abortPos
+	)
+	c.plant.harvestTrees(function()
+		if c.fuel.available() >= c.vector.distAtoB(c.gps.getCurrent(), abortPos) + 90 then
+			c.report.info("Harvested enough wood to return to previous task.")
+			return true
+		end
+		return false
+	end)
+	c.gps.goTo(abortPos)
+end
+
 local move = function(direction)
+	if not c.fuel.safeMove(direction) then
+		-- Last ditch attempt, dig the block, maybe it's fuel
+		c.dig[direction]()
+		if not c.fuel.safeMove(direction) then
+			ohno()
+		end
+	end
 	local success, error = turtle.native[direction]()
 	if success then
-		c.relativeGps[direction]()
+		c.gpsRelative[direction]()
 	end
 	return success, error
 end

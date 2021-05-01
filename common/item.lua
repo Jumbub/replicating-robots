@@ -1250,17 +1250,25 @@ m.all = {
 		m.acacia_planks,
 		m.dark_oak_planks,
 	},
-	sand = {
+	sands = {
 		m.sand,
 		m.red_sand,
 	},
-	coal = {
+	coals = {
 		m.coal,
 		m.charcoal,
 	},
 	cobbled = {
 		m.stone,
 		m.cobblestone,
+	},
+	saplings = {
+		m.oak_sapling,
+		m.spruce_sapling,
+		m.birch_sapling,
+		m.jungle_sapling,
+		m.acacia_sapling,
+		m.dark_oak_sapling,
 	},
 }
 

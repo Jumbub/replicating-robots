@@ -67,13 +67,13 @@ m.groundLoop = function(loops)
 			c.turn.right()
 			local offset = (loopI - 1) * 3
 			if edge == 1 then
-				m.forward(6 + offset) -- 9
+				m.forward(6 + offset)
 			elseif edge == 2 then
-				m.forward(7 + offset) -- 10
+				m.forward(7 + offset)
 			elseif edge == 3 then
-				m.forward(9 + offset) -- 12
+				m.forward(9 + offset)
 			elseif edge == 4 then
-				m.forward(8 + offset) -- 11
+				m.forward(8 + offset)
 			end
 		end)
 	end)
@@ -83,7 +83,7 @@ m.ground = function(loops)
 	-- Scan ground
 	m.groundLoop(loops)
 
-	c.gps.goTo(c.location.getHome())
+	c.gps.goHome()
 end
 
 return m

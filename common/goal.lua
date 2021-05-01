@@ -16,7 +16,7 @@ local sometimes = function(group, count)
 	return g
 end
 
-local SOMETIMES_DIG = c.mutativeConcat(sometimes(c.item.all.cobbled, 14), sometimes(c.item.all.sand, 6))
+local SOMETIMES_DIG = c.mutativeConcat(sometimes(c.item.all.cobbled, 14), sometimes(c.item.all.sands, 6))
 
 m.shouldCollect = function(name)
 	if ALWAYS_DIG:includes(name) then

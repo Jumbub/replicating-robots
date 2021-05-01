@@ -59,7 +59,7 @@ m.vertical = function(edges)
 		c.turn.right()
 	end)
 
-	m.gps.goTo(m.location.getHome())
+	m.gps.goHome()
 end
 
 return m

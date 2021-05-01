@@ -3,7 +3,7 @@ local m = {}
 local craftOneIngredient = function(name, quantity, preCraft, postCraft)
 	quantity = quantity or 1
 	postCraft = postCraft or c.noopTrue
-	if not c.inventory.equip("minecraft:crafting_table") then
+	if not c.inventory.equip(c.item.crafting_table) then
 		c.report.info("No crafting table equipable")
 		return false
 	end
