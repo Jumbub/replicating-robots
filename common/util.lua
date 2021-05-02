@@ -58,4 +58,20 @@ m.mutativeConcat = function(t, ...)
 	return t
 end
 
+-- Creates a recursive pipe (to allow catching exceptions etc.)
+m.createPipe = function(...)
+	return Array({ ... }):reduce(function(acc, nextWrap)
+		return function(...)
+			return nextWrap(acc(...))
+		end
+	end, function(...)
+		return ...
+	end)
+end
+
+m.pipe = function(args, ...)
+	assert(type(args) == "table", "The args parameter is unpacked when passed to the functions")
+	return m.createPipe(...)(args)
+end
+
 return m

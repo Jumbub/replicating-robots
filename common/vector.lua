@@ -5,12 +5,16 @@ m.fromAtoB = function(a, b)
 end
 
 m.horDistAtoB = function(a, b)
+	assert(a)
+	assert(b)
 	local dist = m.fromAtoB(a, b)
 	return math.abs(dist.x) + math.abs(dist.z)
 end
 
 -- The "safe" GPS distance
 m.distAtoB = function(a, b)
+	assert(a)
+	assert(b)
 	local dist = m.fromAtoB(a, b)
 	local travelHeightOffset = 0
 	if m.horDistAtoB(a, b) > 0 then

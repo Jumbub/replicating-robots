@@ -1,7 +1,7 @@
 local m = {}
 
 m.noTravelHeights = function()
-	-- inclusive
+	-- Numbers are exclusive
 	local heights = c.state.get("noTravelHeights", { top = 7, bottom = -2 })
 	return heights.top, heights.bottom
 end
@@ -24,7 +24,8 @@ m.goToTravelHeight = function(cur)
 	c.move.up({ times = m.offsetToTravelHeight(cur) })
 end
 
-m.goTo = function(to, options)
+m.goTo = c.task.wrapLog("c.gps.goTo", function(to, options)
+	assert(to)
 	options = options or {}
 	local safe = options.safe == nil or options.safe
 
@@ -43,14 +44,16 @@ m.goTo = function(to, options)
 	m.goToAxis("z", to.z)
 	m.goToAxis("x", to.x)
 	m.goToAxis("y", to.y)
-	m.face("z")
-	c.nTimes(to.r or 0, function()
-		c.turn.right()
-	end)
-end
+	m.faceR(to.r)
+
+	return true
+end)
 
 m.goToAxis = function(axis, to)
 	local cur = c.gps.getCurrent()
+	if cur[axis] == to then
+		return
+	end
 	if axis == "y" then
 		c.move.up({ times = to - cur.y })
 	elseif axis == "z" then
@@ -64,22 +67,22 @@ m.goToAxis = function(axis, to)
 	end
 end
 
-m.face = function(axis)
+m.faceR = function(tar)
 	local cur = c.gps.getCurrent()
+	local left = (cur.r - tar) % 4
+	local right = (tar - cur.r) % 4
+	if left < right then
+		c.nTimes(left, c.turn.left)
+	else
+		c.nTimes(right, c.turn.right)
+	end
+end
+
+m.face = function(axis)
 	if axis == "z" then
-		if cur.r == 1 then
-			c.turn.left()
-		else
-			c.nTimes(4 - cur.r, c.turn.right)
-		end
+		m.faceR(0)
 	elseif axis == "x" then
-		if cur.r == 0 then
-			c.turn.right()
-		elseif cur.r == 2 then
-			c.turn.left()
-		elseif cur.r == 3 then
-			c.turn.around()
-		end
+		m.faceR(1)
 	else
 		error("Somehow I am supposed to face this axis: " .. axis)
 	end

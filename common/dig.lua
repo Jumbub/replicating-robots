@@ -1,12 +1,12 @@
 local m = {}
 
-m.withAssertions = function(dig)
+local dig = function(dig)
 	local success, error = dig()
 
 	if error == "No tool to dig with" then
-		c.task.reportTilTrue(function()
+		c.task.wrapTryTilTrue("Attempting to equip pickaxe required for digging", function()
 			return c.inventory.equip("minecraft:diamond_pickaxe")
-		end, "Failed to equip pickaxe required for diging")
+		end)()
 
 		success, error = dig()
 	end
@@ -14,14 +14,8 @@ m.withAssertions = function(dig)
 	return success, error
 end
 
-local recoverable = function(dig)
-	return c.task.recoverable(function()
-		return c.dig.withAssertions(dig)
-	end)
-end
-
 m.forward = function()
-	return recoverable(turtle.native.dig)
+	return dig(turtle.native.dig)
 end
 
 m.back = function()
@@ -32,11 +26,11 @@ m.back = function()
 end
 
 m.down = function()
-	return recoverable(turtle.native.digDown)
+	return dig(turtle.native.digDown)
 end
 
 m.up = function()
-	return recoverable(turtle.native.digUp)
+	return dig(turtle.native.digUp)
 end
 
 return m

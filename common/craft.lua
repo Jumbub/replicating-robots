@@ -57,17 +57,13 @@ local makeDonutShape = function(name)
 	end)
 end
 
-m.single = function(name, quantity, preUnstash)
-	return c.task.recoverable(function()
-		return craftOneIngredient(name, quantity, c.noopTrue, preUnstash)
-	end, "Failed to craft 'single'")
-end
+m.single = c.task.wrapTry("c.craft.single", function(name, quantity, preUnstash)
+	return craftOneIngredient(name, quantity, c.noopTrue, preUnstash)
+end)
 
-m.donut = function(name, quantity, preUnstash)
-	return c.task.recoverable(function()
-		return craftOneIngredient(name, quantity, makeDonutShape, preUnstash)
-	end, "Failed to craft 'donut'")
-end
+m.donut = c.task.wrapTry("c.craft.donut", function(name, quantity, preUnstash)
+	return craftOneIngredient(name, quantity, makeDonutShape, preUnstash)
+end)
 
 m.capable = function()
 	return (turtle.craft or c.inventory.has(c.item.crafting_table)) and true or false

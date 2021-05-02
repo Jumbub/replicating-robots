@@ -1,12 +1,12 @@
 local m = {}
 
-local ohno = function()
+local abortTilSufficientFuel = function()
 	local abortPos = c.gps.getCurrent()
 	c.report.warning(
 		"Attempted to move, but not a safe amount of fuel. Temporarily aborting task to harvest fuel.",
 		abortPos
 	)
-	c.plant.harvestTrees(function()
+	c.tree.harvestTil(function()
 		if c.fuel.available() >= c.vector.distAtoB(c.gps.getCurrent(), abortPos) + 90 then
 			c.report.info("Harvested enough wood to return to previous task.")
 			return true
@@ -21,7 +21,7 @@ local move = function(direction)
 		-- Last ditch attempt, dig the block, maybe it's fuel
 		c.dig[direction]()
 		if not c.fuel.safeMove(direction) then
-			ohno()
+			abortTilSufficientFuel()
 		end
 	end
 	local success, error = turtle.native[direction]()
@@ -64,16 +64,28 @@ local INVERSE_DIR = {
 local recoverable = function(direction, options)
 	options = options or {}
 	local times = options.times or 1
+	local absTimes = math.abs(times)
 
 	if times < 0 then
 		direction = INVERSE_DIR[direction]
 	end
 
-	local failedAt = c.range(math.abs(times)):findIndex(function()
+	-- Determine if turning around will be faster then moving backwards
+	local backSpecialCase = absTimes > 1 and direction == "back"
+	if backSpecialCase then
+		direction = "forward"
+		c.turn.around()
+	end
+
+	local failedAt = c.range(absTimes):findIndex(function()
 		return not withAssertions(direction, options)
 	end)
 	if failedAt == -1 then
 		failedAt = nil
+	end
+
+	if backSpecialCase then
+		c.turn.around()
 	end
 
 	return failedAt == nil, failedAt

@@ -24,7 +24,7 @@ end
 m.turnRight = function(cur, times)
 	local next = c.vector.clone(cur)
 	next.r = (cur.r + (times or 1)) % 4
-	return cur
+	return next
 end
 m.turnLeft = function(cur, times)
 	return m.turnRight(cur, -(times or 1))

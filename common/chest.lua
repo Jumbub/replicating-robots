@@ -20,15 +20,14 @@ m.pickUpStash = function()
 		return turtle.suckUp()
 	end)
 
-	c.task.recoverable(function()
+	-- TODO: handle this without intervention
+	c.task.wrapTryTilTrue("Attempting to suck up stash", function()
 		local _, reason = turtle.suckUp()
-		return reason == "No space for items"
-	end, "Expected to be able to pick up all items in stash, please clean out chest")
+		return reason ~= "No space for items"
+	end)()
 
-	c.task.recoverable(
-		c.inventory.selectEmpty,
-		"Expected to be able to pick up chest, but inventory is full, please remove an item from my inventory"
-	)
+	-- TODO: handle this without intervention
+	c.task.wrapTryTilTrue("Attempting to select an empty inventory slot", c.inventory.selectEmpty)()
 
 	c.dig.up()
 
