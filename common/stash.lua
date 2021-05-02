@@ -13,7 +13,7 @@ m.placeChest = function()
 	return true
 end
 
-m.pickUpStash = function()
+m.pickUp = function()
 	c.inventory.organise()
 
 	c.range(16):forEach(function()
@@ -34,16 +34,16 @@ m.pickUpStash = function()
 	return true
 end
 
-local skipStashing = function(name)
+local skip = function(name)
 	c.inventory.organise()
 	local slotsUsed = c.inventory.slotsUsed()
 	assert(slotsUsed > 0, "Somehow you want to stash an inventory with nothing in it: " .. slotsUsed)
 	return c.inventory.slotsUsed() == 1 and c.inventory.find(name)
 end
 
-m.stashExceptSingle = function(name, task)
-	local skipStash = skipStashing(name)
-	if not skipStash and not c.chest.placeChest() then
+m.allButOne = function(name, task)
+	local skipStash = skip(name)
+	if not skipStash and not c.stash.placeChest() then
 		c.report.info("No ability to place chest for stashing")
 		return false
 	end
@@ -69,7 +69,7 @@ m.stashExceptSingle = function(name, task)
 		c.report.info("No success executing task while stashed")
 	end
 
-	if not skipStash and not c.chest.pickUpStash() then
+	if not skipStash and not c.stash.pickUp() then
 		c.report.info("No ability to pick up the stash chest")
 		return false
 	end

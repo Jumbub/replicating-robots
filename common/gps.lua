@@ -30,12 +30,6 @@ m.goTo = c.task.wrapLog("c.gps.goTo", function(to, options)
 	local safe = options.safe == nil or options.safe
 
 	local cur = c.gps.getCurrent()
-	c.report.info("gps.goTo", cur, to, c.vector.distAtoB(cur, to))
-
-	if safe and not c.fuel.safeDestination(to) then
-		c.report.warning("Not enough fuel to go to location")
-		return false
-	end
 
 	if safe and c.vector.horDistAtoB(cur, to) > 0 then
 		-- Move down to a level that avoid "trampling"

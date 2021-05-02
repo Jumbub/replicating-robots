@@ -8,7 +8,7 @@ m.wrapTry = function(name, task)
 	return function(...)
 		local success, result = pcall(m.wrapLog(name, task), ...)
 		while not success do
-			c.report.error("Task failed: " .. name, { success = success, result = result })
+			c.report.error("Task failed: " .. name, { success = success, result = c.report.format(result) })
 			c.report.debug("Press any key after resolving issue...")
 			read()
 			c.reload()

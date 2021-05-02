@@ -79,11 +79,10 @@ m.groundLoop = function(loops)
 	end)
 end
 
-m.ground = function(loops)
-	-- Scan ground
-	m.groundLoop(loops)
-
+m.ground = c.task.wrapLog("c.scan.ground", function(loops)
 	c.gps.goHome()
-end
+	m.groundLoop(loops)
+	c.gps.goHome()
+end)
 
 return m

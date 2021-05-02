@@ -54,6 +54,10 @@ m.has = function(name)
 	return m.find(name) and true or false
 end
 
+m.has = function(name)
+	return m.find(name) and true or false
+end
+
 m.select = function(name)
 	local slot = c.inventory.find(name)
 	if not slot then
@@ -124,6 +128,12 @@ m.organise = function()
 			freeSlots[name] = slot
 		end
 	end)
+end
+
+m.ensure1FreeSlot = function()
+	if m.slotsUsed == 16 then
+		c.report.warning("Dumping ")
+	end
 end
 
 return m

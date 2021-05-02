@@ -1,11 +1,10 @@
 local m = {}
 
-m.patch = function()
-end
-
 m.spin = function()
 	c.nTimes(4, function()
-		if c.inspect.shouldDig(turtle.inspect()) then
+		local success, block = turtle.inspect()
+		if c.inspect.shouldDig(success, block) then
+			c.report.info("Found something worth mining: ", block.name)
 			c.dig.forward()
 		end
 		c.turn.right()
@@ -49,7 +48,7 @@ local alternateAB = function(a, b, n)
 	end)
 end
 
-m.vertical = function(edges)
+m.vertical = c.task.wrapLog("c.mine.vertical", function(edges)
 	c.forI(edges, function(edge)
 		if (edge + 2) % 4 == 0 then
 			alternateAB(squigle, m.singleVertical, math.ceil(edge / 2))
@@ -60,6 +59,6 @@ m.vertical = function(edges)
 	end)
 
 	m.gps.goHome()
-end
+end)
 
 return m

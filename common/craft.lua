@@ -7,7 +7,7 @@ local craftOneIngredient = function(name, quantity, preCraft, postCraft)
 		c.report.info("No crafting table equipable")
 		return false
 	end
-	local stash, task = c.chest.stashExceptSingle(name, function()
+	local stash, task = c.stash.allButOne(name, function()
 		if not c.inventory.selectEmpty() then
 			c.report.info("No success finding an empty slot to put the crafted item")
 			return false
@@ -66,7 +66,10 @@ m.donut = c.task.wrapTry("c.craft.donut", function(name, quantity, preUnstash)
 end)
 
 m.capable = function()
-	return (turtle.craft or c.inventory.has(c.item.crafting_table)) and true or false
+	if turtle.craft or c.inventory.has(c.item.crafting_table) then
+		return true
+	end
+	return false
 end
 
 return m

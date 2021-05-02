@@ -52,7 +52,7 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 	return true
 end)
 
-m.harvestOnce = c.task.wrapLog("c.tree.harvestTilOnce", function()
+m.harvestOnce = c.task.wrapLog("c.tree.harvestOnce", function()
 	c.nTimes(4, function()
 		c.tree.chop()
 		if c.inventory.select(c.item.all.saplings) then

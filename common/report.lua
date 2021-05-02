@@ -4,15 +4,17 @@ local ID = os.getComputerID()
 local STATE_DIR = "memory"
 local STATE_FILE = STATE_DIR .. "/" .. ID .. ".log"
 
-local format = function(data)
+m.format = function(data)
 	if type(data) == "string" then
 		return data
 	elseif data == nil then
 		return "nil"
-	elseif type(data) == "function" then
-		return "<function>"
 	end
-	return textutils.serialiseJSON(data)
+	local success, result = pcall(textutils.serialiseJSON, data)
+	if success then
+		return result
+	end
+	return tostring(data)
 end
 
 local insertMessage = function(message, ...)
@@ -20,7 +22,7 @@ local insertMessage = function(message, ...)
 	if type(data[1]) == "string" then
 		data[1] = message .. ": " .. data[1]
 	else
-		data[1] = message .. ": " .. format(data[1])
+		data[1] = message .. ": " .. m.format(data[1])
 	end
 	return table.unpack(data)
 end
@@ -50,7 +52,7 @@ m.report = function(color, ...)
 	term.setTextColor(color)
 
 	Array({ ... }):forEach(function(data)
-		log(format(data))
+		log(m.format(data))
 	end)
 end
 
@@ -80,10 +82,11 @@ end
 
 m.wrapLog = function(name, task)
 	return function(...)
+		local args = { ... }
 		c.state.updateKey("reportTaskList", {}, function(tasksRaw)
 			local tasks = Array(tasksRaw)
 			tasks:push(name)
-			m.info("Starting task: " .. name)
+			m.info("RUN " .. name .. " WITH " .. m.format(args))
 			return tasks
 		end)
 
@@ -95,7 +98,7 @@ m.wrapLog = function(name, task)
 			finishedTaskName = tasks:pop()
 			return tasks
 		end)
-		m.info("Finished task: " .. finishedTaskName)
+		m.info("END " .. finishedTaskName)
 
 		return result
 	end

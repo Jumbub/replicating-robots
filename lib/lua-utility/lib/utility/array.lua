@@ -125,7 +125,7 @@ function Array:filter(fn)
 end
 
 function Array:find(fn)
-	return self[Array.findIndex(self, fn) + 1]
+	return self[Array.findIndex(self, fn)]
 end
 
 function Array:findIndex(fn)

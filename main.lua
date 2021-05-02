@@ -2,14 +2,12 @@ require("lib")
 require("common")
 
 local main = function()
-	-- c.state.reset()
+	c.state.reset()
 
-	-- c.tree.chop({ first = true })
-	-- c.tree.harvestTil(function()
-	-- 	return c.fuel.available() > 100
-	-- end)
-	-- c.scan.ground(4)
-	-- c.mine.vertical(6)
+	c.tree.chop({ first = true })
+	c.tree.harvestOnce()
+	c.scan.ground(1)
+	c.mine.vertical(1)
 end
 
--- main()
+main()

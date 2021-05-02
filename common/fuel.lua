@@ -35,6 +35,10 @@ m.available = function()
 		+ c.inventory.count(c.item.lava_bucket) * 1000
 end
 
+m.safeAvailable = function()
+	return c.fuel.available() - c.vector.distAtoB(c.gps.getCurrent(), c.location.getHome())
+end
+
 -- Destination that wont be in danger of running out of fuel
 m.safeDestination = function(location)
 	return (
