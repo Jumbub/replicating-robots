@@ -1,8 +1,20 @@
 # Replicating Robots
 
-Replicating Robots is an attempt at the "self-replicating turtle" challenge for the Computer Craft mod in Minecraft.
+My attempt at the "self-replicating turtle" for the Computer Craft mod in Minecraft.
+
+This mod is where my ~~addiction~~ passion for programming began (back in 2012) so I thought I'd pay homage and complete this "harder" challenge.
 
 ![image](readme.png)
+
+## Context
+
+A "turtle" (as seen in the above image) is effectively a robot minecraft player.
+
+They provide an extremely simple API - `moveUp`, `placeDown`, `dig`
+
+With the right resources - diamonds, stone, glass, ... - a turtle could craft another turtle.
+
+In this challenge I write a brain for a turtle, with just enough intelligence to gather the required resources to craft some friends.
 
 ## Challenge
 
