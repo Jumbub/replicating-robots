@@ -147,6 +147,16 @@ function Object.entries(obj)
 	return entries
 end
 
+function Object.fromEntries(entries)
+	local object = {}
+
+	for _, v in pairs(entries) do
+		object[v[1]] = v[2]
+	end
+
+	return object
+end
+
 function Object.freeze(obj)
 	if type(obj) ~= "table" then
 		return obj

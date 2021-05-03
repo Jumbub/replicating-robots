@@ -1,7 +1,24 @@
 local m = {}
 
+m.itemToFuel = function()
+	-- Code relies on this being generated, because I am modifying it's contents via the reference later
+	return Object.fromEntries(Array.concat(
+		{
+			{ c.item.stick, 5 },
+			{ c.item.lava_bucket, 1000 },
+		},
+		c.createEntriesWithValue(15, c.item.all.combustiblePlanks),
+		c.createEntriesWithValue(15, c.item.all.combustibleLogs),
+		c.createEntriesWithValue(80, c.item.all.coals)
+	))
+end
+
 m.refuel = function()
-	if c.inventory.select(c.item.all.coals) then
+	if c.inventory.select(c.item.stick) then
+		assert(turtle.refuel(1), "Somehow refueling from stick has failed")
+	elseif c.inventory.select(c.item.lava_bucket) then
+		assert(turtle.refuel(1), "Somehow refueling from lava bucket has failed")
+	elseif c.inventory.select(c.item.all.coals) then
 		assert(turtle.refuel(1), "Somehow refueling from coal has failed")
 	elseif c.inventory.select(c.item.all.combustiblePlanks) then
 		assert(turtle.refuel(1), "Somehow refueling from plank has failed")
@@ -27,12 +44,10 @@ m.refuel = function()
 end
 
 m.available = function()
-	return turtle.getFuelLevel()
-		+ c.inventory.count(c.item.all.combustibleLogs) * 15 * (c.craft.capable() and 4 or 1)
-		+ c.inventory.count(c.item.all.combustiblePlanks) * 15
-		+ c.inventory.count(c.item.all.coals) * 80
-		+ c.inventory.count(c.item.stick) * 5
-		+ c.inventory.count(c.item.lava_bucket) * 1000
+	return turtle.getFuelLevel() + Object.entries(m.itemToFuel()):reduce(function(acc, val)
+		local item, value = unpack(val)
+		return acc + c.inventory.count(item) * value
+	end, 0)
 end
 
 m.safeAvailable = function()

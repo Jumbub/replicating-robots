@@ -2,68 +2,74 @@ local m = {}
 
 m.getData = function()
 	return c.state.get("smelt", {
-		locations = {
+		furnaces = {
 			{
-				vector = { x = 0, y = -2, z = 0, r = 0 },
+				vector = { x = 2, y = -1, z = 1, r = 0 },
 				input = c.item.iron_ore,
 				output = c.item.iron,
-				furnace = false,
+				setup = false,
 			},
 			{
-				vector = { x = 0, y = -2, z = 0, r = 1 },
+				vector = { x = 2, y = -1, z = 1, r = 1 },
 				input = c.item.sand,
 				output = c.item.glass,
-				furnace = false,
+				setup = false,
 			},
 			{
-				vector = { x = 0, y = -2, z = 0, r = 2 },
+				vector = { x = 2, y = -1, z = 1, r = 2 },
 				input = c.item.cobblestone,
 				output = c.item.stone,
-				furnace = false,
+				setup = false,
 			},
 		},
 	})
 end
 
+m.fuelRequired = function(quantity)
+	assert(quantity <= 64, "Can only smelt 1 stack at a time")
+	c.inventory.organise()
+
+	local itemToFuel = c.fuel.itemToFuel()
+	itemToFuel.lava_bucket = nil
+
+	local item = Object.entries(itemToFuel):map(function(entry)
+		local item, fuel = unpack(entry)
+		return { item, fuel, c.inventory.count(item) }
+	end):filter(function(entry)
+		return entry[3] > 0
+	end):map(function(entry)
+		local item, fuelPerItem, count = unpack(entry)
+
+		local itemsPerSecond = fuelPerItem / 10
+		local itemsForQuantity = math.ceil(quantity / itemsPerSecond)
+		local waste = itemsForQuantity * itemsPerSecond - quantity
+
+		return {
+			item = item,
+			fuelPerItem = fuelPerItem,
+			count = count,
+			requiredCount = itemsForQuantity,
+			waste = waste,
+		}
+	end):filter(function(entry)
+		return entry.requiredCount <= entry.count
+	end):sort(function(a, b)
+		return a.waste <= b.waste
+	end)[1]
+
+	return item
+end
+
 m.requiredFurnaces = function()
-	return #Array(m.getData().locations):filter(function(location)
+	return #Array(m.getData().furnaces):filter(function(location)
 		return not location.smelter
 	end) - c.inventory.count(c.item.furnace)
 end
 
-m.getLocationForInput = function(item)
-	return Array(m.getData().locations):find(function(location)
+m.getFurnaceForInput = function(item)
+	return Array(m.getData().furnaces):find(function(location)
 		return location.input == item
 	end)
-end
-
-m.shouldSmelt = function(item, quantity)
-	-- Check for item in inventory
-	if not c.inventory.has(item) then
-		c.report.info("Cannot smelt an item you dont have")
-		return false
-	end
-
-	location = m.getLocationForInput(item)
-
-	-- Check for enough fuel to burn quantity
-	if c.safeDestination(location.vector) then
-	end
-
-	-- Check if a furnace exists
-	if not m.getLocationForInput(item).furnace then
-		-- Craft required furnace
-		if not (c.inventory.count(c.item.cobblestone) >= 8 and c.craft.capable()) then
-			c.report.info("Cannot craft furnace required to smelt item", {
-				item = item,
-				availStone = c.inventory.count(c.item.cobblestone),
-				craft = c.craft.capable(),
-			})
-			return false
-		end
-	end
-
-	return true
 end
 
 local dropItem = function(quantity)
@@ -96,28 +102,46 @@ end
 
 m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 	-- Check for item in inventory
-	if not c.inventory.has(item) then
-		c.report.info("Cannot smelt an item you dont have: " .. item)
+	if not c.inventory.count(item) >= quantity then
+		c.report.warning("Inventory does not contain " .. quantity .. " of " .. item .. " for smelting")
 		return false
 	end
 
-	local location = m.getLocationForInput(item)
-	if not location then
-		c.report.info("Item does not exist in smelter locations: " .. item)
-	end
+	local furnace = m.getFurnaceForInput(item)
 
-	c.gps.goTo(location.vector)
-	if not c.inventory.select(item) then
-		c.report.info("Item not in inventory anymore: " .. item)
+	-- Check item is processable
+	if not furnace then
+		c.report.warning("Cannot smelt " .. item)
 		return false
 	end
-	if not location.furnace then
-		if not c.inventory.select(c.item.furnace) then
-			c.report.info("Cannot craft required furnace: " .. item)
-			return false
+
+	-- Go to furnace
+	c.gps.goTo(furnace.vector)
+
+	-- Check for furnace, or place one
+	while not c.inspect.is(c.item.furnace, turtle.inspect()) do
+		c.report.info("No existing furnace for input")
+		while not c.inventory.select(c.item.furnace) do
+			c.report.info("No furnaces in inventory required for smelting")
+			while c.inventory.count(c.item.cobblestone) < 8 do
+				c.report.info("Not enough cobble to create missing furnace")
+				c.mine.til(function()
+					return c.inventory.count(c.item.cobblestone) < 8
+				end)
+			end
 		end
 		c.dig.forward()
-		assert(turtle.place(), "Failed to place furnace")
+		turtle.place()
+	end
+
+	-- Calculate required coal
+	local req = fuelForItem(item) * quantity
+	if c.fuel.safeAvailable() - req then
+	end
+
+	-- Wait for existing item to finish smelting
+	while c.inspect.stateIs("lit", true, turtle.inspect()) do
+		sleep(1)
 	end
 
 	return true

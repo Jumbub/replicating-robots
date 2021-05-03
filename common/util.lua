@@ -74,4 +74,10 @@ m.pipe = function(args, ...)
 	return m.createPipe(...)(args)
 end
 
+m.createEntriesWithValue = function(value, items)
+	return Array(items):map(function(item)
+		return { item, value }
+	end)
+end
+
 return m

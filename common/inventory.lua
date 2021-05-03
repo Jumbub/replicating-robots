@@ -13,7 +13,6 @@ local matchDetailOnNames = function(detail, haystack)
 	return matchNameOnNames(detail.name, haystack)
 end
 
--- Takes a name string, or array of name strings
 m.count = function(name)
 	return c.range(16)
 		:map(function(i)
@@ -48,10 +47,6 @@ m.find = function(name)
 		return nil
 	end
 	return index
-end
-
-m.has = function(name)
-	return m.find(name) and true or false
 end
 
 m.has = function(name)

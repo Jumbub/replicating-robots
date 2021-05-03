@@ -20,8 +20,13 @@ m.hasOneTag = function(tags, success, block)
 		return c.inspect.hasTag(tag, success, block)
 	end)
 end
-m.hasName = function(name, success, block)
-	return success and string.find(block.name, name) and true or false
+
+m.stateIs = function(key, value, success, block)
+	return success and block.state and block.state[key] == value and true or false
+end
+
+m.is = function(name, success, block)
+	return success and block.name == name and true or false
 end
 
 m.forward = function()

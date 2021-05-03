@@ -4,7 +4,7 @@ m.spin = function()
 	c.nTimes(4, function()
 		local success, block = turtle.inspect()
 		if c.inspect.shouldDig(success, block) then
-			c.report.info("Found something worth mining: ", block.name)
+			c.report.info("Found something worth mining: " .. block.name)
 			c.dig.forward()
 		end
 		c.turn.right()
