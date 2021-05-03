@@ -7,7 +7,7 @@ local abortTilSufficientFuel = function()
 		abortPos
 	)
 	c.tree.harvestTil(function()
-		if c.fuel.available() >= c.vector.distAtoB(c.gps.getCurrent(), abortPos) + 90 then
+		if c.fuel.available() >= c.vector.distAtoB(c.gps.getCurrent(), abortPos) + 80 then
 			c.report.info("Harvested enough wood to return to previous task.")
 			return true
 		end

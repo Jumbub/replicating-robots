@@ -13,6 +13,23 @@ local matchDetailOnNames = function(detail, haystack)
 	return matchNameOnNames(detail.name, haystack)
 end
 
+m.countSingleHighest = function(name)
+	return Object.entries(c.range(16)
+			:map(function(i)
+			return { m.itemName(i), i }
+		end)
+			:filter(function(v)
+			return matchNameOnNames(v[1], name)
+		end)
+			:reduce(function(acc, v)
+			local n, slot = unpack(v)
+			acc[n] = (acc[n] or 0) + turtle.getItemCount(slot)
+			return acc
+		end, {})):sort(function(a, b)
+		return a[2] >= b[2]
+	end)[1]
+end
+
 m.count = function(name)
 	return c.range(16)
 		:map(function(i)

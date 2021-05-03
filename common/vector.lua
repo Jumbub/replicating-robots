@@ -27,4 +27,8 @@ m.clone = function(a)
 	return { x = a.x, y = a.y, z = a.z, r = a.r or 0 }
 end
 
+m.distToHome = function()
+	return m.distAtoB(c.gps.getCurrent(), c.location.getHome())
+end
+
 return m
