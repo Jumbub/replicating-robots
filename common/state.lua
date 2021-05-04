@@ -32,6 +32,12 @@ m.updateKey = function(key, default, action)
 	end)
 end
 
+m.set = function(key, value)
+	local state = read()
+	state[key] = value
+	write(state)
+end
+
 m.get = function(key, default)
 	local state = read()
 	return state[key] or default

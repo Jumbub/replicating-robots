@@ -20,7 +20,7 @@ end
 
 local getSometimesDig = function()
 	return c.mutativeConcat(
-		sometimes(c.item.all.cobbled, 14 + c.smelt.requiredFurnaces() * 10),
+		sometimes(c.item.all.cobbled, 14 + c.smelt.requiredFurnaces() * 8),
 		sometimes(c.item.all.sands, 64)
 	)
 end

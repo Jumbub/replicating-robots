@@ -31,4 +31,12 @@ m.distToHome = function()
 	return m.distAtoB(c.gps.getCurrent(), c.location.getHome())
 end
 
+m.add = function(a, b)
+	return {
+		x = a.x + b.x,
+		y = a.y + b.y,
+		z = a.z + b.z,
+	}
+end
+
 return m

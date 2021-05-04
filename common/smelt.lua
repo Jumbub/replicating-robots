@@ -93,7 +93,7 @@ local pickupOutput = function()
 	c.move.down()
 	c.move.forward()
 	-- Suck up any left-over items from a previous job
-	c.suckUp()
+	turtle.suckUp()
 	while c.inspect.stateIs("lit", true, turtle.inspectUp()) do
 		sleep(1)
 	end
@@ -132,12 +132,11 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 			c.report.info("No furnaces in inventory required for smelting")
 			while c.inventory.count(c.item.cobblestone) < 8 do
 				c.report.info("Not enough cobble to create missing furnace")
-				c.mine.til(function()
+				c.mineVertical.til(function()
 					return c.inventory.count(c.item.cobblestone) < 8
 				end)
-				sleep(10)
 			end
-			sleep(10)
+			c.craft.donut(c.item.cobblestone, 1)
 		end
 		c.dig.forward()
 		turtle.place()

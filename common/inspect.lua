@@ -21,12 +21,12 @@ m.hasOneTag = function(tags, success, block)
 	end)
 end
 
-m.stateIs = function(key, value, success, block)
-	return success and block.state and block.state[key] == value and true or false
-end
-
 m.is = function(name, success, block)
 	return success and block.name == name and true or false
+end
+
+m.stateIs = function(key, value, success, block)
+	return success and block.state and block.state[key] == value and true or false
 end
 
 m.forward = function()
@@ -35,9 +35,9 @@ end
 
 m.back = function()
 	c.turn.around()
-	local data = turtle.inspect()
+	local data = { turtle.inspect() }
 	c.turn.around()
-	return data
+	return unpack(data)
 end
 
 m.down = function()

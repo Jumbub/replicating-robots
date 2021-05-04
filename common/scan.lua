@@ -44,7 +44,7 @@ m.groundLoop = function(loops)
 		return
 	end
 
-	c.mine.spin()
+	c.mineVertical.spin()
 
 	c.report.info("Starting initial custom loop")
 	m.forward(2)
