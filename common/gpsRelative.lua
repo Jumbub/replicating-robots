@@ -4,7 +4,7 @@ local STATE_KEY = "gpsRelative"
 local DEFAULT = { x = 0, y = 0, z = 0, r = 0 }
 
 local update = function(action)
-	c.state.updateKey(STATE_KEY, DEFAULT, action)
+	c.state.update(STATE_KEY, DEFAULT, action)
 end
 
 m.forward = function(times)

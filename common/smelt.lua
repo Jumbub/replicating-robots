@@ -132,7 +132,7 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 			c.report.info("No furnaces in inventory required for smelting")
 			while c.inventory.count(c.item.cobblestone) < 8 do
 				c.report.info("Not enough cobble to create missing furnace")
-				c.mineVertical.til(function()
+				c.mine.til(function()
 					return c.inventory.count(c.item.cobblestone) < 8
 				end)
 			end

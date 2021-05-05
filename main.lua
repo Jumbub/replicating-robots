@@ -12,7 +12,6 @@ local main = function()
 	-- c.tree.chop({ first = true })
 	-- c.tree.harvestOnce()
 	-- c.scan.ground(1)
-	-- c.mineVertical.vertical(1)
 end
 
 main()

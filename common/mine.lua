@@ -1,100 +1,133 @@
 local m = {}
 
-local MAX_EDGES = 30
+-- TODO: UPDATE THESE VALUES TO 25 & 4 when doing real test
+local BEDROCK_Y_OFFSET = 5
+local BEDROCK_Y_MOVES = 0
 
-m.goToMine = function()
+local check = function()
+	local success, block = turtle.inspect()
+	if c.inspect.shouldDig(success, block) then
+		c.report.info("Found something worth mining: " .. block.name)
+		c.dig.forward()
+	end
+end
+
+local spin = function()
+	c.forI(4, function(i)
+		check()
+		if i ~= 4 then
+			c.turn.right()
+		end
+	end)
+end
+
+local squigle = function()
+	c.move.forward()
+	c.turn.left()
+	check()
+	c.turn.right()
+	c.move.forward()
+	check()
+	c.turn.left()
+	check()
+	c.turn.around()
+	c.move.forward()
+
+	-- Relies on spin only turning 3 times
+	spin()
+end
+
+local goToMine = c.task.wrapLog("c.mine.goToMine", function()
 	local state = c.state.get("mine", nil)
 	if not state then
 		c.gps.goHome()
 		while c.move.down() do
 		end
-		c.nTimes(4, c.move.up)
-		state = {
-			base = c.gps.getCurrent(),
+
+		-- Move to origin
+		c.nTimes(BEDROCK_Y_OFFSET, c.move.up)
+
+		-- Save state
+		c.state.set("mine", {
+			origin = c.gps.getCurrent(),
 			last = c.gps.getCurrent(),
-			dist = 0,
-			goalDist = 0,
-			edgeNumber = 0,
-			level = 0,
-		}
-		c.state.set("mine", state)
+			minedPrev = false,
+			goalCount = 1,
+			turns = 0,
+			count = 0,
+		})
 	else
-		c.gps.goTo(state.base)
+		-- Resume
+		c.gps.goTo(state.last)
 	end
+end)
+
+local vertical = function(lastR, lastY)
+	-- Mine to bottom
+	while c.move.down() do
+		spin()
+	end
+
+	-- Move out of bedrock zone
+	c.nTimes(BEDROCK_Y_MOVES, c.move.up)
+
+	-- Re-orient, then squigle
+	c.gps.faceR(lastR)
+	squigle()
+
+	-- Mine to top, then re-orient
+	while c.gps.getCurrent().y < lastY do
+		spin()
+		c.move.up()
+	end
+	c.gps.faceR(lastR)
 end
 
-m.check = function(direction)
-	if c.inspect.shouldDig(c.inspect[direction]()) then
-		c.dig[direction]()
-	end
-end
-
-m.block = function()
+m.next = c.task.wrapLog("c.mine.next", function()
 	local state = c.state.get("mine", nil)
 	if not state then
-		m.goToMine()
+		goToMine()
 		state = c.state.get("mine", nil)
 		assert(state, "Mine state should be configured")
 		assert(state.last, "Mine state should have a last")
 	end
+
+	-- Go to mining location
 	c.gps.goTo(state.last)
 
-	-- Check for mineables
-	c.turn.right()
-	m.check("down")
-	m.check("forward")
-	m.check("up")
-	c.turn.around()
-	m.check("forward")
-	c.turn.right()
-
-	-- Check if its time to turn
-	assert(state.dist <= state.goalDist, "Somehow the mining algorithm has blown up")
-	if state.dist == state.goalDist then
-		m.check("forward")
-		c.turn.right()
-
-		-- Gaps of 3
-		-- if state.edgeNumber % 2 == 0 then
-		-- 	state.goalDist = state.goalDist + 3
-		-- else
-		-- 	state.goalDist = state.goalDist + 1
-		-- end
-
-		-- Gaps of 2
-		if state.edgeNumber % 2 == 0 then
-			state.goalDist = state.goalDist + 3
-		end
-
-		state.edgeNumber = state.edgeNumber + 1
-		state.dist = 0 -- The value will be 0 when the future +1 is applied
-
-		c.state.set("mine", state)
-	end
-
-	if state.edgeNumber >= MAX_EDGES then
-		-- Move to next level
-		state.level = state.level + 1
-		state.dist = 0
-		c.gps.goTo({ x = state.base.x, y = state.base.y + state.level, z = state.base.z, r = state.base.r })
-
-		-- Move to next block
-		c.move.forward()
-		state.last = c.gps.getCurrent()
-		c.state.set("mine", state)
+	-- Mine
+	if state.minedPrev then
+		squigle()
 	else
-		-- Move to next block
-		c.move.forward()
-		state.last = c.gps.getCurrent()
-		state.dist = state.dist + 1
-		c.state.set("mine", state)
+		vertical(state.last.r, state.last.y)
 	end
-end
 
-m.til = function(til)
-	while not til() do
-		m.block()
+	-- Update stats
+	state.minedPrev = not state.minedPrev
+	state.count = state.count + 1
+
+	-- Determine if we should turn
+	assert(state.count <= state.goalCount, "Somehow we've skipped a mine iteration")
+	if state.count == state.goalCount then
+		c.turn.right()
+		state.count = 0
+		state.turns = state.turns + 1
+		if state.turns % 2 == 0 then
+			state.goalCount = state.goalCount + 1
+		end
 	end
-end
+
+	-- Update GPS after turning
+	state.last = c.gps.getCurrent()
+
+	-- Update state
+	c.state.set("mine", state)
+end)
+
+m.til = c.task.wrapLog("c.mine.til", function(til)
+	while not til() do
+		m.next()
+	end
+end)
 
 return m

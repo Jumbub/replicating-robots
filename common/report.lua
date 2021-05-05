@@ -83,7 +83,7 @@ end
 m.wrapLog = function(name, task)
 	return function(...)
 		local args = { ... }
-		c.state.updateKey("reportTaskList", {}, function(tasksRaw)
+		c.state.update("reportTaskList", {}, function(tasksRaw)
 			local tasks = Array(tasksRaw)
 			tasks:push(name)
 			m.info("RUN " .. name .. " WITH " .. m.format(args))
@@ -93,7 +93,7 @@ m.wrapLog = function(name, task)
 		local result = task(...)
 
 		local finishedTaskName = nil
-		c.state.updateKey("reportTaskList", {}, function(tasksRaw)
+		c.state.update("reportTaskList", {}, function(tasksRaw)
 			local tasks = Array(tasksRaw)
 			finishedTaskName = tasks:pop()
 			return tasks

@@ -44,7 +44,11 @@ m.groundLoop = function(loops)
 		return
 	end
 
-	c.mineVertical.spin()
+	-- Initial spin
+	c.nTimes(function()
+		c.turn.right()
+		inspection()
+	end)
 
 	c.report.info("Starting initial custom loop")
 	m.forward(2)

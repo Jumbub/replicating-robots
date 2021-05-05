@@ -20,12 +20,12 @@ local read = function()
 	return state
 end
 
-m.update = function(action)
+m.updateGlobal = function(action)
 	write(action(read()))
 end
 
-m.updateKey = function(key, default, action)
-	m.update(function(state)
+m.update = function(key, default, action)
+	m.updateGlobal(function(state)
 		local newValue = action(state and state[key] or default)
 		state[key] = newValue
 		return state
