@@ -55,7 +55,3 @@ Replace your turtles rom with: `git clone https://github.com/Jumbub/replicating-
 ### Executing
 
 Inside your turtle, run: `main`
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
