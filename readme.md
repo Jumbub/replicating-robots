@@ -2,7 +2,7 @@
 
 My attempt at the "self-replicating turtle" for the Computer Craft mod in Minecraft.
 
-This mod is where my ~~addiction~~ passion for programming began (back in 2012) so I thought I'd pay homage and complete this "harder" challenge.
+This mod is where my ~~addiction~~ passion for programming began (back in 2012) so I thought I'd pay homage and complete this more complex challenge.
 
 ![image](readme.png)
 
