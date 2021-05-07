@@ -18,17 +18,33 @@
         14x cobblestone
       2x redstone
       2x glass_pane
-        12x glass
-          12x sand
-
-Nx torch
-  Nx stick
-  Nx all_coals
+        6x glass
+          6x sand
 
 sign
   stick
   6x wood
     2x log
+
+chest
+  8x wood
+    2x log
+
+--
+
+2x 2x 4x 2x 2x = 12x log
+6x diamond
+14x iron_ore
+14x cobblestone
+6x sand
+2x redstone
+
+--
+
+Nx torch
+  Nx stick
+  Nx all_coals
+
 
 --
 

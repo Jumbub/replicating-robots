@@ -168,6 +168,11 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 	-- 	end)
 	-- end
 
+	-- Ensure does not try to refuel under furnace
+	if c.fuel.safeAvailable() - FUEL_FOR_SMELTING_ITEM <= 0 then
+		c.fuel.refuel()
+	end
+
 	-- Wait for existing item to finish smelting
 	while c.inspect.stateIs("lit", true, turtle.inspect()) do
 		c.report.info("Waiting for existing materials to smelt", fuel)

@@ -110,11 +110,7 @@ m.wrapLog = function(name, task)
 		end
 
 		if errors then
-			if #c.state.get("reportTaskList", {}) > 0 then
-				error(result[2])
-			else
-				c.report.error(result[2])
-			end
+			error(result[2])
 		end
 
 		table.remove(result, 1)

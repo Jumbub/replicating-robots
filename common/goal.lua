@@ -47,6 +47,17 @@ m.ITEM_PRIORITIES = Array.concat(
 	}
 ):reverse()
 
+m.SCAN_GOAL = Array({
+	{ items = { c.item.sand }, count = 6 },
+	{ items = c.item.all.combustibleLogs, count = 12 * 2 },
+})
+m.MINE_GOAL = Array({
+	{ items = { c.item.diamond }, count = 6 },
+	{ items = { c.item.redstone }, count = 2 },
+	{ items = { c.item.iron_ore }, count = 14 },
+	{ items = { c.item.cobblestone }, count = 14 + 8 * 3 },
+})
+
 m.leastImportantSlot = function()
 	local details = Object.entries(c.inventory.items())
 		:reduce(function(acc, detail)
@@ -80,6 +91,15 @@ end
 m.shouldCollect = function(name)
 	return m.SHOULD_COLLECT:some(function(item)
 		return item == name
+	end)
+end
+
+m.achieved = function(goal)
+	local currentItems = c.inventory.items()
+	return goal:every(function(goalDetail)
+		return Array(goalDetail.items):some(function(goalItem)
+			return currentItems[goalItem] and currentItems[goalItem].total >= goalDetail.count
+		end)
 	end)
 end
 
