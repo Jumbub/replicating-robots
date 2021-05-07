@@ -1215,6 +1215,14 @@ m["potted_warped_fungus"] = "minecraft:potted_warped_fungus"
 m["potted_crimson_roots"] = "minecraft:potted_crimson_roots"
 m["potted_warped_roots"] = "minecraft:potted_warped_roots"
 
+-- ComputerCraft
+m.turtle_normal = "computercraft:turtle_normal"
+m.turtle_advanced = "computercraft:turtle_advanced"
+m.computer_normal = "computercraft:computer_normal"
+m.computer_advanced = "computercraft:computer_advanced"
+m.wireless_modem_normal = "computercraft:wireless_modem_normal"
+m.wireless_modem_advanced = "computercraft:wireless_modem_advanced"
+
 m.all = {
 	combustibleLogs = {
 		m.oak_log,

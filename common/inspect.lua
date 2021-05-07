@@ -8,6 +8,12 @@ m.shouldDig = function(success, block)
 	return c.goal.shouldCollect(block.name)
 end
 
+m.shouldChop = function(success, block)
+	if c.inspect.hasTag("minecraft:logs", success, block) then
+		return c.tree.chop()
+	end
+end
+
 m.hasTag = function(tag, success, block)
 	if success then
 		assert(block, "Block is falsey")

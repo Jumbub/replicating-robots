@@ -78,7 +78,7 @@ m.select = function(name)
 	return assert(turtle.select(slot), "Somehow failed to select slot: " .. slot)
 end
 
-m.equip = function(name)
+m.equip = c.task.wrapLog("c.inventory.equip", function(name)
 	if name == c.item.crafting_table and turtle.craft then
 		return true
 	end
@@ -90,7 +90,7 @@ m.equip = function(name)
 		action = turtle.equipRight
 	end
 	return assert(action(), "Somehow failed to equip " .. name)
-end
+end)
 
 m.selectEmpty = function()
 	local slot = c.range(16):findIndex(function(i)
@@ -118,6 +118,32 @@ m.slotsUsed = function()
 	end)
 end
 
+m.items = function()
+	return c.range(16)
+		:map(function(i)
+			local detail = turtle.getItemDetail(i)
+			if detail then
+				detail.slot = i
+				return detail
+			end
+			return {}
+		end)
+		:filter(function(detail)
+			return detail.name
+		end)
+		:reduce(function(acc, detail)
+			local cur = acc[detail.name]
+			if not cur then
+				cur = { total = detail.count, slots = { { slot = detail.slot, count = detail.count } } }
+			else
+				cur.total = cur.total + detail.count
+				cur.slots[#cur.slots + 1] = { slot = detail.slot, count = detail.count }
+			end
+			acc[detail.name] = cur
+			return acc
+		end, {})
+end
+
 m.organise = function()
 	local freeSlots = {}
 	c.range(16):forEach(function(slot)
@@ -142,9 +168,18 @@ m.organise = function()
 	end)
 end
 
-m.ensure1FreeSlot = function()
-	if m.slotsUsed == 16 then
-		c.report.warning("Dumping ")
+m.dumpLeastImportantSlot = c.task.wrapLog("c.inventory.dumpLeastImportantSlot", function()
+	-- TODO: investigate crafting to resolve issues
+	-- E.g. craft coal block, redstone block, etc.
+	turtle.select(c.goal.leastImportantSlot())
+	turtle.drop()
+end)
+
+m.ensureFreeSlot = function()
+	m.organise()
+	if m.slotsUsed() == 16 then
+		c.report.warning("Warning: inventory full")
+		m.dumpLeastImportantSlot()
 	end
 end
 

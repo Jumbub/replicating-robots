@@ -1,33 +1,60 @@
 local m = {}
 
-local inspection = function()
-	if c.inspect.hasTag("minecraft:logs", turtle.inspect()) then
-		c.tree.chop()
-	elseif c.inspect.shouldDig(turtle.inspect()) then
-		c.dig.forward()
+local goToScan = c.task.wrapLog("c.scan.goToScan", function()
+	local state = c.state.get("scan", nil)
+	if not state then
+		-- Scan home block
+		c.gps.goHome()
+
+		-- Save state
+		c.state.set("scan", {
+			last = c.gps.getCurrent(),
+			loops = 0,
+			edges = 0,
+		})
+	else
+		-- Resume
+		c.gps.goTo(state.last)
 	end
+end)
+
+local inspectForward = function()
+	return c.dig.forward({ optional = true, smart = true })
+end
+
+-- Return the result of inspectForward
+local inspect = function()
+	c.turn.right()
+	while c.dig.forward({ optional = true, smart = true }) do
+	end
+	c.turn.around()
+	while c.dig.forward({ optional = true, smart = true }) do
+	end
+	c.turn.right()
+	return inspectForward()
 end
 
 m.forward = function(times)
-	if times < 1 then
+	if times <= 0 then
 		return
 	end
 
+	-- Climb over blocks that we should not dig
 	while not c.move.forward({ destroy = false }) do
-		inspection()
-		if turtle.detect() then
+		if not inspect() then
 			c.move.up()
 		end
 	end
+
+	inspect()
+
+	-- Climb down to last block we shouldn't dig
 	while not turtle.detectDown() or c.inspect.shouldDig(turtle.inspectDown()) do
 		c.move.down()
+		inspect()
 	end
-	c.turn.right()
-	inspection()
-	c.turn.around()
-	inspection()
-	c.turn.right()
 
+	-- Recursion
 	m.forward(times - 1)
 end
 
@@ -38,55 +65,55 @@ local squigle = function()
 	m.forward(2)
 end
 
-m.groundLoop = function(loops)
-	if loops <= 0 then
-		c.report.warning("Poor loops argument to ground scan function: " .. loops)
-		return
+m.next = c.task.wrapLog("c.scan.next", function()
+	local state = c.state.get("scan", nil)
+	if not state then
+		goToScan()
+		state = c.state.get("scan", nil)
+		assert(state, "Scan state should be configured")
+		assert(state.last, "Scan state should have a last")
 	end
 
-	-- Initial spin
-	c.nTimes(function()
+	-- Go to scanning location
+	c.gps.goTo(state.last)
+
+	local loops = math.floor(state.edges / 4)
+	local edge = state.edges % 4
+	c.report.info("Running scan loop " .. loops .. " on edge " .. edge)
+
+	-- Scan
+	if loops == 0 then
+		c.gps.faceR(edge + 1)
+		if edge == 3 then
+			m.forward(2)
+		else
+			c.dig.forward({ optional = true, smart = true })
+		end
+	else
+		c.nTimes(loops - 1, squigle)
 		c.turn.right()
-		inspection()
-	end)
-
-	c.report.info("Starting initial custom loop")
-	m.forward(2)
-	c.turn.right()
-	m.forward(3)
-	c.turn.right()
-	m.forward(4)
-	c.turn.right()
-	m.forward(6)
-	c.turn.right()
-	m.forward(5)
-	if loops <= 1 then
-		return
+		local offset = (loops - 1) * 3
+		if edge == 0 then
+			m.forward(3 + offset)
+		elseif edge == 1 then
+			m.forward(4 + offset)
+		elseif edge == 2 then
+			m.forward(6 + offset)
+		elseif edge == 3 then
+			m.forward(5 + offset)
+		end
 	end
 
-	c.forI(loops - 1, function(loopI)
-		c.report.info("Starting pattern loop n:" .. loopI)
-		c.forI(4, function(edge)
-			c.nTimes(loopI, squigle)
-			c.turn.right()
-			local offset = (loopI - 1) * 3
-			if edge == 1 then
-				m.forward(6 + offset)
-			elseif edge == 2 then
-				m.forward(7 + offset)
-			elseif edge == 3 then
-				m.forward(9 + offset)
-			elseif edge == 4 then
-				m.forward(8 + offset)
-			end
-		end)
-	end)
-end
+	-- Update state
+	state.edges = state.edges + 1
+	state.last = c.gps.getCurrent()
+	c.state.set("scan", state)
+end)
 
-m.ground = c.task.wrapLog("c.scan.ground", function(loops)
-	c.gps.goHome()
-	m.groundLoop(loops)
-	c.gps.goHome()
+m.til = c.task.wrapLog("c.scan.til", function(til)
+	while not til() do
+		m.next()
+	end
 end)
 
 return m

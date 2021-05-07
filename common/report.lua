@@ -90,7 +90,11 @@ m.wrapLog = function(name, task)
 			return tasks
 		end)
 
-		local result = task(...)
+		local result = { pcall(function()
+			return task(unpack(args))
+		end) }
+
+		local errors = not result[1]
 
 		local finishedTaskName = nil
 		c.state.update("reportTaskList", {}, function(tasksRaw)
@@ -98,9 +102,23 @@ m.wrapLog = function(name, task)
 			finishedTaskName = tasks:pop()
 			return tasks
 		end)
-		m.info("END " .. finishedTaskName)
 
-		return result
+		if errors then
+			m.warning("ABORT " .. result[2])
+		else
+			m.info("END " .. finishedTaskName)
+		end
+
+		if errors then
+			if #c.state.get("reportTaskList", {}) > 0 then
+				error(result[2])
+			else
+				c.report.error(result[2])
+			end
+		end
+
+		table.remove(result, 1)
+		return unpack(result)
 	end
 end
 

@@ -1,0 +1,44 @@
+2x crafty_mining_turtle
+  2x diamond_pickaxe
+    6x diamond
+    4x sticks
+      4x wood
+        2x log
+  2x crafting_table
+    8x wood
+      2x log
+  2x turtle
+    14x iron
+      14x iron_ore
+    2x chest
+      16x wood
+        4x log
+    2x computer
+      14x stone
+        14x cobblestone
+      2x redstone
+      2x glass_pane
+        12x glass
+          12x sand
+
+Nx torch
+  Nx stick
+  Nx all_coals
+
+sign
+  stick
+  6x wood
+    2x log
+
+--
+
+1x disk drive
+  7x stone
+    7x cobblestone
+  2x redstone
+
+1x floppy
+  1x paper
+    3x sugar_cane
+  1x redstone
+

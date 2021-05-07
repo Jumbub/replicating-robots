@@ -1,6 +1,6 @@
 local m = {}
 
-local abortTilSufficientFuel = function()
+local abortTilSufficientFuel = c.task.wrapLog("c.move.abortTilSufficientFuel", function()
 	local abortPos = c.gps.getCurrent()
 	c.report.warning(
 		"Attempted to move, but not a safe amount of fuel. Temporarily aborting task to harvest fuel.",
@@ -14,7 +14,7 @@ local abortTilSufficientFuel = function()
 		return false
 	end)
 	c.gps.goTo(abortPos)
-end
+end)
 
 local move = function(direction)
 	if not c.fuel.safeMove(direction) then
@@ -32,14 +32,13 @@ local move = function(direction)
 end
 
 local withAssertions = function(direction, options)
-	local destroy = options.destroy == nil or options.destroy
-
 	local success, error = move(direction)
 
 	if success then
 		return true
 	end
 
+	local destroy = options.destroy == nil or options.destroy
 	if error == "Movement obstructed" and destroy then
 		while not success and c.dig[direction]() do
 			success, error = move(direction)

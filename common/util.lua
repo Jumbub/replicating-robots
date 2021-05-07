@@ -80,4 +80,10 @@ m.createEntriesWithValue = function(value, items)
 	end)
 end
 
+m.arrayToObjectFill = function(array, fill)
+	return Array.fromEntries(Array(Object.entries(array)):map(function(item)
+		return { item[1], fill }
+	end))
+end
+
 return m

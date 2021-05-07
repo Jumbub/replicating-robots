@@ -20,7 +20,7 @@ m.chopRecursive = function(height, options)
 		)
 	end
 
-	c.move.up()
+	c.move.up({ destroy = true })
 
 	c.tree.chopRecursive(height + 1, options)
 end
@@ -32,13 +32,13 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 		return false
 	end
 
-	c.move.forward()
+	c.move.forward({ destroy = true })
 	local basePos = c.gps.getCurrent()
 
 	-- Clear bottom of tree
 	local height = 0
-	while c.inspect.hasTag("minecraft:logs", turtle.inspectDown()) do
-		c.move.down()
+	while c.inspect.shouldChop(turtle.inspectDown()) do
+		c.move.down({ destroy = true })
 		height = height + 1
 	end
 	c.gps.goTo(basePos)
@@ -47,7 +47,7 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 	c.tree.chopRecursive(height, options)
 
 	c.gps.goTo(basePos)
-	c.move.back()
+	c.move.back({ destroy = true })
 
 	return true
 end)
