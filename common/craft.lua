@@ -1,75 +1,76 @@
 local m = {}
 
-local craftOneIngredient = function(name, quantity, preCraft, postCraft)
-	quantity = quantity or 1
-	postCraft = postCraft or c.noopTrue
-	if not c.inventory.equip(c.item.crafting_table) then
-		c.report.info("No crafting table equipable")
-		return false
-	end
-	local stash, task = c.stash.allButOne(name, function()
-		if not c.inventory.selectEmpty() then
-			c.report.info("No success finding an empty slot to put the crafted item")
-			return false
-		end
-		if not preCraft() then
-			c.report.info("Pre-craft task failed")
-			return false
-		end
-		c.inventory.selectEmpty()
-		if not turtle.craft(quantity or 1) then
-			c.report.info("No success while crafting", {
-				name = name,
-				inv = c.range(16):map(function(i)
-					return c.inventory.itemName(i)
-				end),
-			})
-			return false
-		end
-		if postCraft then
-			if postCraft() == false then
-				c.report.info("No success doing pre unstash crafting task")
-				return false
-			end
-		end
-		return true
-	end)
-	if not stash then
-		c.report.info("No success while stashing to perform craft")
-		return false
-	end
-	if not task then
-		c.report.info("No success while attempting to craft item")
-		return false
-	end
-	return true
-end
-
-local makeDonutShape = function(name)
-	if not c.inventory.selectNonEmpty() then
-		c.report.info("Cannot find ingredient: " .. name)
-		return false
-	end
-	turtle.transferTo(1)
-	turtle.select(1)
-	return Array({ 2, 3, 5, 7, 9, 10, 11 }):every(function(slot)
-		return turtle.transferTo(slot, 1)
-	end)
-end
-
-m.single = c.task.wrapTry("c.craft.single", function(name, quantity, preUnstash)
-	return craftOneIngredient(name, quantity, c.noopTrue, preUnstash)
-end)
-
-m.donut = c.task.wrapTry("c.craft.donut", function(name, quantity, preUnstash)
-	return craftOneIngredient(name, quantity, makeDonutShape, preUnstash)
-end)
-
 m.capable = function()
 	if turtle.craft or c.inventory.has(c.item.crafting_table) then
 		return true
 	end
 	return false
 end
+
+m.slotForPosition = function(i)
+	local adder = math.ceil(i / 3)
+	return i + adder + 4
+end
+
+-- @param recipe { name = string, names = array, slots = (1-9)[] }[]
+m.recipe = c.task.wrapLog("c.craft.recipe", function(recipe, quantity)
+	quantity = quantity or 1
+	assert(m.capable(), "Expect turtles to be crafty enabled")
+	assert(quantity >= 0)
+	assert(recipe)
+
+	-- Update recipe to include single largest count item
+	recipe = Array(recipe):map(function(ingredient)
+		if ingredient.names then
+			ingredient.name = c.inventory.largestCount(ingredient.names)
+			ingredient.names = nil
+		end
+		return ingredient
+	end)
+
+	-- Sanity check the ingredient list
+	if Array(recipe):some(function(item)
+		return #item.slots * quantity > c.inventory.count(item.name)
+	end) then
+		c.report.warning("Not enough items to split into their crafting slots")
+		return false
+	end
+
+	-- Stash unecessary items
+	c.stash.whitelist(
+		Array(recipe):map(function(ingredient)
+			return { name = ingredient.name, count = quantity * #ingredient.slots }
+		end),
+
+		-- Craft function while stashed
+		function()
+			-- Position items
+			c.inventory.moveToEarlySlots()
+			Array(recipe)
+				:map(function(item)
+					local splits = #item.slots
+					local count = c.inventory.count(item.name)
+					local slots = Array(item.slots):map(function(slot, i)
+						local baseSplit = math.floor(count / splits)
+						if i == 1 then
+							return { slot, baseSplit + count % splits }
+						else
+							return { slot, baseSplit }
+						end
+					end)
+					return { name = item.name, slots = slots }
+				end)
+				:forEach(function(item)
+					c.inventory.select(item.name)
+					Array(item.slots):forEach(function(detail)
+						local slot, count = unpack(detail)
+						turtle.transferTo(m.slotForPosition(slot), count)
+					end)
+				end)
+
+			return turtle.craft(quantity)
+		end
+	)
+end)
 
 return m

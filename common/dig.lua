@@ -1,6 +1,6 @@
 local m = {}
 
-local dig = function(dig)
+local dig = function(options, dig)
 	local success, error = dig()
 
 	if error == "No tool to dig with" then
@@ -11,7 +11,8 @@ local dig = function(dig)
 		success, error = dig()
 	end
 
-	if success then
+	if success and options.ensureFreeSlot then
+		-- Ensure slot to receive item
 		c.inventory.ensureFreeSlot()
 	end
 
@@ -22,7 +23,7 @@ local optional = function(options, nativeDig, nativeInspect)
 	options = options or {}
 	-- Just dig
 	if not options.optional then
-		return dig(nativeDig)
+		return dig(options, nativeDig)
 	end
 
 	-- Optionally dig
@@ -31,7 +32,7 @@ local optional = function(options, nativeDig, nativeInspect)
 		return false
 	end
 	c.report.info("Digging " .. block.name)
-	return dig(nativeDig)
+	return dig(options, nativeDig)
 end
 
 local smart = function(options, nativeDig, nativeInspect)

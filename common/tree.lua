@@ -1,5 +1,19 @@
 local m = {}
 
+local specialFirstTree = function()
+	c.report.info("Crafting a chest because this the first tree task")
+	assert(turtle.select(2), "Somehow this failed")
+	assert(turtle.refuel(3), "First task: there should be 3 planks in slot 2")
+	assert(
+		c.craft.recipe(c.recipe.plank, 2),
+		"First task: there should always be the ability to craft 8 planks"
+	)
+	assert(
+		c.craft.recipe(c.recipe.chest, 1),
+		"First task: there should always be the ability to craft 1 chest"
+	)
+end
+
 m.chopRecursive = function(height, options)
 	if not c.inspect.hasTag("minecraft:logs", turtle.inspectUp()) then
 		return c.leaf.collect(height)
@@ -7,17 +21,7 @@ m.chopRecursive = function(height, options)
 
 	-- Special case to handle an early complex chest craft
 	if height == 2 and options.first then
-		c.report.info("Crafting a chest because this the first tree task")
-		assert(turtle.select(2), "Somehow this failed")
-		assert(turtle.refuel(3), "First task: there should be 3 planks in slot 2")
-		assert(
-			c.craft.single(c.item.all.combustibleLogs, 2),
-			"First task: there should always be the ability to craft 8 planks"
-		)
-		assert(
-			c.craft.donut(c.item.all.combustiblePlanks, 1),
-			"First task: there should always be the ability to craft 1 chest"
-		)
+		specialFirstTree()
 	end
 
 	c.move.up({ destroy = true })

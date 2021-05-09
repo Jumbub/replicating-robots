@@ -23,7 +23,7 @@ m.refuel = function()
 	elseif c.inventory.select(c.item.all.combustiblePlanks) then
 		assert(turtle.refuel(1), "Somehow refueling from plank has failed")
 	elseif c.inventory.find(c.item.all.combustibleLogs) then
-		local successRefueling = c.craft.single(c.item.all.combustibleLogs, 1, function()
+		local successRefueling = c.craft.recipe(c.recipe.plank, 1, function()
 			return assert(turtle.refuel(1), "Somehow refueling after crafting plank has failed")
 		end)
 		if successRefueling then

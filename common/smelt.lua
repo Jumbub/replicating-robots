@@ -75,34 +75,50 @@ m.getFurnaceForInput = function(item)
 	end)
 end
 
-local dropInput = function(quantity)
+local dropInput = function(item, quantity)
 	assert(c.fuel.safeAvailable() >= 4, "This check should have happened earlier")
 	c.move.up()
 	c.move.forward()
+
+	c.inventory.ensureFreeSlot()
+	turtle.suckDown()
+
+	-- Drop input
+	c.inventory.select(item)
 	turtle.dropDown(quantity)
+
 	c.move.back()
 	c.move.down()
+	return true
 end
 
-local dropFuel = function(quantity)
+local dropFuel = function(item, quantity)
+	c.inventory.ensureFreeSlot()
+	turtle.suck()
+
+	-- Drop fuel
+	c.inventory.select(item)
 	turtle.drop(quantity)
+	return true
 end
 
 local pickupOutput = function()
 	assert(c.fuel.safeAvailable() >= 4, "This check should have happened earlier")
 	c.move.down()
 	c.move.forward()
-	-- Suck up any left-over items from a previous job
-	turtle.suckUp()
+
+	-- Pickup output
 	while c.inspect.stateIs("lit", true, turtle.inspectUp()) do
 		sleep(1)
 	end
 	turtle.suckUp()
+
 	c.move.back()
 	c.move.up()
+	return true
 end
 
-m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
+m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
 	if quantity < 0 then
 		c.report.warning("Will not craft " .. quantity .. " " .. item)
 		return true
@@ -136,7 +152,7 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 					return c.inventory.count(c.item.cobblestone) < 8
 				end)
 			end
-			c.craft.donut(c.item.cobblestone, 1)
+			c.craft.recipe(c.recipe.furnace, 1)
 		end
 		c.dig.forward()
 		turtle.place()
@@ -176,21 +192,48 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity)
 	-- Wait for existing item to finish smelting
 	while c.inspect.stateIs("lit", true, turtle.inspect()) do
 		c.report.info("Waiting for existing materials to smelt", fuel)
-		sleep(5)
+		sleep(1)
 	end
 
 	-- Fuel up
-	c.inventory.select(fuel.item)
-	dropFuel(fuel.requiredCount)
+	dropFuel(fuel.item, fuel.requiredCount)
 
 	-- Add input
-	c.inventory.select(item)
-	dropInput(quantity)
+	dropInput(item, quantity)
 
-	-- Wait for output
+	-- If async, return a command for picking up output
+	if async then
+		local pos = c.gps.getCurrent()
+		return true, function()
+			c.gps.goTo(pos)
+			pickupOutput()
+		end
+	end
+
+	-- If sync, pickup output
 	pickupOutput()
-
 	return true
 end)
+
+-- @var items {name: string, count: number}
+m.items = function(items)
+	return Array(items)
+		:map(function(item)
+			local success, pickup = m.item(item.name, item.count, true)
+			if not success then
+				c.report.error("Failed to smelt " .. item.count .. " " .. item.name .. "s")
+				return { success }
+			end
+			return { success, pickup }
+		end)
+		:map(function(detail)
+			local success, pickup = unpack(detail)
+			if success then
+				return pickup()
+			else
+				return "Failed"
+			end
+		end)
+end
 
 return m

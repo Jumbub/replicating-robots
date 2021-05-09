@@ -13,21 +13,14 @@ local matchDetailOnNames = function(detail, haystack)
 	return matchNameOnNames(detail.name, haystack)
 end
 
-m.countSingleHighest = function(name)
-	return Object.entries(c.range(16)
-			:map(function(i)
-			return { m.itemName(i), i }
-		end)
-			:filter(function(v)
-			return matchNameOnNames(v[1], name)
-		end)
-			:reduce(function(acc, v)
-			local n, slot = unpack(v)
-			acc[n] = (acc[n] or 0) + turtle.getItemCount(slot)
-			return acc
-		end, {})):sort(function(a, b)
-		return a[2] >= b[2]
-	end)[1]
+m.largestCount = function(names)
+	return unpack(
+		Array(names):map(function(name)
+			return { name, m.count(name) }
+		end):sort(function(a, b)
+			return a[2] >= b[2]
+		end)[1] or {}
+	)
 end
 
 m.count = function(name)
@@ -75,7 +68,7 @@ m.select = function(name)
 	if not slot then
 		return false
 	end
-	return assert(turtle.select(slot), "Somehow failed to select slot: " .. slot)
+	return turtle.select(slot)
 end
 
 m.equip = c.task.wrapLog("c.inventory.equip", function(name)
@@ -92,14 +85,22 @@ m.equip = c.task.wrapLog("c.inventory.equip", function(name)
 	return assert(action(), "Somehow failed to equip " .. name)
 end)
 
-m.selectEmpty = function()
+m.firstEmpty = function()
 	local slot = c.range(16):findIndex(function(i)
 		return not turtle.getItemDetail(i)
 	end)
 	if slot == -1 then
-		return false
+		return nil
 	end
-	return assert(turtle.select(slot), "Somehow failed to select inventory slot: " .. slot)
+	return slot
+end
+
+m.selectEmpty = function()
+	local slot = m.firstEmpty()
+	if slot then
+		return assert(turtle.select(slot), "Somehow failed to select inventory slot: " .. slot)
+	end
+	return false
 end
 
 m.selectNonEmpty = function()
@@ -165,6 +166,28 @@ m.organise = function()
 		elseif turtle.getItemSpace(slot) > 0 then
 			freeSlots[name] = slot
 		end
+	end)
+	return true
+end
+
+-- Return value signifies whether it moved items
+m.moveToEarlySlots = function()
+	m.organise()
+
+	local emptyI = 1
+	return c.range(16):some(function(i)
+		local detail = turtle.getItemDetail(i)
+		if detail and emptyI < i then
+			turtle.select(i)
+			turtle.transferTo(emptyI)
+
+			m.moveToEarlySlots()
+			return true
+		end
+		if detail then
+			emptyI = i + 1
+		end
+		return false
 	end)
 end
 

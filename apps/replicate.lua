@@ -29,16 +29,17 @@ local main = function()
 	c.tree.harvestOnce()
 
 	gatherResources()
-	c.smelt.item(c.item.iron_ore, 14)
 
-	gatherResources()
-	c.smelt.item(c.item.cobblestone, 14)
+	c.smelt.items({
+		{ name = c.item.iron_ore, count = 14 },
+		{ name = c.item.cobblestone, count = 14 },
+		{ name = c.item.sand, count = 6 },
+	})
 
-	gatherResources()
-	c.smelt.item(c.item.sand, 6)
-
-	gatherResources()
-	-- c.craft.fence(c.item.glass, 1)
+	c.craft.recipe(c.recipe.glass_pane, 2)
+	c.craft.recipe(c.recipe.chest, 2)
+	c.craft.recipe(c.recipe.computer_normal, 2)
+	c.craft.recipe(c.recipe.turtle_normal, 2)
 end
 
 local success, result = pcall(main)
