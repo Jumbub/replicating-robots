@@ -25,10 +25,12 @@ end)
 
 local move = function(direction)
 	if not c.fuel.safeMove(direction) then
-		-- Last ditch attempt, dig the block, maybe it's fuel
+		-- Last ditch attempt, dig the block, maybe it's fuel (seems like a hack for the first tree :/)
 		c.dig[direction]()
 		if not c.fuel.safeMove(direction) then
 			abortTilSufficientFuel()
+		else
+			c.fuel.refuel()
 		end
 	end
 	local success, error = turtle.native[direction]()

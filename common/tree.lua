@@ -2,14 +2,14 @@ local m = {}
 
 local specialFirstTree = function()
 	c.report.info("Crafting a chest because this the first tree task")
-	assert(turtle.select(2), "Somehow this failed")
-	assert(turtle.refuel(3), "First task: there should be 3 planks in slot 2")
+	assert(turtle.select(16), "Somehow this failed")
+	assert(turtle.refuel(), "First task: there should be planks in slot 16")
 	assert(
-		c.craft.recipe(c.recipe.plank, 2),
+		c.craft.recipe(c.recipe.plank, 8),
 		"First task: there should always be the ability to craft 8 planks"
 	)
 	assert(
-		c.craft.recipe(c.recipe.chest, 1),
+		c.craft.recipe(c.recipe[c.item.chest], 1),
 		"First task: there should always be the ability to craft 1 chest"
 	)
 end
@@ -36,7 +36,7 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 		return false
 	end
 
-	c.move.forward({ destroy = true })
+	c.move.forward()
 	local basePos = c.gps.getCurrent()
 
 	-- Clear bottom of tree
@@ -51,7 +51,7 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 	c.tree.chopRecursive(height, options)
 
 	c.gps.goTo(basePos)
-	c.move.back({ destroy = true })
+	c.move.back()
 
 	return true
 end)
