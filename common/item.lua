@@ -1224,6 +1224,15 @@ m.wireless_modem_normal = "computercraft:wireless_modem_normal"
 m.wireless_modem_advanced = "computercraft:wireless_modem_advanced"
 
 m.all = {
+	signs = {
+		m.oak_sign,
+		m.spruce_sign,
+		m.birch_sign,
+		m.jungle_sign,
+		m.acacia_sign,
+		m.dark_oak_sign,
+		m.sign,
+	},
 	combustibleLogs = {
 		m.oak_log,
 		m.spruce_log,
@@ -1279,5 +1288,23 @@ m.all = {
 		m.dark_oak_sapling,
 	},
 }
+
+local del = function(string, delPattern)
+	return String.replace(string, delPattern, "")
+end
+
+m.logsForPlank = function(plank)
+	local wood = del(del(plank, "_planks"), "minecraft:")
+	return {
+		"minecraft:" .. wood .. "_log",
+		"minecraft:stripped_" .. wood .. "_log",
+		"minecraft:stripped_" .. wood .. "_wood",
+		"minecraft:" .. wood .. "_wood",
+	}
+end
+
+m.plankForLog = function(log)
+	return del(del(del(log, "_log"), "stripped_"), "_wood") .. "_planks"
+end
 
 return m

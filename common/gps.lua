@@ -24,14 +24,10 @@ m.goToTravelHeight = function(cur)
 	c.move.up({ times = m.offsetToTravelHeight(cur) })
 end
 
-m.goTo = c.task.wrapLog("c.gps.goTo", function(to, options)
-	assert(to)
-	options = options or {}
-	local safe = options.safe == nil or options.safe
-
+m.goTo = c.task.wrapLog("c.gps.goTo", function(to)
+	assert(to and to.x and to.y and to.z and to.r)
 	local cur = c.gps.getCurrent()
-
-	if safe and c.vector.horDistAtoB(cur, to) > 0 then
+	if c.vector.horDistAtoB(cur, to) > 0 then
 		-- Move down to a level that avoid "trampling"
 		m.goToTravelHeight(cur)
 	end
@@ -86,8 +82,8 @@ m.getCurrent = function()
 	return c.gpsRelative.getCurrent()
 end
 
-m.goHome = function(options)
-	c.gps.goTo(c.location.getHome(), options)
+m.goHome = function()
+	c.gps.goTo(c.location.getHome())
 end
 
 return m

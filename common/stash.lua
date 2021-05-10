@@ -92,8 +92,8 @@ m.whitelist = c.task.wrapLog("c.stash.whitelist", function(whitelist, task)
 			if not skipChest then
 				assert(turtle.dropUp(stashCount))
 			end
-			whiteobject[detail.name] = whiteobject[detail.name] - notStashedCount
 		end
+		whiteobject[detail.name] = whiteobject[detail.name] - notStashedCount
 	end)
 
 	-- Validate stash counts

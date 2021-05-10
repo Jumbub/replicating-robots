@@ -152,7 +152,7 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
 					return c.inventory.count(c.item.cobblestone) < 8
 				end)
 			end
-			c.craft.recipe(c.recipe.furnace, 1)
+			c.craft.recipe(c.recipe[c.item.furnace], 1)
 		end
 		c.dig.forward()
 		turtle.place()

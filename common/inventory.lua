@@ -195,6 +195,7 @@ m.dumpLeastImportantSlot = c.task.wrapLog("c.inventory.dumpLeastImportantSlot", 
 	-- TODO: investigate crafting to resolve issues
 	-- E.g. craft coal block, redstone block, etc.
 	turtle.select(c.goal.leastImportantSlot())
+	c.report.warning("Dumped item details", turtle.getItemDetail())
 	turtle.drop()
 end)
 
