@@ -12,11 +12,12 @@ m.range = function(n)
 	return arr
 end
 
-local commonModule = "src/common"
+local commonFile = "src/common"
+local commonModule = String.replace(commonFile, "/", ".")
 
 -- Reload common packages globally
 m.reload = function()
-	Array(fs.list(commonModule))
+	Array(fs.list(commonFile))
 		:map(function(file)
 			return String.replace(file, ".lua", "")
 		end)
