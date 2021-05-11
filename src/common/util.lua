@@ -12,20 +12,22 @@ m.range = function(n)
 	return arr
 end
 
+local commonModule = "src/common"
+
 -- Reload common packages globally
 m.reload = function()
-	Array(fs.list("common"))
+	Array(fs.list(commonModule))
 		:map(function(file)
 			return String.replace(file, ".lua", "")
 		end)
 		:forEach(function(file)
-			if package.loaded["common." .. file] then
-				package.loaded["common." .. file] = nil
+			if package.loaded[commonModule .. "." .. file] then
+				package.loaded[commonModule .. "." .. file] = nil
 			end
 		end)
 
-	package.loaded["common"] = nil
-	require("common")
+	package.loaded[commonModule] = nil
+	require(commonModule)
 
 	c.report.warning("Reloaded common packages [" .. c.tag .. "]")
 
