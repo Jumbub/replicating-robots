@@ -49,7 +49,6 @@ m.GOALS = {
 	scan = {
 		{ items = { c.item.sand }, count = 6 },
 		{ items = { c.item.all.combustibleLogs }, count = 12 },
-		{ items = { c.item.all.leaves }, count = 1 }, -- Used to prevent climbing over trees
 	},
 	mine = {
 		{ items = { c.item.coal }, count = 6 },

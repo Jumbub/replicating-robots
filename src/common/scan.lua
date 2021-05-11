@@ -21,7 +21,10 @@ end)
 local smartDig = function()
 	if c.inspect.hasTag("minecraft:logs", c.inspect.forward()) then
 		return c.tree.chop()
-	elseif c.inspect.shouldDig("scan", c.inspect.forward()) then
+	elseif
+		c.inspect.hasTag("minecraft:leaves", c.inspect.forward())
+		and c.inspect.shouldDig("scan", c.inspect.forward())
+	then
 		return c.dig.forward()
 	end
 	return false

@@ -10,13 +10,15 @@ local main = function()
 	while not c.goal.achieved(Array.concat(c.goal.GOALS.scan, c.goal.GOALS.mine)) do
 		-- Scan
 		c.scan.til(function()
-			return c.goal.achieved(c.goal.SCAN_GOAL)
+			return c.goal.achieved(c.goal.GOALS.scan)
 		end)
 
 		-- Mine
 		c.mine.til(function()
-			return c.goal.achieved(c.goal.MINE_GOAL)
+			return c.goal.achieved(c.goal.GOALS.mine)
 		end)
+
+		sleep(1) -- Prevent spam loop when code is bugged bugs
 	end
 
 	-- Smelt required items
