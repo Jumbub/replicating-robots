@@ -10,7 +10,7 @@ m.placeChest = function(skip)
 		c.report.info("Skipping chest placement for stash")
 		return true
 	end
-	c.dig.up({ smart = true })
+	c.dig.up()
 	if not c.inventory.select(c.item.chest) then
 		c.report.info("No chest in inventory for stashing")
 		return false

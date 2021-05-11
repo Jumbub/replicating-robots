@@ -18,20 +18,25 @@ local goToScan = c.task.wrapLog("c.scan.goToScan", function()
 	end
 end)
 
-local inspectForward = function()
-	return c.dig.forward({ optional = true, smart = true })
+local smartDig = function()
+	if c.inspect.hasTag("minecraft:logs", c.inspect.forward()) then
+		return c.tree.chop()
+	elseif c.inspect.shouldDig("scan", c.inspect.forward()) then
+		return c.dig.forward()
+	end
+	return false
 end
 
--- Return the result of inspectForward
+-- Returns the result of the final dig
 local inspect = function()
 	c.turn.right()
-	while c.dig.forward({ optional = true, smart = true }) do
+	while smartDig() do
 	end
 	c.turn.around()
-	while c.dig.forward({ optional = true, smart = true }) do
+	while smartDig() do
 	end
 	c.turn.right()
-	return inspectForward()
+	return smartDig()
 end
 
 m.forward = function(times)
@@ -87,7 +92,7 @@ m.next = c.task.wrapLog("c.scan.next", function()
 		if edge == 3 then
 			m.forward(2)
 		else
-			c.dig.forward({ optional = true, smart = true })
+			smartDig()
 		end
 	else
 		c.nTimes(loops - 1, squigle)
