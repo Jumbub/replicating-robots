@@ -1,10 +1,14 @@
-# Better shell
+# MBS
 .lua_history
 .shell_history
+.mbs
+mbs.lua
+00_mbs.lua
 
-# Testing
-test.lua
+# Scratch files
 test
 
-# Memory
+# Data storage
 memory
+startup/*
+!startup/1_replicating_robots.lua

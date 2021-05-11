@@ -1,6 +1,6 @@
 require("lib")
 
-local commands = require("world.commands")
+local commands = require("src.world.commands")
 
 print("Playing god.\n")
 

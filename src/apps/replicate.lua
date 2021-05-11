@@ -1,5 +1,5 @@
 require("lib")
-require("common")
+require("src.common")
 
 local gatherResources = function()
 	_G.GATHER_STACK = 0

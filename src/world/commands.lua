@@ -1,4 +1,4 @@
-local modify = require("world/modify")
+local modify = require("src.world.modify")
 
 local m = {}
 

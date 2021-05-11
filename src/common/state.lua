@@ -13,10 +13,12 @@ end
 
 local read = function()
 	local file = fs.open(STATE_FILE, "r")
-	assert(file, "Somehow I cannot read from the state file")
-	local state = textutils.unserialiseJSON(file.readAll()) or {}
-	file.close()
+	if not file then
+		return {}
+	end
 
+	local state = textutils.unserialiseJSON(file.readAll())
+	file.close()
 	return state
 end
 

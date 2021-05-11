@@ -46,12 +46,22 @@ In this challenge I write a brain for a turtle, with just enough intelligence to
 - Fuel use is enabled
 - Player will neither help nor deliberately obstruct the turtle
 
-## Running
+## Getting Started
 
-### Installing
+### Required
 
-Replace your turtles rom with: `git clone https://github.com/Jumbub/replicating-robots.git`
+[cc-tweaked [1.16.3] 1.93.1](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked)
 
-### Executing
+[computercraft-github](https://github.com/eric-wieser/computercraft-github)
 
-Inside your turtle, run: `main`
+##### Recommended
+
+[mbs](https://github.com/SquidDev-CC/mbs)
+
+### Install
+
+`github clone Jumbub/replicating-robots .`
+
+### Run
+
+`go`
