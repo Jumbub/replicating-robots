@@ -49,7 +49,7 @@ m.forward = function(times)
 	inspect()
 
 	-- Climb down to last block we shouldn't dig
-	while not turtle.detectDown() or c.inspect.shouldDig(turtle.inspectDown()) do
+	while not turtle.detectDown() or c.inspect.shouldDig("scan", turtle.inspectDown()) do
 		c.move.down()
 		inspect()
 	end

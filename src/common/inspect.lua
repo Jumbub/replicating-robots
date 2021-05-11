@@ -1,11 +1,11 @@
 local m = {}
 
-m.shouldDig = function(success, block)
+m.shouldDig = function(goal, success, block)
 	if not success then
 		return false
 	end
 
-	return c.goal.shouldCollect(block.name)
+	return c.goal.shouldCollect(goal, block.name)
 end
 
 m.shouldChop = function(success, block)

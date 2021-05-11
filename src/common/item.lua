@@ -1287,6 +1287,14 @@ m.all = {
 		m.acacia_sapling,
 		m.dark_oak_sapling,
 	},
+	leaves = {
+		m.oak_leaves,
+		m.spruce_leaves,
+		m.birch_leaves,
+		m.jungle_leaves,
+		m.acacia_leaves,
+		m.dark_oak_leaves,
+	},
 }
 
 local del = function(string, delPattern)

@@ -6,7 +6,7 @@ local BEDROCK_Y_MOVES = 0
 
 local check = function()
 	local success, block = turtle.inspect()
-	if c.inspect.shouldDig(success, block) then
+	if c.inspect.shouldDig("mine", success, block) then
 		c.report.info("Found something worth mining: " .. block.name)
 		c.dig.forward()
 	end

@@ -58,6 +58,10 @@ m.collectOak = function(height)
 end
 
 m.collect = c.task.wrapLog("c.leaf.collect", function(height)
+	if c.goal.achieved(c.goal.GOALS.tree) then
+		c.report.info("Skipping leaf collection due to meeting goal")
+		return true
+	end
 	return c.leaf.collectOak(height)
 end)
 

@@ -1,34 +1,23 @@
 require("lib")
 require("src.common")
 
-local gatherResources = function()
-	_G.GATHER_STACK = 0
-	while not c.goal.achieved(Array.concat(c.goal.SCAN_GOAL, c.goal.MINE_GOAL)) do
-		if not c.goal.achieved(c.goal.SCAN_GOAL) then
-			c.scan.til(function()
-				return c.goal.achieved(c.goal.SCAN_GOAL)
-			end)
-		elseif not c.goal.achieved(c.goal.MINE_GOAL) then
-			c.mine.til(function()
-				return c.goal.achieved(c.goal.MINE_GOAL)
-			end)
-		end
-
-		-- Abort bad loops
-		_G.GATHER_STACK = _G.GATHER_STACK
-		if _G.GATHER_STACK > 20 then
-			error("The gather loop has repeated 20 times, aborting")
-		end
-	end
-end
-
 local main = function()
 	c.state.reset()
 
 	c.tree.chop({ first = true })
 	c.tree.harvestOnce()
 
-	gatherResources()
+	while not c.goal.achieved(Array.concat(c.goal.GOALS.scan, c.goal.GOALS.mine)) do
+		-- Scan
+		c.scan.til(function()
+			return c.goal.achieved(c.goal.SCAN_GOAL)
+		end)
+
+		-- Mine
+		c.mine.til(function()
+			return c.goal.achieved(c.goal.MINE_GOAL)
+		end)
+	end
 
 	-- Smelt required items
 	local furni = c.inventory.count(c.item.furnace)
