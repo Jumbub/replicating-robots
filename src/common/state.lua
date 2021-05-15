@@ -48,6 +48,7 @@ end
 m.reset = function()
 	c.report.separator("State reset")
 	write({})
+  return true
 end
 
 return m

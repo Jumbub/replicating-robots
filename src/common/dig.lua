@@ -1,6 +1,8 @@
 local m = {}
 
 local dig = function(dig)
+  c.inventory.ensureFreeSlot()
+
 	local success, error = dig()
 
 	if error == "No tool to dig with" then

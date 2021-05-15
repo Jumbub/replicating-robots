@@ -41,7 +41,7 @@ m.chop = c.task.wrapLog("c.tree.chop", function(options)
 
 	-- Clear bottom of tree
 	local height = 0
-	while c.inspect.shouldChop(turtle.inspectDown()) do
+	while c.inspect.shouldChop(c.inspect.down()) do
 		c.move.down({ destroy = true })
 		height = height + 1
 	end
@@ -67,6 +67,7 @@ m.harvestOnce = c.task.wrapLog("c.tree.harvestOnce", function()
 		end
 		c.turn.right()
 	end)
+  return true
 end)
 
 m.harvestTil = c.task.wrapLog("c.tree.harvestTil", function(til)
@@ -89,6 +90,8 @@ m.harvestTil = c.task.wrapLog("c.tree.harvestTil", function(til)
 		c.report.info("Sleeping because til not reached")
 		sleep(10)
 	end
+
+  return true
 end)
 
 return m

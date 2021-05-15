@@ -195,14 +195,12 @@ m.dumpLeastImportantSlot = c.task.wrapLog("c.inventory.dumpLeastImportantSlot", 
 	-- TODO: investigate crafting to resolve issues
 	-- E.g. craft coal block, redstone block, etc.
 	turtle.select(c.goal.leastImportantSlot())
-	c.report.warning("Dumped item details", turtle.getItemDetail())
 	turtle.drop()
 end)
 
 m.ensureFreeSlot = function()
 	m.organise()
 	if m.slotsUsed() == 16 then
-		c.report.warning("Warning: inventory full")
 		m.dumpLeastImportantSlot()
 	end
 end

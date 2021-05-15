@@ -59,8 +59,8 @@ m.forward = function(times)
 	-- Climb down to last block we shouldn't dig
 	while
     not turtle.detectDown()
-    or c.inspect.shouldDig("scan", turtle.inspectDown())
-		or c.inspect.hasTag("minecraft:leaves", c.inspect.inspectDown())
+    or c.inspect.shouldDig("scan", c.inspect.down())
+		or c.inspect.hasTag("minecraft:leaves", c.inspect.down())
   do
 		c.move.down()
 		inspect()

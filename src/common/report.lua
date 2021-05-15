@@ -1,8 +1,8 @@
 local m = {}
 
 local ID = os.getComputerID()
-local STATE_DIR = "memory"
-local STATE_FILE = STATE_DIR .. "/" .. ID .. ".log"
+local MEMORY_DIR = "memory"
+local REPORT_FILE = MEMORY_DIR .. "/" .. ID .. ".log"
 
 m.format = function(data)
 	if type(data) == "string" then
@@ -42,7 +42,7 @@ local log = function(message, noOffset)
 
 	print(message)
 
-	local file = fs.open(STATE_FILE, "a")
+	local file = fs.open(REPORT_FILE, "a")
 	assert(file, "Somehow I cannot write to the state file")
 	file.writeLine(message)
 	file.close()
