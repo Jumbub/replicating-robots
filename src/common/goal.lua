@@ -19,15 +19,12 @@ m.ITEM_PRIORITIES = Array.concat(
 	},
 	{
 		-- Goal resources
-		c.item.diamond_ore,
 		c.item.diamond,
 		c.item.glass,
 		c.item.glass_pane,
 		c.item.sand,
 		c.item.redstone,
-		c.item.redstone_ore,
 		c.item.iron_ingot,
-		c.item.iron_ore,
 		c.item.stone,
 	},
 	-- Easy to collect again
@@ -44,18 +41,18 @@ m.ITEM_PRIORITIES = Array.concat(
 
 m.GOALS = {
 	tree = {
-		{ items = { c.item.all.saplings }, count = 3 }, -- Used to prevent harvesting of leaves when redundant
+		{ items = c.item.all.saplings, count = 3 }, -- Used to avoid wasting fuel collecting unecessary amounts of leaves
 	},
 	scan = {
 		{ items = { c.item.sand }, count = 6 },
-		{ items = { c.item.all.combustibleLogs }, count = 12 },
+		{ items = c.item.all.combustibleLogs, count = 12 },
 	},
 	mine = {
-		{ items = { c.item.coal }, count = 6 },
-		{ items = { c.item.diamond }, count = 6 },
-		{ items = { c.item.redstone }, count = 2 },
-		{ items = { c.item.iron_ore }, count = 14 },
-		{ items = { c.item.cobblestone }, count = 14 + 8 * 3 },
+		{ items = { c.item.coal }, blocks = { c.item.coal_ore }, count = 6 },
+		{ items = { c.item.diamond }, blocks = { c.item.diamond_ore }, count = 6 },
+		{ items = { c.item.redstone }, blocks = { c.item.redstone_ore }, count = 2 },
+		{ items = { c.item.iron_ingot } , blocks = { c.item.iron_ore }, count = 14 },
+		{ items = { c.item.cobblestone }, blocks = { c.item.stone }, count = 14 + 8 * 3 },
 	},
 }
 
@@ -93,12 +90,14 @@ m.shouldCollect = function(goal, name)
 	local requirement = Array(m.GOALS[goal]):find(function(detail)
 		return Array(detail.items):some(function(detailName)
 			return detailName == name
+		end) or Array(detail.blocks):some(function(blockName)
+			return blockName == name
 		end)
 	end)
 	if not requirement then
 		return false
 	end
-	return c.inventory.count(name) < requirement.count
+	return requirement.items:reduce(function(acc, item) return acc + c.inventory.count(item) end, 0) < requirement.count
 end
 
 m.achieved = function(goal)
