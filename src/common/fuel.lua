@@ -8,7 +8,7 @@ m.itemToFuel = function()
 			{ c.item.lava_bucket, 1000 },
 		},
 		c.createEntriesWithValue(15, c.item.all.combustiblePlanks),
-		c.createEntriesWithValue(15, c.item.all.combustibleLogs),
+		c.createEntriesWithValue(15*4, c.item.all.combustibleLogs),
 		c.createEntriesWithValue(80, c.item.all.coals)
 	))
 end
@@ -23,16 +23,13 @@ m.refuel = function()
 	elseif c.inventory.select(c.item.all.combustiblePlanks) then
 		assert(turtle.refuel(1), "Somehow refueling from plank has failed")
 	elseif c.inventory.find(c.item.all.combustibleLogs) then
-		local successRefueling = c.craft.recipe(c.recipe.plank, 1, function()
+		assert(c.craft.recipe(c.recipe.plank, 1, function()
 			return assert(turtle.refuel(1), "Somehow refueling after crafting plank has failed")
-		end)
-		if successRefueling then
-			return true
-		end
+		end), 'If crafting planks fails, the safe movement calculation will be invalid')
 
 		assert(
-			c.inventory.select(c.item.all.combustibleLogs),
-			"If crafting of plank failed, the log should still be in the inventory"
+			c.inventory.select(c.item.all.combustiblePlanks),
+			"If crafting of planks failed, the log should still be in the inventory"
 		)
 
 		return assert(turtle.refuel(1), "Somehow refueling from a log has failed")

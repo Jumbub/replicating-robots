@@ -50,7 +50,7 @@ return Object.assign(
 			plank,
 			{
 				{
-					names = c.item.logsForPlank(plank),
+					names = c.item.logForPlank(plank),
 					slots = { 1 },
 				},
 				4,

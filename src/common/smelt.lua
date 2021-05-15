@@ -162,27 +162,13 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
 	local fuel = m.fuelRequired(quantity)
 	c.report.info("Fuel calculation complete", fuel)
 
-	-- Harvest logs til we can smelt quantity
-	-- while not fuel or c.fuel.safeAvailable() - fuel.usedFuel - FUEL_FOR_SMELTING_ITEM < 0 do
-	-- 	local required = math.max((fuel.usedFuel + FUEL_FOR_SMELTING_ITEM) - c.fuel.safeAvailable(), 0)
-
-	-- 	-- This algorithm for determining when to stop is unbelievably conservative
-	-- 	local start = c.inventory.count(c.item.all.logs)
-	-- 	c.tree.harvestTil(function()
-	-- 		return (c.inventory.countSingleHighest(c.item.all.logs) - start) * 6 >= quantity + required / 10
-	-- 	end)
-
-	-- 	fuel = m.fuelRequired(quantity)
-	-- end
-
-	-- Harvest logs til we can perform task
-	-- while c.fuel.safeAvailable() - fuel.usedFuel - FUEL_FOR_SMELTING_ITEM > 0 do
-	-- 	-- The "+ 50" is just a random buffer to prevent excessive trips
-	-- 	local required = c.vector.distToHome() * 2 + FUEL_FOR_SMELTING_ITEM + fuel.usedFuel + 50
-	-- 	c.tree.harvestTil(function()
-	-- 		return c.fuel.available() - required > 0
-	-- 	end)
-	-- end
+  -- If the fuel is not in our inventory, we assume it's craftable
+  local plank = c.item.logToPlank(fuel.item)
+  if plank then
+      assert(c.craft.recipe(plank, fuel.requiredCount * 4))
+      fuel.item = plank
+      fuel.requiredCount = 4 * fuel.requiredCount
+  end
 
 	-- Ensure does not try to refuel under furnace
 	if c.fuel.safeAvailable() - FUEL_FOR_SMELTING_ITEM <= 0 then

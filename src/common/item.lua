@@ -1301,7 +1301,7 @@ local del = function(string, delPattern)
 	return String.replace(string, delPattern, "")
 end
 
-m.logsForPlank = function(plank)
+m.logForPlank = function(plank)
 	local wood = del(del(plank, "_planks"), "minecraft:")
 	return {
 		"minecraft:" .. wood .. "_log",
