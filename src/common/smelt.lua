@@ -162,7 +162,7 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
 	local fuel = m.fuelRequired(quantity)
 	c.report.info("Fuel calculation complete", fuel)
 
-  -- If the fuel is not in our inventory, we assume it's craftable
+  -- If the fuel can be converted to planks, do so
   local plank = c.item.logToPlank(fuel.item)
   if plank then
       assert(c.craft.recipe(plank, fuel.requiredCount * 4))
