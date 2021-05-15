@@ -1,12 +1,14 @@
 local m = {}
 
-_G.ABORT_STACK = 0
-
 local abortTilSufficientFuel = c.task.wrapLog("c.move.abortTilSufficientFuel", function()
-	ABORT_STACK = ABORT_STACK + 1
-	if ABORT_STACK >= 5 then
+  -- Avoid infinite loops
+  local moveAbortions = c.state.get("moveAbortions", 0)
+	if moveAbortions >= 5 then
+    c.state.set("moveAbortions", 0)
 		error("Attempted to abort, but the stack already has 5 abortions")
 	end
+  c.state.set("moveAbortions", moveAbortions + 1)
+
 	local abortPos = c.gps.getCurrent()
 	c.report.warning(
 		"Attempted to move, but not a safe amount of fuel. Temporarily aborting task to harvest fuel.",
@@ -20,7 +22,8 @@ local abortTilSufficientFuel = c.task.wrapLog("c.move.abortTilSufficientFuel", f
 		return false
 	end)
 	c.gps.goTo(abortPos)
-	ABORT_STACK = ABORT_STACK - 1
+
+  c.state.set("moveAbortions", moveAbortions)
 end)
 
 local move = function(direction)
