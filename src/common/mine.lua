@@ -1,8 +1,7 @@
 local m = {}
 
--- TODO: UPDATE THESE VALUES TO 25 & 4 when doing real test
-local BEDROCK_Y_OFFSET = 5
-local BEDROCK_Y_MOVES = 0
+local MINING_TOP_HEIGHT = 25
+local MINING_BOTTOM_HEIGHT = 4
 
 local check = function()
 	local success, block = turtle.inspect()
@@ -46,7 +45,7 @@ local goToMine = c.task.wrapLog("c.mine.goToMine", function()
 		end
 
 		-- Move to origin
-		c.nTimes(BEDROCK_Y_OFFSET + 17, c.move.up)
+		c.nTimes(MINING_TOP_HEIGHT + MINING_BOTTOM_HEIGHT, c.move.up)
 
 		-- Save state
 		c.state.set("mine", {
@@ -70,7 +69,7 @@ local vertical = function(lastR, lastY)
 	end
 
 	-- Move out of bedrock zone
-	c.nTimes(BEDROCK_Y_MOVES, c.move.up)
+	c.nTimes(MINING_BOTTOM_HEIGHT, c.move.up)
 
 	-- Re-orient, then squigle
 	c.gps.faceR(lastR)
