@@ -25,6 +25,7 @@ m.ITEM_PRIORITIES = Array.concat(
 		c.item.sand,
 		c.item.redstone,
 		c.item.iron_ingot,
+		c.item.iron_ore,
 		c.item.stone,
 	},
 	-- Easy to collect again

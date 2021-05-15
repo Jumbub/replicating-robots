@@ -8,13 +8,13 @@ This mod is where my ~~addiction~~ passion for programming began (back in 2012) 
 
 ## Context
 
-A "turtle" (as seen in the above image) is effectively a robot minecraft player.
+ComputerCraft is a mod for Minecraft, which adds Lua programmable robots to the game.
 
-They provide an extremely simple API - `moveUp`, `placeDown`, `dig`
+The robots are very primitive by default, only exposing a basic API for interacting with the world (`move`, `dig`, `inspect`, ...)
 
-With the right resources - diamonds, stone, glass, ... - a turtle could craft another turtle.
+With the right programming, the robot can achieve anything a normal player could.
 
-In this challenge I write a brain for a turtle, with just enough intelligence to gather the required resources to craft some friends.
+In this challenge, you program a robot to collect enough resources to create a clone of itself.
 
 ## Challenge
 

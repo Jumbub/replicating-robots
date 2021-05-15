@@ -191,12 +191,12 @@ m.moveToEarlySlots = function()
 	end)
 end
 
-m.dumpLeastImportantSlot = c.task.wrapLog("c.inventory.dumpLeastImportantSlot", function()
+m.dumpLeastImportantSlot = function()
 	-- TODO: investigate crafting to resolve issues
 	-- E.g. craft coal block, redstone block, etc.
 	turtle.select(c.goal.leastImportantSlot())
 	turtle.drop()
-end)
+end
 
 m.ensureFreeSlot = function()
 	m.organise()
