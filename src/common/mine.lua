@@ -42,10 +42,11 @@ local goToMine = c.task.wrapLog("c.mine.goToMine", function()
 	if not state then
 		c.gps.goHome()
 		while c.move.down() do
+      spin()
 		end
 
 		-- Move to origin
-		c.nTimes(BEDROCK_Y_OFFSET, c.move.up)
+		c.nTimes(BEDROCK_Y_OFFSET + 17, c.move.up)
 
 		-- Save state
 		c.state.set("mine", {
