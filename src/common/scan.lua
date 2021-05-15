@@ -23,7 +23,7 @@ local smartDig = function()
 		return c.tree.chop()
 	elseif
 		c.inspect.hasTag("minecraft:leaves", c.inspect.forward())
-		and c.inspect.shouldDig("scan", c.inspect.forward())
+		or c.inspect.shouldDig("scan", c.inspect.forward())
 	then
 		return c.dig.forward()
 	end
@@ -57,7 +57,11 @@ m.forward = function(times)
 	inspect()
 
 	-- Climb down to last block we shouldn't dig
-	while not turtle.detectDown() or c.inspect.shouldDig("scan", turtle.inspectDown()) do
+	while
+    not turtle.detectDown()
+    or c.inspect.shouldDig("scan", turtle.inspectDown())
+		or c.inspect.hasTag("minecraft:leaves", c.inspect.inspectDown())
+  do
 		c.move.down()
 		inspect()
 	end
