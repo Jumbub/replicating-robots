@@ -195,7 +195,13 @@ m.dumpLeastImportantSlot = function()
 	-- TODO: investigate crafting to resolve issues
 	-- E.g. craft coal block, redstone block, etc.
 	turtle.select(c.goal.leastImportantSlot())
-	turtle.drop()
+	if not turtle.dropUp() then
+    if not turtle.dropDown() then
+      if not turtle.drop() then
+        c.report.warning('Oh no, cannot dump item')
+      end
+    end
+  end
 end
 
 m.ensureFreeSlot = function()
