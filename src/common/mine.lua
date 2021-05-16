@@ -1,12 +1,15 @@
 local m = {}
 
-local MINING_TOP_HEIGHT = 10
+local MINING_TOP_HEIGHT = 14
 local MINING_BOTTOM_HEIGHT = 4
 
 local checkDir = function(direction)
 	local success, block = c.inspect[direction]()
 	if c.inspect.shouldDig("mine", success, block) then
 		c.report.info("Found something worth mining: " .. block.name)
+    c.report.info('Inventory info', {
+      items = c.range(16):map(function(i) return turtle.getItemDetail(i) end)
+    })
     c.inventory.moveToEarlySlots()
     if turtle.getItemCount() == 0 then
       turtle.select(1)
