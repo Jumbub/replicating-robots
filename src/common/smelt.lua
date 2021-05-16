@@ -165,15 +165,10 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
   -- If the fuel can be converted to planks, do so
   local plank = c.item.logToPlank(fuel.item)
   if plank then
-      assert(c.craft.recipe(plank, fuel.requiredCount * 4))
+      assert(c.craft.recipe(c.recipe[plank], fuel.requiredCount * 4))
       fuel.item = plank
       fuel.requiredCount = 4 * fuel.requiredCount
   end
-
-	-- Ensure does not try to refuel under furnace
-	if c.fuel.safeAvailable() - FUEL_FOR_SMELTING_ITEM <= 0 then
-		c.fuel.refuel()
-	end
 
 	-- Wait for existing item to finish smelting
 	while c.inspect.stateIs("lit", true, turtle.inspect()) do

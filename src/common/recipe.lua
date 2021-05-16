@@ -49,10 +49,10 @@ return Object.assign(
 		return {
 			plank,
 			{
-				{
-					names = c.item.plankToLog(plank),
-					slots = { 1 },
-				},
+        { {
+          names = c.item.plankToLogs(plank),
+          slots = { 1 },
+        } },
 				4,
 			},
 		}
