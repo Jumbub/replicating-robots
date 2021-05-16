@@ -1301,7 +1301,10 @@ local del = function(string, delPattern)
 	return String.replace(string, delPattern, "")
 end
 
-m.logToPlank = function(plank)
+m.plankToLogs = function(plank)
+  if not Array(m.all.combustiblePlanks):some(function(p) return plank == p end) then
+    return
+  end
 	local wood = del(del(plank, "_planks"), "minecraft:")
 	return {
 		"minecraft:" .. wood .. "_log",
@@ -1311,7 +1314,10 @@ m.logToPlank = function(plank)
 	}
 end
 
-m.plankToLog = function(log)
+m.logToPlank = function(log)
+  if not Array(m.all.combustibleLogs):some(function(l) return log == l end) then
+    return
+  end
 	return del(del(del(log, "_log"), "stripped_"), "_wood") .. "_planks"
 end
 
