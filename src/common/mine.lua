@@ -1,14 +1,22 @@
 local m = {}
 
-local MINING_TOP_HEIGHT = 25
+local MINING_TOP_HEIGHT = 10
 local MINING_BOTTOM_HEIGHT = 4
 
-local check = function()
-	local success, block = turtle.inspect()
+local checkDir = function(direction)
+	local success, block = c.inspect[direction]()
 	if c.inspect.shouldDig("mine", success, block) then
 		c.report.info("Found something worth mining: " .. block.name)
-		c.dig.forward()
+    c.inventory.moveToEarlySlots()
+    if turtle.getItemCount() == 0 then
+      turtle.select(1)
+    end
+		c.dig[direction]()
 	end
+end
+
+local check = function()
+  checkDir('forward')
 end
 
 local spin = function()
@@ -22,10 +30,14 @@ end
 
 local squigle = function()
 	c.move.forward()
+  checkDir('up')
+  checkDir('down')
 	c.turn.left()
 	check()
 	c.turn.right()
 	c.move.forward()
+  checkDir('up')
+  checkDir('down')
 	check()
 	c.turn.left()
 	check()
@@ -45,7 +57,7 @@ local goToMine = c.task.wrapLog("c.mine.goToMine", function()
 		end
 
 		-- Move to origin
-		c.nTimes(MINING_TOP_HEIGHT + MINING_BOTTOM_HEIGHT, c.move.up)
+		c.nTimes(MINING_TOP_HEIGHT, c.move.up)
 
 		-- Save state
 		c.state.set("mine", {
