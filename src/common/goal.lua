@@ -20,22 +20,24 @@ m.ITEM_PRIORITIES = Array.concat(
 	{
 		-- Goal resources
 		c.item.diamond,
-		c.item.glass,
-		c.item.glass_pane,
-		c.item.sand,
 		c.item.redstone,
 		c.item.iron_ingot,
 		c.item.iron_ore,
+		c.item.glass,
+		c.item.glass_pane,
+		c.item.sand,
 		c.item.stone,
 	},
-	-- Easy to collect again
+	-- Easily collectable
 	c.item.all.combustiblePlanks,
+  -- Easily craftable
 	{
+    c.item.furnace,
 		c.item.stick,
-		c.item.cobblestone,
 	},
-	-- Trash with some utility
+	-- Ordered trash
 	{
+		c.item.cobblestone,
 		c.item.dirt,
 	}
 ):reverse()
@@ -52,7 +54,7 @@ m.GOALS = {
 		{ items = { c.item.coal }, blocks = { c.item.coal_ore }, count = 6, limit = 64 },
 		{ items = { c.item.diamond }, blocks = { c.item.diamond_ore }, count = 6, limit = 64 },
 		{ items = { c.item.redstone }, blocks = { c.item.redstone_ore }, count = 2, limit = 64 },
-		{ items = { c.item.iron_ingot } , blocks = { c.item.iron_ore }, count = 14, limit = 64 },
+		{ items = { c.item.iron_ore } , blocks = { c.item.iron_ore }, count = 14, limit = 64 },
 		{ items = { c.item.cobblestone }, blocks = { c.item.stone }, count = 14 + 8 * 3, limit = 64 },
 	},
 }
