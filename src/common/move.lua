@@ -14,6 +14,11 @@ local abortTilSufficientFuel = c.task.wrapLog("c.move.abortTilSufficientFuel", f
 		"Attempted to move, but not a safe amount of fuel. Temporarily aborting task to harvest fuel.",
 		abortPos
 	)
+
+  c.report.debug('Aborting movement', {
+    abortions = moveAbortions,
+    abortPos,
+  })
 	c.tree.harvestTil(function()
 		if c.fuel.available() >= c.vector.distAtoB(c.gps.getCurrent(), abortPos) + 80 then
 			c.report.info("Harvested enough wood to return to previous task.")
@@ -21,7 +26,12 @@ local abortTilSufficientFuel = c.task.wrapLog("c.move.abortTilSufficientFuel", f
 		end
 		return false
 	end)
+
 	c.gps.goTo(abortPos)
+  c.report.debug('Resumed previous position', {
+    abortPos = abortPos,
+    currentPos = c.gps.getCurrent(),
+  })
 
   c.state.set("moveAbortions", moveAbortions)
 end)
