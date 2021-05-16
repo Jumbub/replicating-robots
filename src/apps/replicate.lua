@@ -15,6 +15,7 @@ local main = function()
 
 		-- Mine
 		c.mine.til(function()
+      c.report.info('Inventory status', c.inventory.items())
 			return c.goal.achieved(c.goal.GOALS.mine)
 		end)
 
