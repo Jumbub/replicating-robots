@@ -46,8 +46,12 @@ local squigle = function()
 	check()
 	c.turn.around()
 	c.move.forward()
+  checkDir('up')
+  checkDir('down')
 
 	-- Relies on spin only turning 3 times
+	check()
+  c.turn.right()
 	spin()
 end
 
