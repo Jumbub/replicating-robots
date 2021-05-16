@@ -42,18 +42,18 @@ m.ITEM_PRIORITIES = Array.concat(
 
 m.GOALS = {
 	tree = {
-		{ items = c.item.all.saplings, count = 3 }, -- Used to avoid wasting fuel collecting unecessary amounts of leaves
+		{ items = c.item.all.saplings, count = 3, limit = 64 }, -- Used to avoid wasting fuel collecting unecessary amounts of leaves
 	},
 	scan = {
-		{ items = { c.item.sand }, count = 6 },
-		{ items = c.item.all.combustibleLogs, count = 12 },
+		{ items = { c.item.sand }, count = 6, limit = 64 },
+		{ items = c.item.all.combustibleLogs, count = 12, limit = 64 },
 	},
 	mine = {
-		{ items = { c.item.coal }, blocks = { c.item.coal_ore }, count = 6 },
-		{ items = { c.item.diamond }, blocks = { c.item.diamond_ore }, count = 6 },
-		{ items = { c.item.redstone }, blocks = { c.item.redstone_ore }, count = 2 },
-		{ items = { c.item.iron_ingot } , blocks = { c.item.iron_ore }, count = 14 },
-		{ items = { c.item.cobblestone }, blocks = { c.item.stone }, count = 14 + 8 * 3 },
+		{ items = { c.item.coal }, blocks = { c.item.coal_ore }, count = 6, limit = 64 },
+		{ items = { c.item.diamond }, blocks = { c.item.diamond_ore }, count = 6, limit = 64 },
+		{ items = { c.item.redstone }, blocks = { c.item.redstone_ore }, count = 2, limit = 64 },
+		{ items = { c.item.iron_ingot } , blocks = { c.item.iron_ore }, count = 14, limit = 64 },
+		{ items = { c.item.cobblestone }, blocks = { c.item.stone }, count = 14 + 8 * 3, limit = 64 },
 	},
 }
 
@@ -98,7 +98,9 @@ m.shouldCollect = function(goal, name)
 	if not requirement then
 		return false
 	end
-	return requirement.items:reduce(function(acc, item) return acc + c.inventory.count(item) end, 0) < requirement.count
+	return requirement.items:reduce(function(acc, item)
+    return acc + c.inventory.count(item)
+  end, 0) < requirement.limit
 end
 
 m.achieved = function(goal)
