@@ -96,9 +96,11 @@ local dropFuel = function(item, quantity)
 	c.inventory.ensureFreeSlot()
 	turtle.suck()
 
+  assert(c.inventory.count(item) >= quantity)
+
 	-- Drop fuel
 	c.inventory.select(item)
-	turtle.drop(quantity)
+  turtle.drop(quantity)
 	return true
 end
 
@@ -111,6 +113,7 @@ local pickupOutput = function()
 	while c.inspect.stateIs("lit", true, turtle.inspectUp()) do
 		sleep(1)
 	end
+  c.inventory.ensureFreeSlot()
 	turtle.suckUp()
 
 	c.move.back()
@@ -143,19 +146,25 @@ m.item = c.task.wrapLog("c.smelt.item", function(item, quantity, async)
 
 	-- Check for furnace, or place one
 	while not c.inspect.is(c.item.furnace, turtle.inspect()) do
+		c.dig.forward()
 		c.report.info("No existing furnace for input")
 		while not c.inventory.select(c.item.furnace) do
 			c.report.info("No furnaces in inventory required for smelting")
 			while c.inventory.count(c.item.cobblestone) < 8 do
 				c.report.info("Not enough cobble to create missing furnace")
 				c.mine.til(function()
-					return c.inventory.count(c.item.cobblestone) < 8
+					return c.inventory.count(c.item.cobblestone) >= 8
 				end)
 			end
 			c.craft.recipe(c.recipe[c.item.furnace], 1)
 		end
-		c.dig.forward()
 		turtle.place()
+	end
+
+	-- Ensure does not try to refuel under furnace
+	if c.fuel.safeAvailable() - FUEL_FOR_SMELTING_ITEM <= 0 then
+		c.fuel.refuel()
+    -- TODO: make this better by harvesting if refueling fails
 	end
 
 	-- Calculate required fuel

@@ -26,7 +26,7 @@ local suckUp = function()
 	local success, reason = turtle.suckUp()
 	if reason == "No space for items" then
 		c.report.warning("Not enough space to pickup stash without dumping")
-		c.inventory.dumpLeastImportantSlot()
+    c.inventory.ensureFreeSlot()
 		success, reason = turtle.suckUp()
 	end
 	return success
@@ -45,11 +45,7 @@ m.pickUp = function(skip)
 	while suckUp() do
 	end
 
-	if not c.inventory.firstEmpty() then
-		c.report.warning("Not enough space to pickup chest without dumping")
-		c.inventory.dumpLeastImportantSlot()
-	end
-
+  c.inventory.ensureFreeSlot()
 	c.dig.up()
 
 	return true
