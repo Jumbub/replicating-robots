@@ -24,6 +24,7 @@ m.refuel = function()
 		assert(turtle.refuel(1), "Somehow refueling from plank has failed")
 	elseif c.inventory.find(c.item.all.combustibleLogs) then
 		assert(c.craft.recipe(c.recipe.plank, 1, function()
+      c.inventory.select(c.item.all.combustiblePlanks)
 			return assert(turtle.refuel(1), "Somehow refueling after crafting plank has failed")
 		end), 'If crafting planks fails, the safe movement calculation will be invalid')
 
