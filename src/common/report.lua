@@ -13,7 +13,15 @@ m.format = function(data)
 	local success, result = pcall(textutils.serialiseJSON, data)
 	if success then
 		return result
-	end
+  end
+  if type(data) == 'table' then
+    local x = '{'
+    for key, value in pairs(data) do
+      local s, r = pcall(textutils.serialiseJSON, value)
+       x = x .. '[' .. key .. ']=' .. (s and r or tostring(value)) .. ', '
+    end
+    return x .. '}'
+  end
 	return tostring(data)
 end
 
