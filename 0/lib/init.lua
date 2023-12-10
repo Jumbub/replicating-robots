@@ -1,0 +1,5 @@
+Utility = require("lib.lua-utility.lib.utility")
+Array = require("lib.lua-utility.lib.utility.array")
+Object = require("lib.lua-utility.lib.utility.object")
+String = require("lib.lua-utility.lib.utility.string")
+Function = require("lib.lua-utility.lib.utility.function")
