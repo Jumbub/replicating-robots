@@ -27,4 +27,18 @@ function File.write(path, contents)
   return true
 end
 
+--- @param path string
+--- @param contents string
+--- @return boolean Success status
+function File.append(path, contents)
+  local file = fs.open(path, "a")
+  if not file then
+    return false
+  end
+
+  file.write(contents)
+  file.close()
+  return true
+end
+
 return File

@@ -1,0 +1,11 @@
+pcall: module 'main' not found:
+  no field package.preload['main']
+  no file 'startup/main'
+  no file 'startup/main.lua'
+  no file 'startup/main/init.lua'
+  no file '/rom/modules/main/main'
+  no file '/rom/modules/main/main.lua'
+  no file '/rom/modules/main/main/init.lua'
+  no file '/rom/modules/turtle/main'
+  no file '/rom/modules/turtle/main.lua'
+  no file '/rom/modules/turtle/main/init.lua'
