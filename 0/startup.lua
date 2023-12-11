@@ -1,8 +1,17 @@
-local success, error = pcall(require("main"))
-if not success then
-  printError(error)
+local function tryWritingError(error)
+  local f = fs.open("logs.txt", "a")
+  if f then
+    f.writeLine(error)
+    f.close()
+  end
 end
 
-print("\nRebooting in 5 seconds.")
+local success, error = pcall(require, "main")
+if not success then
+  printError("Failed during execution of main.lua")
+  pcall(tryWritingError, error)
+end
+
+print("Rebooting in 5 seconds.")
 sleep(5)
 os.reboot()

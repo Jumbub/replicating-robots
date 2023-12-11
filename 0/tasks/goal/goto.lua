@@ -1,7 +1,7 @@
 local t = {}
 
 function t.idempotent(args, world)
-  assert(world.gps, "Unsupported state for action")
+  assert(world.position, "Unsupported state for action")
 
   local success = turtle[args.direction]()
 

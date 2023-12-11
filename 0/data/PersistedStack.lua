@@ -26,8 +26,8 @@ function PersistedStack:peek()
   return self.stack:peek()
 end
 
-function PersistedStack:length()
-  return self.stack:length()
+function PersistedStack:__len()
+  return #self.stack
 end
 
 return PersistedStack

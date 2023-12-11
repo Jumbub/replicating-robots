@@ -164,7 +164,9 @@ function Object.freeze(obj)
 
   local meta = {
     __index = {},
-    __newindex = function() end,
+    __newindex = function()
+      error("table is frozen")
+    end,
     __metatable = "table is frozen",
   }
 

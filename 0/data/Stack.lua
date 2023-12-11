@@ -20,8 +20,4 @@ function Stack:peek()
   return self[#self]
 end
 
-function Stack:length()
-  return #self
-end
-
 return Stack
