@@ -28,6 +28,7 @@ function Logger:setupGlobalDebug()
   _G.dd = function(...)
     self:log("debug", ...)
   end
+  return self
 end
 
 --- @param level string

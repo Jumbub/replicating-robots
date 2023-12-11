@@ -17,8 +17,6 @@ function task:complete(world)
   return { complete = world.count == self.args.to, push = push }
 end
 
-function task:perform(world)
-  dd(world.count)
-end
+function task:perform(world) end
 
 return task

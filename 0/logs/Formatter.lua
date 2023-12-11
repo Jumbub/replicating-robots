@@ -2,7 +2,7 @@ local Formatter = {}
 
 function Formatter.unknown(data, ...)
   if #{ ... } > 0 then
-    return Formatter.format(data) .. ", " .. Formatter.unknown(...)
+    return Formatter.unknown(data) .. ", " .. Formatter.unknown(...)
   end
 
   if type(data) == "string" then

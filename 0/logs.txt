@@ -7546,3 +7546,177 @@ pcall: module 'main' not found:
 [2023-12-10T22:27:47] /main.lua:23 [warning] "Starting loop..."
 [2023-12-10T22:27:47] /main.lua:25 [debug] { id = "197035.9955558776855",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
 [2023-12-10T22:27:47] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T22:34:36] /main.lua:23 [warning] "Starting loop..."
+[2023-12-10T22:34:36] /main.lua:25 [debug] { id = "197036.5766668319702",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T22:34:36] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T22:43:40] /main.lua:45 [warning] "Ran out of work."
+[2023-12-10T22:43:58] /main.lua:45 [warning] "Ran out of work."
+[2023-12-10T22:44:01] /main.lua:45 [warning] "Ran out of work."
+[2023-12-10T22:44:07] /main.lua:33 [debug] "hi"
+[2023-12-10T22:44:07] /main.lua:46 [warning] "Ran out of work."
+[2023-12-10T22:44:12] /main.lua:33 [debug] "hi"
+[2023-12-10T22:44:12] /main.lua:46 [warning] "Ran out of work."
+/tasks/TaskStack.lua:33: attempt to index field 'stack' (a function value)
+/tasks/TaskStack.lua:33: attempt to index field 'stack' (a function value)
+[2023-12-10T22:46:32] /main.lua:42 [debug] "hi"
+[2023-12-10T22:46:32] /main.lua:55 [warning] "Ran out of work."
+[2023-12-10T22:46:47] /main.lua:42 [debug] "hi"
+[2023-12-10T22:46:47] /main.lua:55 [warning] "Ran out of work."
+/logs/Formatter.lua:5: attempt to call field 'format' (a nil value)
+/logs/Formatter.lua:5: attempt to call field 'format' (a nil value)
+[2023-12-10T22:47:42] /main.lua:25 [info] "Calling peek with ", { }
+[2023-12-10T22:47:42] /main.lua:25 [info] "Calling push with ", { }, { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T22:47:42] /main.lua:25 [info] "Calling next with "
+[2023-12-10T22:47:42] /main.lua:42 [debug] "hi"
+[2023-12-10T22:47:42] /main.lua:25 [info] "Calling pop with ", { }, { id = "197036.7950000762939",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T22:47:42] /main.lua:25 [info] "Calling next with "
+[2023-12-10T22:47:42] /main.lua:55 [warning] "Ran out of work."
+[2023-12-10T22:48:15] /main.lua:25 [info] { 1 = "peek",  2 = { 1 = { } } }
+[2023-12-10T22:48:15] /main.lua:25 [info] { 1 = "push",  2 = { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:48:15] /main.lua:25 [info] { 1 = "next",  2 = { } }
+[2023-12-10T22:48:15] /main.lua:42 [debug] "hi"
+[2023-12-10T22:48:15] /main.lua:25 [info] { 1 = "pop",  2 = { 1 = { },  2 = { id = "197036.8041667938232",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:48:15] /main.lua:25 [info] { 1 = "next",  2 = { 2 = { id = "197036.8041667938232",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:48:15] /main.lua:55 [warning] "Ran out of work."
+[2023-12-10T22:50:46] /main.lua:25 [info] { 1 = "peek",  2 = { 1 = { } } }
+[2023-12-10T22:50:46] /main.lua:25 [info] { 1 = "push",  2 = { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:50:46] /main.lua:25 [info] { 1 = "next",  2 = { } }
+[2023-12-10T22:50:46] /main.lua:42 [debug] "hi"
+[2023-12-10T22:50:46] /main.lua:25 [info] { 1 = "pop",  2 = { 1 = { },  2 = { id = "197036.8461112976074",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:50:46] /main.lua:25 [info] { 1 = "next",  2 = { 2 = { id = "197036.8461112976074",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } } }
+[2023-12-10T22:50:46] /main.lua:55 [warning] "Ran out of work."
+[2023-12-10T22:51:17] /main.lua:25 [info] "peek", { 1 = { } }
+[2023-12-10T22:51:17] /main.lua:25 [info] "push", { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:51:17] /main.lua:25 [info] "next", { }
+[2023-12-10T22:51:17] /main.lua:42 [debug] "hi"
+[2023-12-10T22:51:17] /main.lua:25 [info] "pop", { 1 = { },  2 = { id = "197036.8547220230103",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:51:17] /main.lua:25 [info] "next", { 2 = { id = "197036.8547220230103",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:51:17] /main.lua:55 [warning] "Ran out of work."
+[2023-12-10T22:52:30] /main.lua:25 [info] "peek", { 1 = { } }
+[2023-12-10T22:52:30] /main.lua:27 [info] "peek"
+[2023-12-10T22:52:30] /main.lua:25 [info] "push", { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:52:30] /main.lua:27 [info] "push"
+[2023-12-10T22:52:30] /main.lua:25 [info] "next", { }
+[2023-12-10T22:52:30] /main.lua:27 [info] "next", { id = "197036.875",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T22:52:30] /main.lua:44 [debug] "hi"
+[2023-12-10T22:52:30] /main.lua:25 [info] "pop", { 1 = { },  2 = { id = "197036.875",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:52:30] /main.lua:27 [info] "pop"
+[2023-12-10T22:52:30] /main.lua:25 [info] "next", { 2 = { id = "197036.875",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:52:30] /main.lua:27 [info] "next"
+[2023-12-10T22:52:30] /main.lua:57 [warning] "Ran out of work."
+[2023-12-10T22:53:03] /main.lua:25 [info] "peek", { 1 = { } }
+[2023-12-10T22:53:03] /main.lua:27 [info] "peek", { }
+[2023-12-10T22:53:03] /main.lua:25 [info] "push", { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:03] /main.lua:27 [info] "push", { }
+[2023-12-10T22:53:03] /main.lua:25 [info] "next", { }
+[2023-12-10T22:53:03] /main.lua:27 [info] "next", { 1 = { id = "197036.8841667175293",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:03] /main.lua:44 [debug] "hi"
+[2023-12-10T22:53:03] /main.lua:25 [info] "pop", { 1 = { },  2 = { id = "197036.8841667175293",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:03] /main.lua:27 [info] "pop", { }
+[2023-12-10T22:53:03] /main.lua:25 [info] "next", { 2 = { id = "197036.8841667175293",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:03] /main.lua:27 [info] "next", { }
+[2023-12-10T22:53:03] /main.lua:57 [warning] "Ran out of work."
+[2023-12-10T22:53:36] /main.lua:25 [info] "peek", { 1 = { } }
+[2023-12-10T22:53:36] /main.lua:27 [info] "peek", { }
+[2023-12-10T22:53:36] /main.lua:25 [info] "push", { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:36] /main.lua:27 [info] "push", { }
+[2023-12-10T22:53:36] /main.lua:25 [info] "next", { }
+[2023-12-10T22:53:36] /main.lua:27 [info] "next", { 1 = { id = "197036.8933334350586",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:36] /main.lua:44 [debug] "hi", "idempotent.goto"
+[2023-12-10T22:53:36] /main.lua:25 [info] "pop", { 1 = { },  2 = { id = "197036.8933334350586",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:36] /main.lua:27 [info] "pop", { }
+[2023-12-10T22:53:36] /main.lua:25 [info] "next", { 2 = { id = "197036.8933334350586",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:53:36] /main.lua:27 [info] "next", { }
+[2023-12-10T22:53:36] /main.lua:57 [warning] "Ran out of work."
+[2023-12-10T22:58:08] /debug/Trace.lua:12 [info] "peek", { 1 = { } }
+[2023-12-10T22:58:08] /debug/Trace.lua:14 [info] "peek", { }
+[2023-12-10T22:58:08] /debug/Trace.lua:12 [info] "push", { 1 = { },  2 = { name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:58:08] /debug/Trace.lua:14 [info] "push", { }
+[2023-12-10T22:58:08] /debug/Trace.lua:12 [info] "next", { }
+[2023-12-10T22:58:08] /debug/Trace.lua:14 [info] "next", { 1 = { id = "197036.968888759613",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:58:08] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T22:58:08] /debug/Trace.lua:12 [info] "pop", { 1 = { },  2 = { id = "197036.968888759613",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:58:08] /debug/Trace.lua:14 [info] "pop", { }
+[2023-12-10T22:58:09] /debug/Trace.lua:12 [info] "next", { 2 = { id = "197036.968888759613",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:58:09] /debug/Trace.lua:14 [info] "next", { }
+[2023-12-10T22:58:09] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T22:58:32] /debug/Trace.lua:13 [info] "peek", { 1 = { } }, { }
+[2023-12-10T22:58:32] /debug/Trace.lua:13 [info] "push", { 1 = { },  2 = { id = "197036.9755554199219",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T22:58:32] /debug/Trace.lua:13 [info] "next", { }, { 1 = { id = "197036.9755554199219",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T22:58:32] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T22:58:32] /debug/Trace.lua:13 [info] "pop", { 1 = { },  2 = { id = "197036.9755554199219",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T22:58:32] /debug/Trace.lua:13 [info] "next", { 2 = { id = "197036.9755554199219",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T22:58:32] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:00:15] /debug/Trace.lua:19 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:00:15] /debug/Trace.lua:19 [info] "push", { 1 = { },  2 = { id = "197037.0041666030884",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:00:15] /debug/Trace.lua:19 [info] "next", { }, { 1 = { id = "197037.0041666030884",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }
+[2023-12-10T23:00:15] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:00:15] /debug/Trace.lua:19 [info] "pop", { 1 = { },  2 = { id = "197037.0041666030884",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:00:15] /debug/Trace.lua:19 [info] "next", { 2 = { id = "197037.0041666030884",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:00:15] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:00:22] /debug/Trace.lua:19 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:00:22] /debug/Trace.lua:19 [info] "push", { 1 = { },  2 = { id = "197037.0061111450195",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:00:22] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:00:22] /debug/Trace.lua:19 [info] "pop", { 1 = { },  2 = { id = "197037.0061111450195",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:00:22] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:02:20] /debug/Trace.lua:23 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:02:20] /debug/Trace.lua:23 [info] "push", { 1 = { },  2 = { id = "197037.0388889312744",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:02:20] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:02:20] /debug/Trace.lua:23 [info] "pop", { 1 = { },  2 = { id = "197037.0388889312744",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:02:20] /main.lua:40 [warning] "Ran out of work."
+/debug/Trace.lua:6: attempt to index local 'dict' (a nil value)
+[2023-12-10T23:04:27] /debug/Trace.lua:28 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:04:27] /debug/Trace.lua:28 [info] "push", { 1 = { },  2 = { id = "197037.0741667747498",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:04:27] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:04:27] /debug/Trace.lua:28 [info] "pop", { 1 = { },  2 = { id = "197037.0741667747498",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:04:28] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:04:52] /debug/Trace.lua:28 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:04:52] /debug/Trace.lua:28 [info] "push", { 1 = { },  2 = { id = "197037.0811109542847",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:04:52] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:04:52] /debug/Trace.lua:28 [info] "pop", { 1 = { },  2 = { id = "197037.0811109542847",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:04:52] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:05:46] /debug/Trace.lua:28 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:05:46] /debug/Trace.lua:28 [info] "push", { 1 = { },  2 = { id = "197037.0961112976074",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:05:46] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:05:46] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:05:51] /debug/Trace.lua:28 [info] "peek", { 1 = { } }, { }
+[2023-12-10T23:05:51] /debug/Trace.lua:28 [info] "push", { 1 = { },  2 = { id = "197037.0975003242493",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:05:51] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:05:51] /debug/Trace.lua:28 [info] "pop", { 1 = { },  2 = { id = "197037.0975003242493",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } } }, { }
+[2023-12-10T23:05:51] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:05:59] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:05:59] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:06:01] /main.lua:27 [debug] "hi", "idempotent.goto"
+[2023-12-10T23:06:01] /main.lua:40 [warning] "Ran out of work."
+[2023-12-10T23:06:18] /main.lua:28 [info] "Running idempotent task: idempotent.goto"
+/tasks/TaskStack.lua:47: Unknown task being popped
+[2023-12-10T23:10:50] /main.lua:28 [info] "Running idempotent task: idempotent.goto"
+/tasks/TaskStack.lua:47: Unknown task being popped
+[2023-12-10T23:12:34] /main.lua:27 [debug] { id = "197037.2094440460205",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T23:12:34] /main.lua:29 [info] "Running idempotent task: idempotent.goto"
+/tasks/TaskStack.lua:47: Unknown task being popped
+[2023-12-10T23:14:36] /main.lua:27 [debug] { id = "197037.2433333396912",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T23:14:36] /main.lua:29 [info] "Running idempotent task: idempotent.goto"
+/tasks/TaskStack.lua:47: Unknown task being popped
+[2023-12-10T23:15:01] /main.lua:27 [debug] { id = "197037.2502779960632",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T23:15:01] /main.lua:29 [info] "Running idempotent task: idempotent.goto"
+/tasks/TaskStack.lua:47: Unknown task being popped
+[2023-12-10T23:15:28] /main.lua:27 [debug] { id = "197037.2577776908875",  name = "idempotent.goto",  args = { y = 0,  x = 0,  z = 0 } }
+[2023-12-10T23:15:28] /main.lua:29 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:15:28] /tasks/TaskStack.lua:47 [debug] "table: 440b2aa2", "table: 440b2aa2"
+[2023-12-10T23:15:28] /tasks/TaskStack.lua:47 [debug] "nil", "table: 440b2aa2"
+/tasks/TaskStack.lua:48: Unknown task being popped
+/debug/RateLimit.lua:5: bad argument #1 to 'sleep' (number expected, got function)
+/main.lua:29: attempt to index local 'task' (a function value)
+[2023-12-10T23:25:46] /main.lua:30 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:25:46] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T23:25:54] /main.lua:30 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:25:54] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T23:25:56] /main.lua:30 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:25:57] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T23:26:49] /main.lua:30 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:26:49] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T23:28:26] /main.lua:30 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:28:27] /main.lua:39 [warning] "Ran out of work."
+[2023-12-10T23:29:42] /main.lua:26 [info] "Running idempotent task: idempotent.goto"
+[2023-12-10T23:29:42] /main.lua:35 [warning] "Ran out of work."
