@@ -1,5 +1,6 @@
 local PersistedStack = require("data.PersistedStack")
 local Unique = require("data.Unique")
+local Task = require("tasks.Task")
 
 --- @class TaskStack
 --- @field next function
@@ -12,13 +13,18 @@ function TaskStack.new(path)
   local self = {
     stack = PersistedStack.new(path),
   }
+
+  while not Task.isIdempotent(self.stack:peek()) do
+    self.stack:pop()
+  end
+
   self.next = function()
     return self:peek()
   end
   return setmetatable(self, TaskStack)
 end
 
---- @param task table
+--- @param task Task
 function TaskStack:push(task, ...)
   task.id = Unique.id()
   self.stack:push(task)
@@ -28,7 +34,7 @@ function TaskStack:push(task, ...)
   end
 end
 
---- @return table|nil
+--- @return Task|nil
 function TaskStack:peek()
   local task = self.stack:peek()
   if not task then
@@ -41,7 +47,7 @@ function TaskStack:peek()
   return setmetatable(task, taskMeta)
 end
 
---- @param task table
+--- @param task Task
 --- @return nil
 function TaskStack:pop(task)
   assert(task == self.stack:peek(), "Unknown task being popped")
