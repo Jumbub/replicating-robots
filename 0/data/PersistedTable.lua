@@ -3,6 +3,7 @@ local PersistedTable = {}
 PersistedTable.__index = PersistedTable
 
 --- @param path string
+--- @param default? table
 function PersistedTable.new(path, default)
   return setmetatable({
     data = SerializedFile.read(path) or default or {},

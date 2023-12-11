@@ -16,7 +16,7 @@ end
 function FileLogger:log(level, message)
   local debug = debug.getinfo(4, "Sl")
   local time = os.date("%FT%T")
-  File.append(self.path, string.format("[%s %s:%d %s] %s", time, debug.short_src, debug.currentline, level, message))
+  File.append(self.path, string.format("[%s] %s:%d [%s] %s", time, debug.short_src, debug.currentline, level, message))
 end
 
 return FileLogger

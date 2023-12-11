@@ -1,13 +1,16 @@
 local Stack = require("data.Stack")
 local SerializedFile = require("data.SerializedFile")
+
+--- @class PersistedStack : Stack
+--- @field stack Stack
+--- @field path string
 local PersistedStack = {}
 PersistedStack.__index = PersistedStack
 
 --- @param path string
 function PersistedStack.new(path)
-  local fileData = SerializedFile.read(path)
-  local self = { stack = Stack.new(fileData), path = path }
-  return setmetatable(self, PersistedStack)
+  local stack = Stack.new(SerializedFile.read(path))
+  return setmetatable({ stack = stack, path = path }, PersistedStack)
 end
 
 function PersistedStack:push(item)
