@@ -10,7 +10,7 @@ tasks.next = require("debug.RateLimit").fn(0.1, tasks.next)
 -- tasks = require("debug.Trace").table(tasks, log, { "next" })
 
 if not tasks:peek() then
-  tasks:push({ name = "absolute.goto", args = { x = 0, y = 0, z = 0 } })
+  tasks:push({ name = "idempotent.goto", args = { x = 0, y = 0, z = 0 } })
 end
 
 local state = {}

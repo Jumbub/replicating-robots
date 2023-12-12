@@ -24,10 +24,9 @@ function TaskStack.new(path)
   return setmetatable(self, TaskStack)
 end
 
---- @param task Task
+--- @param task PlainTask
 function TaskStack:push(task, ...)
-  task.id = Unique.id()
-  self.stack:push(task)
+  self.stack:push(Object.assign(task, { id = Unique.id() }))
 
   if #{ ... } > 0 then
     self:push(...)

@@ -1,14 +1,17 @@
---- @class Task
---- @field id string
+--- @class PlainTask A task about to be queued
+--- @field name string
+--- @field args? table
+
+--- @class Task A task after it's metadata is generated and applied
 --- @field name string
 --- @field run function
-local z = {}
+--- @field id string
 
-local Task = {}
+--- @class TaskContext The context for task execution
+--- @field task Task
+--- @field args table
+--- @field state State
+--- @field tasks TaskStack
 
---- @param task Task
-function Task.isIdempotent(task)
-  return String.startsWith(task.name, "absolute.")
-end
-
-return Task
+--- @class State The context for task execution
+--- @field gps? Vector
