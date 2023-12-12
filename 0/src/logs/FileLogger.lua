@@ -11,12 +11,17 @@ function FileLogger.new(path)
   return setmetatable({ path = path }, FileLogger)
 end
 
+local function getDebugInfo()
+  local debug = debug.getinfo(5, "Sl")
+  return string.format("%s:%d", debug.short_src, debug.currentline)
+end
+
 --- @param level string
 --- @param message string
 function FileLogger:log(level, message)
-  local debug = debug.getinfo(4, "Sl")
   local time = os.date("%FT%T")
-  File.append(self.path, string.format("[%s] %s:%d [%s] %s", time, debug.short_src, debug.currentline, level, message))
+  local trace = (level == "error" or level == "debug") and getDebugInfo() or ""
+  File.append(self.path, string.format("[%s][%s]%s %s", time, level, trace, message))
 end
 
 return FileLogger
