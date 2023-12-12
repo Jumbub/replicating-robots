@@ -1,4 +1,4 @@
-local PersistedStack = require("src.data.PersistedStack")
+local PersistedStack = require("src.state.PersistedStack")
 
 --- @class TaskStack
 --- @field next function
@@ -7,7 +7,8 @@ local TaskStack = {}
 TaskStack.__index = TaskStack
 
 --- @param path string
-function TaskStack.new(path)
+--- @param log Logger
+function TaskStack.new(path, log)
   local self = {
     stack = PersistedStack.new(path),
   }
@@ -31,10 +32,6 @@ function TaskStack:peek()
     return nil
   end
 
-  local function complete()
-    self:pop(task)
-  end
-
   local function push(...)
     self:push(...)
   end
@@ -42,15 +39,23 @@ function TaskStack:peek()
   --- @param state TaskState
   return function(state)
     --- @type TaskContext
-    local context = { state = state, args = task.args or {}, complete = complete, push = push }
-    return require("src.tasks." .. task.name)(context)
-  end
-end
+    local context = { state = state, args = task.args or {}, push = push }
+    local runner = require("src.tasks." .. task.name)
 
---- @param task Task
-function TaskStack:pop(task)
-  assert(task == self.stack:peek(), "Unknown task being popped")
-  self.stack:pop()
+    local success, result = xpcall(runner, function(...)
+      return debug.traceback(...)
+    end, context)
+
+    if success then
+      self.stack:pop()
+    else
+      if type(result) == "table" and result.name ~= nil then
+        self:push(result)
+      else
+        error(result)
+      end
+    end
+  end
 end
 
 return TaskStack

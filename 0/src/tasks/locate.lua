@@ -1,5 +1,6 @@
+local gps = require("src.tasks.actions.gps")
+
 --- @param c TaskContext
 return function(c)
-  c.state.gps = vector.new(gps.locate(10, false))
-  c.complete()
+  c.state.location = gps.locate()
 end

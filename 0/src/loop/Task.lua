@@ -5,8 +5,7 @@
 --- @class TaskContext Context for task execution
 --- @field args table
 --- @field state TaskState
---- @field push function
---- @field complete function
 
 --- @class TaskState Shared data between tasks (not persisted across reboots)
---- @field gps? Vector
+--- @field location? Vector world coordinates or relative from start point
+--- @field orientation? number 0 north, 1 east, 2 south, 3 west

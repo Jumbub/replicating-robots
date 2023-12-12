@@ -1,4 +1,4 @@
-local SerializedFile = require("src.data.SerializedFile")
+local SerializedFile = require("src.state.SerializedFile")
 local PersistedTable = {}
 PersistedTable.__index = PersistedTable
 
