@@ -2,7 +2,9 @@ local gps = require("src.tasks.actions.gps")
 
 --- @param c TaskContext
 return function(c)
-  local startLocation = gps.available()
+  assert(gps.available())
+
+  local startLocation = gps.locate()
   assert(turtle.forward())
   local newLocation = gps.locate()
 

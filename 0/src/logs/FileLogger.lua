@@ -13,7 +13,7 @@ end
 
 local function getDebugInfo()
   local debug = debug.getinfo(5, "Sl")
-  return string.format("%s:%d", debug.short_src, debug.currentline)
+  return string.format("[%s:%d]", debug.short_src, debug.currentline)
 end
 
 --- @param level string

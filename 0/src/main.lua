@@ -19,7 +19,7 @@ end
 local state = {}
 for task in tasks.next do
   task(state)
-  sleep(1) -- Avoid loops completely running away
+  sleep(0.2) -- Avoid loops completely running away
 end
 
 log:warning("Ran out of work.")
