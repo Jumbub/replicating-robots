@@ -1,6 +1,4 @@
-local PersistedStack = require("data.PersistedStack")
-local Unique = require("data.Unique")
-local Task = require("tasks.Task")
+local PersistedStack = require("src.data.PersistedStack")
 
 --- @class TaskStack
 --- @field next function
@@ -14,40 +12,42 @@ function TaskStack.new(path)
     stack = PersistedStack.new(path),
   }
 
-  while not Task.isIdempotent(self.stack:peek()) do
-    self.stack:pop()
-  end
-
   self.next = function()
     return self:peek()
   end
+
   return setmetatable(self, TaskStack)
 end
 
---- @param task PlainTask
-function TaskStack:push(task, ...)
-  self.stack:push(Object.assign(task, { id = Unique.id() }))
-
-  if #{ ... } > 0 then
-    self:push(...)
-  end
+--- @param task Task
+function TaskStack:push(task)
+  self.stack:push(task)
 end
 
---- @return Task|nil
 function TaskStack:peek()
+  --- @type Task
   local task = self.stack:peek()
   if not task then
     return nil
   end
 
-  local taskMeta = assert(require("tasks." .. task.name))
-  taskMeta.__index = taskMeta
+  local function complete()
+    self:pop(task)
+  end
 
-  return setmetatable(task, taskMeta)
+  local function push(...)
+    self:push(...)
+  end
+
+  --- @param state TaskState
+  return function(state)
+    --- @type TaskContext
+    local context = { state = state, args = task.args or {}, complete = complete, push = push }
+    return require("src.tasks." .. task.name)(context)
+  end
 end
 
 --- @param task Task
---- @return nil
 function TaskStack:pop(task)
   assert(task == self.stack:peek(), "Unknown task being popped")
   self.stack:pop()

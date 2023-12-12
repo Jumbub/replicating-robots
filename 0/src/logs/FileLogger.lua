@@ -1,4 +1,4 @@
-local File = require("data.File")
+local File = require("src.data.File")
 
 --- @class FileLogger
 --- @field path string

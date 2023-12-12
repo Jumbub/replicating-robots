@@ -1,4 +1,4 @@
-local PersistedTable = require("data.PersistedTable")
+local PersistedTable = require("src.data.PersistedTable")
 local Sanity = {}
 Sanity.__index = Sanity
 

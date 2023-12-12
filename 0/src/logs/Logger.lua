@@ -1,5 +1,5 @@
-local TerminalLogger = require("logs.TerminalLogger")
-local Formatter = require("logs.Formatter")
+local TerminalLogger = require("src.logs.TerminalLogger")
+local Formatter = require("src.logs.Formatter")
 
 --- @class Logger
 --- @field fileLogger FileLogger

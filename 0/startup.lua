@@ -1,4 +1,4 @@
-local success, error = pcall(require, "main")
+local success, error = pcall(require, "src.main")
 if not success then
   printError(error)
   printError("\nFailed during execution of main.lua")

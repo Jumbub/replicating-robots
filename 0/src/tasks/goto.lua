@@ -1,9 +1,9 @@
 --- @param c TaskContext
 return function(c)
   if not c.state.gps then
-    c.tasks:push({ name = "move.locate" })
+    c.push({ name = "locate" })
     return
   end
 
-  c.tasks:pop(c.task)
+  c.complete()
 end

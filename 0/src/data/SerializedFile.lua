@@ -1,4 +1,4 @@
-local File = require("data.File")
+local File = require("src.data.File")
 local SerializedFile = {}
 
 --- @param path string

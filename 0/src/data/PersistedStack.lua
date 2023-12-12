@@ -1,5 +1,5 @@
-local Stack = require("data.Stack")
-local SerializedFile = require("data.SerializedFile")
+local Stack = require("src.data.Stack")
+local SerializedFile = require("src.data.SerializedFile")
 
 --- @class PersistedStack : Stack
 --- @field stack Stack
