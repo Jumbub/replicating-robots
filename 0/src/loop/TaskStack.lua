@@ -7,8 +7,7 @@ local TaskStack = {}
 TaskStack.__index = TaskStack
 
 --- @param path string
---- @param log Logger
-function TaskStack.new(path, log)
+function TaskStack.new(path)
   local self = {
     stack = PersistedStack.new(path),
   }
@@ -42,9 +41,7 @@ function TaskStack:peek()
     local context = { state = state, args = task.args or {}, push = push }
     local runner = require("src.tasks." .. task.name)
 
-    local success, result = xpcall(runner, function(...)
-      return debug.traceback(...)
-    end, context)
+    local success, result = xpcall(runner, debug.traceback, context)
 
     if success then
       self.stack:pop()
