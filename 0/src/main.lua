@@ -13,7 +13,7 @@ tasks.next = require("src.debug.RateLimit").fn(0.1, tasks.next)
 tasks = require("src.debug.Trace").table(tasks, log, { "next" })
 
 if not tasks:peek() then
-  tasks:push({ name = "goto", args = { location = vector.new(0, 0, 0) } })
+  tasks:push({ name = "tree.chop" })
 end
 
 local state = {}
