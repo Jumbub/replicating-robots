@@ -31,4 +31,10 @@ function move.direction(direction)
   return turtle[direction]()
 end
 
+--- @param _ boolean
+--- @param error string|nil
+function move.noFuel(_, error)
+  return error == "Out of fuel"
+end
+
 return move

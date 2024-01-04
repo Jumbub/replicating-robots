@@ -1,3 +1,5 @@
+local inventory = require("src.actions.inventory")
+
 local fuel = {}
 
 --- @param limit? number

@@ -46,8 +46,12 @@ function TaskStack:peek()
     if success then
       self.stack:pop()
     else
-      if type(result) == "table" and result.name ~= nil then
-        self:push(result)
+      if type(result) == "table" then
+        if result.name ~= nil then
+          self:push(result)
+        elseif result.complete ~= nil then
+          self.stack:pop()
+        end
       else
         error(result)
       end

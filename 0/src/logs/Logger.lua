@@ -28,6 +28,10 @@ function Logger:setupGlobalDebug()
   _G.dd = function(...)
     self:log("debug", ...)
   end
+  _G.ddd = function(...)
+    self:log("debug", ...)
+    error("Stopped by debugger")
+  end
   return self
 end
 

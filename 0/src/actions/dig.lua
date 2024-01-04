@@ -35,7 +35,7 @@ function dig.direction(direction, side)
   end
 end
 
-function dig.all()
+function dig.allDirections()
   dig.forward()
   dig.down()
   dig.up()
